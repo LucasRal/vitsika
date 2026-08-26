@@ -1,0 +1,499 @@
+
+1. Dataset check
+================
+title  : AntWeb
+licence: http://creativecommons.org/licenses/by/4.0/legalcode
+doi    : 10.15468/wqmjjt
+occurrence records (all countries): 920136
+
+2. Formicidae backbone match
+============================
+usageKey=4342 rank=FAMILY matchType=EXACT confidence=94
+
+3. Madagascar counts
+====================
+MG records (all taxa)          : 142883
+MG Formicidae records          : 141430
+MG Formicidae with StillImage  : 6995
+
+4. Genus facet (imaged MG records)
+==================================
+(loaded 111 cached genera from genera.csv)
+#    genus                    subfamily             n_records
+1    Hypoponera               ponerinae                   899
+2    Camponotus               formicinae                  792
+3    Pheidole                 myrmicinae                  789
+4    Tetramorium              myrmicinae                  495
+5    Strumigenys              myrmicinae                  375
+6    Crematogaster            myrmicinae                  280
+7    Mystrium                 amblyoponinae               176
+8    Technomyrmex             dolichoderinae              154
+9    Leptogenys               ponerinae                   151
+10   Carebara                 myrmicinae                  137
+11   Nesomyrmex               myrmicinae                  122
+12   Monomorium               myrmicinae                  101
+13   Tetraponera              pseudomyrmecinae             91
+14   Bothroponera             ponerinae                    87
+15   Adetomyrma               amblyoponinae                86
+16   Pachycondyla             ponerinae                    74
+17   Vitsika                  myrmicinae                   68
+18   Anochetus                ponerinae                    59
+19   Tapinoma                 dolichoderinae               58
+20   Nylanderia               formicinae                   57
+21   Aphaenogaster            myrmicinae                   51
+22   Stigmatomma              amblyoponinae                50
+23   Cataulacus               myrmicinae                   47
+24   Prionopelta              amblyoponinae                42
+25   Royidris                 myrmicinae                   41
+26   Malagidris               myrmicinae                   40
+27   Syllophopsis             myrmicinae                   37
+28   Simopone                 dorylinae                    36
+29   Platythyrea              ponerinae                    36
+30   Terataner                myrmicinae                   33
+31   Tanipone                 dorylinae                    33
+32   Odontomachus             ponerinae                    32
+33   Meranoplus               myrmicinae                   32
+34   Proceratium              proceratiinae                30
+35   Paratrechina             formicinae                   25
+36   Cardiocondyla            myrmicinae                   21
+37   Eutetramorium            myrmicinae                   21
+38   Metapone                 myrmicinae                   21
+39   Oligomyrmex              myrmicinae                   20
+40   Lioponera                dorylinae                    19
+
+60 genera with imaged MG records; 46 have >= 10 records
+
+5. Sample imaged MG records
+===========================
+Full JSON of first record:
+{
+  "key": 6196662952,
+  "datasetKey": "13b70480-bd69-11dd-b15f-b8a03c50a862",
+  "publishingOrgKey": "66522820-055c-11d8-b84e-b8a03c50a862",
+  "networkKeys": [
+    "68e8e67a-43e6-44a3-8817-dc0e6b70f973"
+  ],
+  "installationKey": "a43950ae-eb88-4ef4-bfff-43bcf12885ad",
+  "hostingOrganizationKey": "66522820-055c-11d8-b84e-b8a03c50a862",
+  "publishingCountry": "US",
+  "protocol": "EML",
+  "lastCrawled": "2026-08-24T12:02:22.292+00:00",
+  "lastParsed": "2026-08-24T12:09:02.928+00:00",
+  "crawlId": 634,
+  "extensions": {
+    "http://rs.gbif.org/terms/1.0/Multimedia": [
+      {
+        "http://purl.org/dc/terms/format": "image/jpeg",
+        "http://purl.org/dc/terms/creator": "Nomena Rasoarimalala",
+        "http://purl.org/dc/terms/references": "https://www.antweb.org/specimenImages.do?name=casent4026135",
+        "http://purl.org/dc/terms/title": "casent4026135 dorsal view 1",
+        "http://purl.org/dc/terms/rightsHolder": "California Academy of Sciences, 2000-2026",
+        "http://purl.org/dc/terms/identifier": "https://www.antweb.org/images/casent4026135/casent4026135_d_1_high.jpg",
+        "http://purl.org/dc/terms/license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)"
+      },
+      {
+        "http://purl.org/dc/terms/format": "image/jpeg",
+        "http://purl.org/dc/terms/creator": "Nomena Rasoarimalala",
+        "http://purl.org/dc/terms/references": "https://www.antweb.org/specimenImages.do?name=casent4026135",
+        "http://purl.org/dc/terms/title": "casent4026135 head view 1",
+        "http://purl.org/dc/terms/rightsHolder": "California Academy of Sciences, 2000-2026",
+        "http://purl.org/dc/terms/identifier": "https://www.antweb.org/images/casent4026135/casent4026135_h_1_high.jpg",
+        "http://purl.org/dc/terms/license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)"
+      },
+      {
+        "http://purl.org/dc/terms/format": "image/jpeg",
+        "http://purl.org/dc/terms/creator": "Nomena Rasoarimalala",
+        "http://purl.org/dc/terms/references": "https://www.antweb.org/specimenImages.do?name=casent4026135",
+        "http://purl.org/dc/terms/title": "casent4026135 label view 1",
+        "http://purl.org/dc/terms/rightsHolder": "California Academy of Sciences, 2000-2026",
+        "http://purl.org/dc/terms/identifier": "https://www.antweb.org/images/casent4026135/casent4026135_l_1_high.jpg",
+        "http://purl.org/dc/terms/license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)"
+      },
+      {
+        "http://purl.org/dc/terms/format": "image/jpeg",
+        "http://purl.org/dc/terms/creator": "Nomena Rasoarimalala",
+        "http://purl.org/dc/terms/references": "https://www.antweb.org/specimenImages.do?name=casent4026135",
+        "http://purl.org/dc/terms/title": "casent4026135 profile view 1",
+        "http://purl.org/dc/terms/rightsHolder": "California Academy of Sciences, 2000-2026",
+        "http://purl.org/dc/terms/identifier": "https://www.antweb.org/images/casent4026135/casent4026135_p_1_high.jpg",
+        "http://purl.org/dc/terms/license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)"
+      }
+    ]
+  },
+  "basisOfRecord": "PRESERVED_SPECIMEN",
+  "occurrenceStatus": "PRESENT",
+  "classifications": {
+    "7ddf754f-d193-4cc9-b351-99906754a03b": {
+      "usage": {
+        "key": "55DQ2",
+        "name": "Terataner alluaudi (Emery, 1895)",
+        "rank": "SPECIES",
+        "code": "ZOOLOGICAL",
+        "authorship": "(Emery, 1895)",
+        "genericName": "Terataner",
+        "specificEpithet": "alluaudi",
+        "formattedName": "<i>Terataner</i> <i>alluaudi</i> (Emery, 1895)"
+      },
+      "acceptedUsage": {
+        "key": "55DQ2",
+        "name": "Terataner alluaudi (Emery, 1895)",
+        "rank": "SPECIES",
+        "code": "ZOOLOGICAL",
+        "authorship": "(Emery, 1895)",
+        "genericName": "Terataner",
+        "specificEpithet": "alluaudi",
+        "formattedName": "<i>Terataner</i> <i>alluaudi</i> (Emery, 1895)"
+      },
+      "taxonomicStatus": "ACCEPTED",
+      "classification": [
+        {
+          "key": "CS5HF",
+          "name": "Eukaryota",
+          "rank": "DOMAIN"
+        },
+        {
+          "key": "N",
+          "name": "Animalia",
+          "rank": "KINGDOM"
+        },
+        {
+          "key": "RT",
+          "name": "Arthropoda",
+          "rank": "PHYLUM"
+        },
+        {
+          "key": "L2655",
+          "name": "Hexapoda",
+          "rank": "SUBPHYLUM"
+        },
+        {
+          "key": "H6",
+          "name": "Insecta",
+          "rank": "CLASS"
+        },
+        {
+          "key": "HYM",
+          "name": "Hymenoptera",
+          "rank": "ORDER"
+        },
+        {
+          "key": "KZPW7",
+          "name": "Apocrita",
+          "rank": "SUBORDER"
+        },
+        {
+          "key": "KZMNP",
+          "name": "Aculeata",
+          "rank": "INFRAORDER"
+        },
+        {
+          "key": "VGRS7",
+          "name": "Formicoidea",
+          "rank": "SUPERFAMILY"
+        },
+        {
+          "key": "CLRKP",
+          "name": "Formicidae",
+          "rank": "FAMILY"
+        },
+        {
+          "key": "CMD7Z",
+          "name": "Myrmicinae",
+          "rank": "SUBFAMILY"
+        },
+        {
+          "key": "CLMZ7",
+          "name": "Crematogastrini",
+          "rank": "TRIBE"
+        },
+        {
+          "key": "7TYJ",
+          "name": "Terataner",
+          "rank": "GENUS"
+        },
+        {
+          "key": "55DQ2",
+          "name": "Terataner alluaudi",
+          "rank": "SPECIES"
+        }
+      ],
+      "issues": []
+    },
+    "d7dddbf4-2cf0-4f39-9b2a-bb099caae36c": {
+      "usage": {
+        "key": "1317371",
+        "name": "Terataner alluaudi (Emery, 1895)",
+        "rank": "SPECIES",
+        "code": "ZOOLOGICAL",
+        "authorship": "(Emery, 1895)",
+        "genericName": "Terataner",
+        "specificEpithet": "alluaudi",
+        "formattedName": "<i>Terataner</i> <i>alluaudi</i> (Emery, 1895)"
+      },
+      "acceptedUsage": {
+        "key": "1317371",
+        "name": "Terataner alluaudi (Emery, 1895)",
+        "rank": "SPECIES",
+        "code": "ZOOLOGICAL",
+        "authorship": "(Emery, 1895)",
+        "genericName": "Terataner",
+        "specificEpithet": "alluaudi",
+        "formattedName": "<i>Terataner</i> <i>alluaudi</i> (Emery, 1895)"
+      },
+      "taxonomicStatus": "ACCEPTED",
+      "classification": [
+        {
+          "key": "1",
+          "name": "Animalia",
+          "rank": "KINGDOM"
+        },
+        {
+          "key": "54",
+          "name": "Arthropoda",
+          "rank": "PHYLUM"
+        },
+        {
+          "key": "216",
+          "name": "Insecta",
+          "rank": "CLASS"
+        },
+        {
+          "key": "1457",
+          "name": "Hymenoptera",
+          "rank": "ORDER"
+        },
+        {
+          "key": "4342",
+          "name": "Formicidae",
+          "rank": "FAMILY"
+        },
+        {
+          "key": "1317363",
+          "name": "Terataner",
+          "rank": "GENUS"
+        },
+        {
+          "key": "1317371",
+          "name": "Terataner alluaudi",
+          "rank": "SPECIES"
+        }
+      ],
+      "issues": []
+    }
+  },
+  "taxonKey": 1317371,
+  "kingdomKey": 1,
+  "phylumKey": 54,
+  "classKey": 216,
+  "orderKey": 1457,
+  "familyKey": 4342,
+  "genusKey": 1317363,
+  "speciesKey": 1317371,
+  "acceptedTaxonKey": 1317371,
+  "scientificName": "Terataner alluaudi (Emery, 1895)",
+  "scientificNameAuthorship": "(Emery, 1895)",
+  "acceptedScientificName": "Terataner alluaudi (Emery, 1895)",
+  "kingdom": "Animalia",
+  "phylum": "Arthropoda",
+  "order": "Hymenoptera",
+  "family": "Formicidae",
+  "genus": "Terataner",
+  "species": "Terataner alluaudi",
+  "genericName": "Terataner",
+  "specificEpithet": "alluaudi",
+  "taxonRank": "SPECIES",
+  "taxonomicStatus": "ACCEPTED",
+  "decimalLatitude": -12.3292,
+  "decimalLongitude": 49.33899,
+  "elevation": 150.0,
+  "continent": "AFRICA",
+  "stateProvince": "Antsiranana",
+  "gadm": {
+    "level0": {
+      "gid": "MDG",
+      "name": "Madagascar"
+    },
+    "level1": {
+      "gid": "MDG.2_1",
+      "name": "Antsiranana"
+    },
+    "level2": {
+      "gid": "MDG.2.1_1",
+      "name": "Diana"
+    },
+    "level3": {
+      "gid": "MDG.2.1.3_1",
+      "name": "Antsiranana Rural"
+    }
+  },
+  "year": 2026,
+  "month": 3,
+  "day": 30,
+  "eventDate": "2026-03-30",
+  "startDayOfYear": 89,
+  "endDayOfYear": 89,
+  "issues": [
+    "GEODETIC_DATUM_ASSUMED_WGS84",
+    "CONTINENT_DERIVED_FROM_COORDINATES",
+    "COLLECTION_MATCH_NONE",
+    "INSTITUTION_MATCH_FUZZY"
+  ],
+  "modified": "2026-08-22T18:08:31.000+00:00",
+  "lastInterpreted": "2026-08-24T12:09:02.928+00:00",
+  "license": "http://creativecommons.org/licenses/by/4.0/legalcode",
+  "isSequenced": false,
+  "identifiers": [
+    {
+      "identifier": "CAS:ANTWEB:casent4026135"
+    }
+  ],
+  "media": [
+    {
+      "type": "StillImage",
+      "format": "image/jpeg",
+      "references": "https://www.antweb.org/specimenImages.do?name=casent4026135",
+      "title": "casent4026135 dorsal view 1",
+      "creator": "Nomena Rasoarimalala",
+      "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+      "rightsHolder": "California Academy of Sciences, 2000-2026",
+      "identifier": "https://www.antweb.org/images/casent4026135/casent4026135_d_1_high.jpg"
+    },
+    {
+      "type": "StillImage",
+      "format": "image/jpeg",
+      "references": "https://www.antweb.org/specimenImages.do?name=casent4026135",
+      "title": "casent4026135 head view 1",
+      "creator": "Nomena Rasoarimalala",
+      "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+      "rightsHolder": "California Academy of Sciences, 2000-2026",
+      "identifier": "https://www.antweb.org/images/casent4026135/casent4026135_h_1_high.jpg"
+    },
+    {
+      "type": "StillImage",
+      "format": "image/jpeg",
+      "references": "https://www.antweb.org/specimenImages.do?name=casent4026135",
+      "title": "casent4026135 label view 1",
+      "creator": "Nomena Rasoarimalala",
+      "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+      "rightsHolder": "California Academy of Sciences, 2000-2026",
+      "identifier": "https://www.antweb.org/images/casent4026135/casent4026135_l_1_high.jpg"
+    },
+    {
+      "type": "StillImage",
+      "format": "image/jpeg",
+      "references": "https://www.antweb.org/specimenImages.do?name=casent4026135",
+      "title": "casent4026135 profile view 1",
+      "creator": "Nomena Rasoarimalala",
+      "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+      "rightsHolder": "California Academy of Sciences, 2000-2026",
+      "identifier": "https://www.antweb.org/images/casent4026135/casent4026135_p_1_high.jpg"
+    }
+  ],
+  "facts": [],
+  "relations": [],
+  "institutionKey": "d2a27206-87ab-47ea-b5fc-d2e57054b688",
+  "isInCluster": false,
+  "recordedBy": "Brian L. Fisher|Malagasy Arthropod Team",
+  "preparations": "Pin",
+  "samplingProtocol": "hand collecting",
+  "dnaSequenceID": [],
+  "nucleotideSequence": [],
+  "geodeticDatum": "WGS84",
+  "class": "Insecta",
+  "countryCode": "MG",
+  "recordedByIDs": [],
+  "identifiedByIDs": [],
+  "gbifRegion": "AFRICA",
+  "country": "Madagascar",
+  "publishedByGbifRegion": "NORTH_AMERICA",
+  "identifier": "CAS:ANTWEB:casent4026135",
+  "habitat": "tropical dry forest on karst limestone; ex dead twig above ground",
+  "verbatimEventDate": "2026-03-30",
+  "nomenclaturalCode": "ICZN",
+  "http://unknown.org/crawl_attempt": "634",
+  "http://unknown.org/status": "not_reviewed",
+  "locality": "Montagne des Français",
+  "georeferenceRemarks": "±500 m",
+  "fieldNumber": "BLF44498",
+  "gbifID": "6196662952",
+  "collectionCode": "ANTWEB",
+  "occurrenceID": "CAS:ANTWEB:casent4026135",
+  "catalogNumber": "casent4026135",
+  "locationRemarks": "coordinates obtained from GPS",
+  "institutionCode": "CAS",
+  "ownerInstitutionCode": "CASC",
+  "higherClassification": "animalia;arthropoda;insecta;hymenoptera;hymenoptera;formicidae;myrmicinae"
+}
+
+gbifID=6196662952 occurrenceID=CAS:ANTWEB:casent4026135 catalogNumber=casent4026135
+  genus=Terataner species=Terataner alluaudi taxonRank=SPECIES sex=None
+  stateProvince=Antsiranana locality=Montagne des Français coords=(-12.3292, 49.33899)
+  media: https://www.antweb.org/images/casent4026135/casent4026135_d_1_high.jpg | title=casent4026135 dorsal view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026135/casent4026135_h_1_high.jpg | title=casent4026135 head view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026135/casent4026135_l_1_high.jpg | title=casent4026135 label view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026135/casent4026135_p_1_high.jpg | title=casent4026135 profile view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+gbifID=6196666403 occurrenceID=CAS:ANTWEB:casent4026126 catalogNumber=casent4026126
+  genus=Aptinoma species=Aptinoma mangabe taxonRank=SPECIES sex=None
+  stateProvince=Antsiranana locality=Montagne des Français coords=(-12.3292, 49.33899)
+  media: https://www.antweb.org/images/casent4026126/casent4026126_d_1_high.jpg | title=casent4026126 dorsal view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026126/casent4026126_h_1_high.jpg | title=casent4026126 head view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026126/casent4026126_l_1_high.jpg | title=casent4026126 label view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026126/casent4026126_p_1_high.jpg | title=casent4026126 profile view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+gbifID=6196666437 occurrenceID=CAS:ANTWEB:casent4026129 catalogNumber=casent4026129
+  genus=None species=None taxonRank=FAMILY sex=None
+  stateProvince=Antsiranana locality=Montagne des Français coords=(-12.3292, 49.33899)
+  media: https://www.antweb.org/images/casent4026129/casent4026129_d_1_high.jpg | title=casent4026129 dorsal view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026129/casent4026129_h_1_high.jpg | title=casent4026129 head view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026129/casent4026129_l_1_high.jpg | title=casent4026129 label view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026129/casent4026129_p_1_high.jpg | title=casent4026129 profile view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+gbifID=6196667140 occurrenceID=CAS:ANTWEB:casent4026138 catalogNumber=casent4026138
+  genus=None species=None taxonRank=FAMILY sex=None
+  stateProvince=Antsiranana locality=Montagne des Français coords=(-12.3292, 49.33899)
+  media: https://www.antweb.org/images/casent4026138/casent4026138_d_1_high.jpg | title=casent4026138 dorsal view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026138/casent4026138_h_1_high.jpg | title=casent4026138 head view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026138/casent4026138_l_1_high.jpg | title=casent4026138 label view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026138/casent4026138_p_1_high.jpg | title=casent4026138 profile view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+gbifID=6196667239 occurrenceID=CAS:ANTWEB:casent4026132 catalogNumber=casent4026132
+  genus=Aphaenogaster species=Aphaenogaster swammerdami taxonRank=SPECIES sex=None
+  stateProvince=Antsiranana locality=Montagne des Français coords=(-12.3292, 49.33899)
+  media: https://www.antweb.org/images/casent4026132/casent4026132_d_1_high.jpg | title=casent4026132 dorsal view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026132/casent4026132_h_1_high.jpg | title=casent4026132 head view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026132/casent4026132_l_1_high.jpg | title=casent4026132 label view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+  media: https://www.antweb.org/images/casent4026132/casent4026132_p_1_high.jpg | title=casent4026132 profile view 1 | creator=Nomena Rasoarimalala | license=Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free D
+
+6. One-record-per-view check
+============================
+catalogNumber 'casent4026135' -> specimen_code 'casent4026135'
+q=casent4026135: 1 hits total, 1 with matching specimen_code
+  catalogNumber=casent4026135          occurrenceID=CAS:ANTWEB:casent4026135       media=4 views=d,h,l,p
+=> one-record-per-view does NOT hold here: ONE record carries 4 media items
+
+same check on an older (2003) imaged specimen:
+catalogNumber 'casent0008678' -> specimen_code 'casent0008678'
+q=casent0008678: 2 hits total, 2 with matching specimen_code
+  catalogNumber=casent0008678          occurrenceID=CAS:ANTWEB:casent0008678       media=1 views=p
+  catalogNumber=casent0008678-d01      occurrenceID=CAS:ANTWEB:casent0008678-d01   media=0 views=-
+=> one-record-per-view HOLDS for this specimen (suffixed catalogNumbers)
+
+7. Image download test (GBIF cache)
+===================================
+GET https://api.gbif.org/v1/image/cache/1024x1024/occurrence/6196662952/media/5aefb288e3a23dc98aeb667cf2407fd4 -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+GET https://api.gbif.org/v1/image/cache/x/occurrence/6196662952/media/5aefb288e3a23dc98aeb667cf2407fd4 -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+GET https://api.gbif.org/v1/image/cache/1024x1024/occurrence/6196662952/media/2b3a12682d7da04a2e0a522dd8e4467b -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+GET https://api.gbif.org/v1/image/cache/x/occurrence/6196662952/media/2b3a12682d7da04a2e0a522dd8e4467b -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+GET https://api.gbif.org/v1/image/cache/1024x1024/occurrence/6196662952/media/5a243981309d2d810395adcc0a2e2987 -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+GET https://api.gbif.org/v1/image/cache/x/occurrence/6196662952/media/5a243981309d2d810395adcc0a2e2987 -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+GET https://api.gbif.org/v1/image/cache/1024x1024/occurrence/6196662952/media/5308a0f13cd39abcab92718f2bb29bb7 -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+GET https://api.gbif.org/v1/image/cache/x/occurrence/6196662952/media/5308a0f13cd39abcab92718f2bb29bb7 -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+GET https://api.gbif.org/v1/image/cache/1024x1024/occurrence/6196666403/media/c216a962389e9db965bf5ba74d9b326a -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+GET https://api.gbif.org/v1/image/cache/x/occurrence/6196666403/media/c216a962389e9db965bf5ba74d9b326a -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+GET https://api.gbif.org/v1/image/cache/1024x1024/occurrence/6196666403/media/83767a72094b3e09748de7e0a104f016 -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+GET https://api.gbif.org/v1/image/cache/x/occurrence/6196666403/media/83767a72094b3e09748de7e0a104f016 -> HTTP 404, text/html; charset=UTF-8, 0 bytes
+recent images not in the GBIF cache; retrying with 2003 records
+GET https://api.gbif.org/v1/image/cache/1024x1024/occurrence/865078416/media/ef454f340ce54f40a93ebc7415587567 -> HTTP 200, image/jpeg, 118396 bytes
+saved /home/ubuntu/projects/lifeplan/mg-ants/data/_test.jpg: 118396 bytes, 1024x1024 px, format=JPEG (source: https://www.antweb.org/images/casent0008678/casent0008678_p_2_high.jpg)
+image download test: OK
+
+Done
+====
+report saved to /home/ubuntu/projects/lifeplan/mg-ants/reports/01_explore.txt

@@ -1,0 +1,6 @@
+requests
+pandas
+pyarrow
+pillow
+tqdm
+pyyaml

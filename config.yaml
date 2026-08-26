@@ -1,0 +1,9 @@
+dataset_key: 13b70480-bd69-11dd-b15f-b8a03c50a862
+country: MG
+family_key: 4342  # Formicidae — the dataset also contains non-ant bycatch
+min_specimens_per_genus: 10
+views_priority: [p, d]
+castes: [worker]
+image_max_px: 1024
+test_fraction: 0.2
+seed: 42
