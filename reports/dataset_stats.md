@@ -1,9 +1,14 @@
 # Dataset stats
 
-- Images (one per specimen): **4346**
-- Genera kept (>= 10 specimens): **40**
-- Genera dropped: **19**
+- Images (one per specimen): **4354**
+- Genera kept (>= 10 specimens): **39**
+- Genera dropped: **18**
 - Share of rows with coordinates: **99.6%**
+
+## Genus names merging several genusKeys
+
+- Carebara: merged 2 genusKeys [np.int64(1317472), np.int64(1323617)]
+- Strumigenys: merged 2 genusKeys [np.int64(1320203), np.int64(1321015)]
 
 ## Media items per occurrence record (raw harvest)
 
@@ -65,12 +70,12 @@
 | Camponotus | 0 | 115 | 0 | 84 | 593 | 792 |
 | Pheidole | 0 | 36 | 0 | 68 | 685 | 789 |
 | Tetramorium | 0 | 20 | 0 | 102 | 373 | 495 |
-| Strumigenys | 0 | 17 | 0 | 34 | 323 | 374 |
+| Strumigenys | 0 | 18 | 0 | 38 | 331 | 387 |
 | Crematogaster | 0 | 28 | 0 | 53 | 199 | 280 |
 | Mystrium | 0 | 38 | 0 | 30 | 107 | 175 |
+| Carebara | 0 | 6 | 0 | 10 | 140 | 156 |
 | Technomyrmex | 0 | 27 | 2 | 18 | 107 | 154 |
 | Leptogenys | 0 | 11 | 0 | 2 | 138 | 151 |
-| Carebara | 0 | 3 | 0 | 6 | 127 | 136 |
 | Nesomyrmex | 0 | 14 | 0 | 21 | 87 | 122 |
 | Monomorium | 0 | 22 | 0 | 22 | 55 | 99 |
 | Tetraponera | 0 | 11 | 0 | 18 | 62 | 91 |
@@ -99,12 +104,10 @@
 | Cardiocondyla | 0 | 3 | 0 | 1 | 17 | 21 |
 | Eutetramorium | 0 | 1 | 0 | 5 | 15 | 21 |
 | Metapone | 0 | 3 | 0 | 5 | 13 | 21 |
-| Oligomyrmex | 0 | 3 | 0 | 4 | 13 | 20 |
 | Lioponera | 0 | 4 | 0 | 0 | 15 | 19 |
 | Aptinoma | 0 | 2 | 0 | 1 | 12 | 15 |
 | Probolomyrmex | 0 | 3 | 0 | 3 | 8 | 14 |
 | Ravavy | 0 | 6 | 0 | 2 | 5 | 13 |
-| Pyramica | 0 | 1 | 0 | 4 | 8 | 13 |
 | Plagiolepis | 0 | 1 | 0 | 5 | 6 | 12 |
 | Pilotrochus | 0 | 2 | 0 | 2 | 6 | 10 |
 | Melissotarsus | 0 | 0 | 0 | 2 | 7 | 9 |
@@ -113,13 +116,13 @@
 | Trichomyrmex | 0 | 1 | 0 | 1 | 5 | 7 |
 | Erromyrma | 0 | 2 | 0 | 2 | 2 | 6 |
 | Ponera | 0 | 0 | 0 | 2 | 4 | 6 |
-| Lividopone | 0 | 1 | 0 | 1 | 2 | 4 |
 | Lepisiota | 0 | 2 | 0 | 1 | 1 | 4 |
+| Lividopone | 0 | 1 | 0 | 1 | 2 | 4 |
 | Paraparatrechina | 0 | 1 | 0 | 0 | 2 | 3 |
 | Brachymyrmex | 0 | 2 | 0 | 0 | 1 | 3 |
-| Discothyrea | 0 | 0 | 0 | 0 | 1 | 1 |
 | Leptothorax | 0 | 0 | 0 | 0 | 1 | 1 |
 | Cerapachys | 0 | 1 | 0 | 0 | 0 | 1 |
+| Discothyrea | 0 | 0 | 0 | 0 | 1 | 1 |
 | Ooceraea | 0 | 0 | 0 | 0 | 1 | 1 |
 
 ## Images per genus per split
@@ -130,10 +133,10 @@
 | Pheidole | 548 | 137 | 685 |
 | Camponotus | 468 | 117 | 585 |
 | Tetramorium | 298 | 75 | 373 |
-| Strumigenys | 258 | 64 | 322 |
+| Strumigenys | 264 | 66 | 330 |
 | Crematogaster | 159 | 40 | 199 |
+| Carebara | 112 | 28 | 140 |
 | Leptogenys | 110 | 28 | 138 |
-| Carebara | 102 | 25 | 127 |
 | Mystrium | 85 | 21 | 106 |
 | Nesomyrmex | 69 | 17 | 86 |
 | Tetraponera | 50 | 12 | 62 |
@@ -145,26 +148,25 @@
 | Aphaenogaster | 29 | 7 | 36 |
 | Stigmatomma | 26 | 7 | 33 |
 | Vitsika | 26 | 6 | 32 |
-| Cataulacus | 25 | 6 | 31 |
 | Simopone | 25 | 6 | 31 |
-| Adetomyrma | 24 | 6 | 30 |
+| Cataulacus | 25 | 6 | 31 |
 | Tanipone | 24 | 6 | 30 |
+| Adetomyrma | 24 | 6 | 30 |
 | Nylanderia | 23 | 6 | 29 |
 | Royidris | 22 | 5 | 27 |
 | Prionopelta | 20 | 5 | 25 |
 | Terataner | 19 | 5 | 24 |
 | Proceratium | 18 | 4 | 22 |
 | Tapinoma | 17 | 4 | 21 |
-| Platythyrea | 17 | 4 | 21 |
 | Malagidris | 17 | 4 | 21 |
+| Platythyrea | 17 | 4 | 21 |
 | Odontomachus | 16 | 4 | 20 |
 | Meranoplus | 15 | 4 | 19 |
 | Cardiocondyla | 14 | 3 | 17 |
 | Syllophopsis | 14 | 3 | 17 |
 | Paratrechina | 13 | 3 | 16 |
-| Lioponera | 12 | 3 | 15 |
 | Eutetramorium | 12 | 3 | 15 |
-| Oligomyrmex | 10 | 3 | 13 |
+| Lioponera | 12 | 3 | 15 |
 | Metapone | 10 | 3 | 13 |
 
 ## Genera dropped (below threshold)
@@ -173,21 +175,20 @@
 |---|---|
 | Aptinoma | 9 |
 | Probolomyrmex | 8 |
-| Pyramica | 8 |
 | Melissotarsus | 7 |
-| Plagiolepis | 6 |
 | Pilotrochus | 6 |
-| Trichomyrmex | 4 |
-| Solenopsis | 4 |
+| Plagiolepis | 6 |
 | Ponera | 4 |
-| Lividopone | 2 |
+| Solenopsis | 4 |
+| Trichomyrmex | 4 |
 | Paraparatrechina | 2 |
 | Erromyrma | 2 |
 | Parasyscia | 2 |
-| Discothyrea | 1 |
+| Lividopone | 2 |
 | Brachymyrmex | 1 |
-| Ooceraea | 1 |
 | Leptothorax | 1 |
+| Ooceraea | 1 |
+| Discothyrea | 1 |
 | Lepisiota | 1 |
 | Ravavy | 1 |
 
@@ -195,12 +196,12 @@
 
 | stateProvince | images |
 |---|---|
-| Antsiranana | 1256 |
+| Antsiranana | 1259 |
 | Toamasina | 937 |
-| Toliara | 635 |
-| Fianarantsoa | 598 |
-| Antananarivo | 570 |
-| Mahajanga | 283 |
+| Toliara | 636 |
+| Fianarantsoa | 599 |
+| Antananarivo | 572 |
+| Mahajanga | 284 |
 | Majunga | 49 |
 | (none) | 8 |
 | Toliary | 6 |

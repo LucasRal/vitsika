@@ -1,8 +1,12 @@
 input: 24013 media rows, 5858 records, 5857 specimens
+synonym remap: Oligomyrmex -> Carebara (20 specimens)
+synonym remap: Pyramica -> Strumigenys (13 specimens)
+genus name merge — Carebara: merged 2 genusKeys [np.int64(1317472), np.int64(1323617)]
+genus name merge — Strumigenys: merged 2 genusKeys [np.int64(1320203), np.int64(1321015)]
 after dropping label/unknown views: 19386 rows
 after caste filter ['worker']: 13921 rows, 4532 specimens
 one image per specimen (p/d priority): 4416 rows
-genera kept: 40 (dropped 19 below 10 specimens); 4346 images
-split: {'train': 3480, 'test': 866}
+genera kept: 39 (dropped 18 below 10 specimens); 4354 images
+split: {'train': 3486, 'test': 868}
 dataset written to /home/ubuntu/projects/lifeplan/mg-ants/data/dataset.csv
 stats written to /home/ubuntu/projects/lifeplan/mg-ants/reports/dataset_stats.md

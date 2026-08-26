@@ -1,0 +1,5 @@
+# Outdated GBIF backbone genus names -> current genus.
+# Applied in 03_build_dataset.py before the per-genus threshold and split;
+# the original backbone name is kept in the genus_gbif column.
+Oligomyrmex: Carebara
+Pyramica: Strumigenys

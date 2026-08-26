@@ -20,7 +20,7 @@ from pathlib import Path
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gbif_client import load_config, setup_logging  # noqa: E402
+from gbif_client import load_config, sanitize_code, setup_logging  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -28,6 +28,21 @@ RAW = DATA / "raw"
 REPORTS = ROOT / "reports"
 
 log = logging.getLogger("build_dataset")
+
+
+def apply_genus_synonyms(raw: pd.DataFrame) -> pd.DataFrame:
+    """Remap outdated backbone genus names (config/synonyms.yaml) to current
+    ones BEFORE thresholds and splits; keep the original in genus_gbif."""
+    raw = raw.copy()
+    raw["genus_gbif"] = raw["genus"]
+    syn_path = ROOT / "config" / "synonyms.yaml"
+    synonyms: dict[str, str] = load_config(syn_path) if syn_path.exists() else {}
+    if synonyms:
+        raw["genus"] = raw["genus"].replace(synonyms)
+        for old, new in synonyms.items():
+            n = raw.loc[raw["genus_gbif"] == old, "specimen_code"].nunique()
+            log.info("synonym remap: %s -> %s (%d specimens)", old, new, n)
+    return raw
 
 
 def log_merged_genus_keys(df: pd.DataFrame) -> list[str]:
@@ -187,6 +202,7 @@ def main() -> None:
     log.info("input: %d media rows, %d records, %d specimens",
              len(raw), raw["gbifID"].nunique(), raw["specimen_code"].nunique())
 
+    raw = apply_genus_synonyms(raw)
     merge_notes = log_merged_genus_keys(raw)
 
     df = raw[raw["view"].isin(["h", "d", "p"])]
@@ -211,6 +227,11 @@ def main() -> None:
 
     df["split"] = split_by_specimen(df, cfg["test_fraction"], cfg["seed"])
     log.info("split: %s", df["split"].value_counts().to_dict())
+
+    df["image_path"] = (
+        "data/images/" + df["genus"].astype(str) + "/"
+        + df["specimen_code"].map(sanitize_code) + "_" + df["view"] + ".jpg"
+    )
 
     out = DATA / "dataset.csv"
     df.to_csv(out, index=False)

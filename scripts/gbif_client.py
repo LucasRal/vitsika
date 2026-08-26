@@ -101,6 +101,12 @@ def view_from_url(image_url: str) -> str | None:
     return m.group(1) if m else None
 
 
+def sanitize_code(code: str) -> str:
+    """Filesystem-safe specimen code: chars outside [A-Za-z0-9_-] become '_',
+    with runs of '_' collapsed (e.g. 'blf2102(14)-8' -> 'blf2102_14_-8')."""
+    return re.sub(r"_+", "_", re.sub(r"[^A-Za-z0-9_-]", "_", code))
+
+
 def is_antweb_url(url: str) -> bool:
     host = urlparse(url).netloc.lower()
     return host == "antweb.org" or host.endswith(".antweb.org")

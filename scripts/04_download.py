@@ -108,6 +108,33 @@ def write_download_stats(status: pd.DataFrame) -> None:
     )
     lines.append("")
 
+    lines.append("## Failures per genus")
+    lines.append("")
+    by_genus = status.groupby("genus").agg(rows=("download_failed", "size"),
+                                           failed=("download_failed", "sum"))
+    by_genus = by_genus[by_genus["failed"] > 0].sort_values("failed", ascending=False)
+    if by_genus.empty:
+        lines.append("None.")
+    else:
+        lines += md_table(
+            ["genus", "rows", "failed", "fail rate"],
+            [[g, r.rows, r.failed, f"{r.failed / r.rows:.1%}"] for g, r in by_genus.iterrows()],
+        )
+    lines.append("")
+
+    lines.append("## Usable images per genus per split (downloads that succeeded)")
+    lines.append("")
+    usable = status[~status["download_failed"]]
+    pivot = usable.pivot_table(index="genus", columns="split", values="specimen_code",
+                               aggfunc="count", fill_value=0)
+    pivot["total"] = pivot.sum(axis=1)
+    pivot = pivot.sort_values("total", ascending=False)
+    lines += md_table(
+        ["genus", "train", "test", "total"],
+        [[g, r.get("train", 0), r.get("test", 0), r["total"]] for g, r in pivot.iterrows()],
+    )
+    lines.append("")
+
     out = REPORTS / "download_stats.md"
     out.write_text("\n".join(lines), encoding="utf-8")
     log.info("stats written to %s", out)
@@ -130,13 +157,15 @@ def main() -> None:
     outcomes: list[dict] = []
 
     for row in tqdm(df.itertuples(index=False), total=len(df), unit="img"):
-        dest = IMAGES / str(row.genus) / f"{row.specimen_code}_{row.view}.jpg"
+        dest = ROOT / str(row.image_path)  # sanitized path built in phase 3
         outcome = {
             "specimen_code": row.specimen_code,
             "genus": row.genus,
+            "split": row.split,
             "gbifID": row.gbifID,
             "eventDate": row.eventDate,
             "image_url": row.image_url,
+            "image_path": row.image_path,
             "download_failed": False,
             "error": "",
         }
