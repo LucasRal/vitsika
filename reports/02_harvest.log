@@ -3,6 +3,7 @@ imaged MG Formicidae records: 6995
 [2/60] Camponotus (1312361): 3122 media rows, 792 specimens
 [3/60] Pheidole (1321654): 3646 media rows, 789 specimens
 [4/60] Tetramorium (1323128): 2055 media rows, 495 specimens
+request error on https://api.gbif.org/v1/occurrence/865076740/verbatim: HTTPSConnectionPool(host='api.gbif.org', port=443): Read timed out. (read timeout=60) — retry in 1s
 [5/60] Strumigenys (1320203): 1547 media rows, 375 specimens
 [6/60] Crematogaster (1324306): 1274 media rows, 280 specimens
 [7/60] Mystrium (1326355): 848 media rows, 176 specimens
@@ -38,21 +39,18 @@ imaged MG Formicidae records: 6995
 [37/60] Eutetramorium (1318666): 90 media rows, 21 specimens
 [38/60] Metapone (1326945): 131 media rows, 21 specimens
 [39/60] Oligomyrmex (1323617): 85 media rows, 20 specimens
-HTTP 429 on https://api.gbif.org/v1/occurrence/search — retry in 1s
 [40/60] Lioponera (4673512): 91 media rows, 19 specimens
 [41/60] Aptinoma (4673426): 68 media rows, 15 specimens
 [42/60] Probolomyrmex (1320011): 62 media rows, 14 specimens
 [43/60] Pyramica (1321015): 58 media rows, 13 specimens
 [44/60] Ravavy (4673430): 61 media rows, 13 specimens
 [45/60] Plagiolepis (1320758): 52 media rows, 12 specimens
-HTTP 429 on https://api.gbif.org/v1/occurrence/search — retry in 1s
 [46/60] Pilotrochus (1327440): 54 media rows, 10 specimens
 [47/60] Melissotarsus (1316287): 31 media rows, 9 specimens
 [48/60] Parasyscia (4679903): 34 media rows, 8 specimens
 [49/60] Solenopsis (9107211): 35 media rows, 8 specimens
 [50/60] Trichomyrmex (4672464): 29 media rows, 7 specimens
 [51/60] Erromyrma (10099461): 30 media rows, 6 specimens
-HTTP 429 on https://api.gbif.org/v1/occurrence/search — retry in 1s
 [52/60] Ponera (1317227): 27 media rows, 6 specimens
 [53/60] Brachymyrmex (1317285): 33 media rows, 4 specimens
 [54/60] Lepisiota (1320868): 22 media rows, 4 specimens
