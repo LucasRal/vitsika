@@ -43,11 +43,11 @@ def log_merged_genus_keys(df: pd.DataFrame) -> list[str]:
 
 
 def caste_drop_table(spec: pd.DataFrame, castes: list[str]) -> pd.DataFrame:
-    """Per genus: specimens kept vs dropped for null sex vs queen/male/other."""
-    sex = spec["sex"].fillna("").str.lower()
+    """Per genus: specimens kept vs dropped for null caste vs queen/male/other."""
+    caste = spec["caste"].fillna("").str.strip().str.lower()
     category = pd.Series("kept (" + "/".join(castes) + ")", index=spec.index)
-    category[~sex.isin(castes)] = "dropped: " + sex[~sex.isin(castes)]
-    category[sex == ""] = "dropped: sex null"
+    category[~caste.isin(castes)] = "dropped: " + caste[~caste.isin(castes)]
+    category[caste == ""] = "dropped: caste null"
     table = pd.crosstab(spec["genus"], category)
     table["total"] = table.sum(axis=1)
     return table.sort_values("total", ascending=False)
@@ -133,7 +133,7 @@ def write_stats(
     )
     lines.append("")
 
-    lines.append("## Caste filter per genus (specimens with usable views)")
+    lines.append("## Caste filter per genus (verbatim caste; specimens with usable views)")
     lines.append("")
     lines += md_table(
         ["genus"] + list(caste_table.columns),
@@ -194,7 +194,7 @@ def main() -> None:
 
     castes = [c.lower() for c in cfg["castes"]]
     caste_table = caste_drop_table(df.drop_duplicates("specimen_code"), castes)
-    df = df[df["sex"].fillna("").str.lower().isin(castes)]
+    df = df[df["caste"].fillna("").str.strip().str.lower().isin(castes)]
     log.info("after caste filter %s: %d rows, %d specimens",
              castes, len(df), df["specimen_code"].nunique())
 

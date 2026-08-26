@@ -3,8 +3,10 @@
 
 Paginates /v1/occurrence/search per genusKey (from data/genera.csv), explodes
 media[] into one row per image, keeps only antweb.org identifiers, and writes
-data/raw/records.parquet. Resumable: each finished genus is recorded in
-data/raw/done_genera.txt and stored as its own parquet part.
+data/raw/records.parquet. For each kept record, one extra call to
+/occurrence/{gbifID}/verbatim retrieves the caste (verbatim dwc:sex — GBIF's
+interpreted sex field drops 'worker'). Resumable: each finished genus is
+recorded in data/raw/done_genera.txt and stored as its own parquet part.
 
 Refuses to run the inline strategy if the imaged MG count exceeds 90,000
 (offset + limit must stay <= 100,000) — in that case switch to the GBIF
@@ -42,7 +44,7 @@ OFFSET_CAP = 100_000
 COLUMNS = [
     "gbifID", "occurrenceID", "catalogNumber", "specimen_code", "view",
     "genusKey", "genus", "subfamily", "species", "scientificName",
-    "verbatimScientificName", "taxonRank", "sex", "typeStatus",
+    "verbatimScientificName", "taxonRank", "sex", "caste", "typeStatus",
     "stateProvince", "locality", "decimalLatitude", "decimalLongitude",
     "elevation", "eventDate", "recordedBy", "identifiedBy",
     "image_url", "image_title", "creator", "license", "rightsHolder", "issues",
@@ -72,6 +74,7 @@ def media_rows(rec: dict[str, Any]) -> list[dict[str, Any]]:
             "verbatimScientificName": rec.get("verbatimScientificName"),
             "taxonRank": rec.get("taxonRank"),
             "sex": rec.get("sex"),
+            "caste": "",  # filled from the verbatim record (see harvest_genus)
             "typeStatus": rec.get("typeStatus"),
             "stateProvince": rec.get("stateProvince"),
             "locality": rec.get("locality"),
@@ -89,6 +92,15 @@ def media_rows(rec: dict[str, Any]) -> list[dict[str, Any]]:
             "issues": ";".join(rec.get("issues", [])),
         })
     return rows
+
+
+def fetch_verbatim_caste(client: GbifClient, gbif_id: Any) -> str:
+    """AntWeb stores the caste in the verbatim dwc:sex field ('worker',
+    'queen', 'male', 'alate queen', ...). GBIF's interpretation layer only
+    keeps Male/Female/Other, so 'worker' becomes sex=null — the verbatim
+    record is the only reliable source."""
+    v = client.get_json(f"occurrence/{gbif_id}/verbatim")
+    return (v.get("http://rs.tdwg.org/dwc/terms/sex") or "").strip().lower()
 
 
 def harvest_genus(client: GbifClient, cfg: dict, genus_key: str) -> pd.DataFrame:
@@ -111,7 +123,12 @@ def harvest_genus(client: GbifClient, cfg: dict, genus_key: str) -> pd.DataFrame
             },
         )
         for rec in res["results"]:
-            rows.extend(media_rows(rec))
+            new_rows = media_rows(rec)
+            if new_rows:  # only spend a verbatim call on records we keep
+                caste = fetch_verbatim_caste(client, rec["key"])
+                for row in new_rows:
+                    row["caste"] = caste
+            rows.extend(new_rows)
         offset += PAGE_SIZE
         if res.get("endOfRecords", True):
             break

@@ -1,0 +1,8 @@
+input: 24013 media rows, 5858 records, 5857 specimens
+after dropping label/unknown views: 19386 rows
+after caste filter ['worker']: 0 rows, 0 specimens
+one image per specimen (p/d priority): 0 rows
+genera kept: 0 (dropped 0 below 10 specimens); 0 images
+split: {}
+dataset written to /home/ubuntu/projects/lifeplan/mg-ants/data/dataset.csv
+stats written to /home/ubuntu/projects/lifeplan/mg-ants/reports/dataset_stats.md
