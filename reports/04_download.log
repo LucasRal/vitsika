@@ -1,0 +1,5 @@
+dataset: 4354 images to ensure
+request error on https://api.gbif.org/v1/image/cache/1024x1024/occurrence/865115801/media/d6a5a1f7510ba79ecdf1f11dab77d16f: HTTPSConnectionPool(host='api.gbif.org', port=443): Read timed out. (read timeout=60) — retry in 1s
+errors written to /home/ubuntu/projects/lifeplan/mg-ants/data/download_errors.csv
+stats written to /home/ubuntu/projects/lifeplan/mg-ants/reports/download_stats.md
+done: 139 downloaded, 0 skipped (already present), 4215 failed
