@@ -69,11 +69,20 @@ def caste_drop_table(spec: pd.DataFrame, castes: list[str]) -> pd.DataFrame:
 
 
 def pick_one_image_per_specimen(df: pd.DataFrame, views_priority: list[str]) -> pd.DataFrame:
+    """Prefer profile shot 1 (fallback: lowest shot index), then dorsal shot 1.
+    The shot index is parsed from the URL (_p_<n>_) as an INTEGER — string
+    sort would pick _p_10_ before _p_1_ (often a detail/SEM shot)."""
     rank = {v: i for i, v in enumerate(views_priority)}
     df = df[df["view"].isin(rank)].copy()
     df["view_rank"] = df["view"].map(rank)
-    df = df.sort_values(["specimen_code", "view_rank", "image_url"])
-    return df.drop_duplicates("specimen_code", keep="first").drop(columns=["view_rank"])
+    df["shot_index"] = (
+        df["image_url"].str.extract(r"_[hdpl]_(\d+)_", expand=False)
+        .astype("float").fillna(9999)
+    )
+    df = df.sort_values(["specimen_code", "view_rank", "shot_index"])
+    df = df.drop_duplicates("specimen_code", keep="first").drop(columns=["view_rank"])
+    df["shot_index"] = df["shot_index"].astype(int)
+    return df
 
 
 def split_by_specimen(df: pd.DataFrame, test_fraction: float, seed: int) -> pd.Series:

@@ -1,0 +1,34 @@
+2026-08-26 19:11:42,734 rows to download: 10
+2026-08-26 19:11:42,824 GET https://www.antweb.org/images/antweb1008494/antweb1008494_p_2_med.jpg -> HTTP 403
+2026-08-26 19:11:44,835 GET https://www.antweb.org/images/antweb1008494/antweb1008494_p_2_med.jpg -> HTTP 403
+2026-08-26 19:11:48,846 GET https://www.antweb.org/images/antweb1008494/antweb1008494_p_2_med.jpg -> HTTP 403
+2026-08-26 19:11:57,643 GET https://www.antweb.org/images/antweb1008554/antweb1008554_p_2_med.jpg -> HTTP 403
+2026-08-26 19:11:59,656 GET https://www.antweb.org/images/antweb1008554/antweb1008554_p_2_med.jpg -> HTTP 403
+2026-08-26 19:12:03,667 GET https://www.antweb.org/images/antweb1008554/antweb1008554_p_2_med.jpg -> HTTP 403
+2026-08-26 19:12:12,416 GET https://www.antweb.org/images/antweb1008775/antweb1008775_p_1_med.jpg -> HTTP 403
+2026-08-26 19:12:14,428 GET https://www.antweb.org/images/antweb1008775/antweb1008775_p_1_med.jpg -> HTTP 403
+2026-08-26 19:12:18,440 GET https://www.antweb.org/images/antweb1008775/antweb1008775_p_1_med.jpg -> HTTP 403
+2026-08-26 19:12:27,350 GET https://www.antweb.org/images/blf00976(40)-2/blf00976(40)-2_p_1_med.jpg -> HTTP 403
+2026-08-26 19:12:29,362 GET https://www.antweb.org/images/blf00976(40)-2/blf00976(40)-2_p_1_med.jpg -> HTTP 403
+2026-08-26 19:12:33,374 GET https://www.antweb.org/images/blf00976(40)-2/blf00976(40)-2_p_1_med.jpg -> HTTP 403
+2026-08-26 19:12:42,318 GET https://www.antweb.org/images/blf0561(26)-1/blf0561(26)-1_p_1_med.jpg -> HTTP 403
+2026-08-26 19:12:44,329 GET https://www.antweb.org/images/blf0561(26)-1/blf0561(26)-1_p_1_med.jpg -> HTTP 403
+2026-08-26 19:12:48,341 GET https://www.antweb.org/images/blf0561(26)-1/blf0561(26)-1_p_1_med.jpg -> HTTP 403
+2026-08-26 19:12:57,153 GET https://www.antweb.org/images/blf1070(39)-01/blf1070(39)-01_p_1_med.jpg -> HTTP 403
+2026-08-26 19:12:59,165 GET https://www.antweb.org/images/blf1070(39)-01/blf1070(39)-01_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:03,176 GET https://www.antweb.org/images/blf1070(39)-01/blf1070(39)-01_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:11,697 GET https://www.antweb.org/images/blf1070(40)-9/blf1070(40)-9_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:13,710 GET https://www.antweb.org/images/blf1070(40)-9/blf1070(40)-9_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:17,722 GET https://www.antweb.org/images/blf1070(40)-9/blf1070(40)-9_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:26,548 GET https://www.antweb.org/images/blf1862(05)-16/blf1862(05)-16_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:28,558 GET https://www.antweb.org/images/blf1862(05)-16/blf1862(05)-16_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:32,570 GET https://www.antweb.org/images/blf1862(05)-16/blf1862(05)-16_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:41,302 GET https://www.antweb.org/images/blf2072(29)-12/blf2072(29)-12_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:43,314 GET https://www.antweb.org/images/blf2072(29)-12/blf2072(29)-12_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:47,326 GET https://www.antweb.org/images/blf2072(29)-12/blf2072(29)-12_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:56,270 GET https://www.antweb.org/images/blf2102(14)-8/blf2102(14)-8_p_1_med.jpg -> HTTP 403
+2026-08-26 19:13:58,281 GET https://www.antweb.org/images/blf2102(14)-8/blf2102(14)-8_p_1_med.jpg -> HTTP 403
+2026-08-26 19:14:02,293 GET https://www.antweb.org/images/blf2102(14)-8/blf2102(14)-8_p_1_med.jpg -> HTTP 403
+2026-08-26 19:14:10,294 10 consecutive 403s — Cloudflare is blocking this IP. Stopping. Run this script from another network (e.g. a laptop on a residential connection).
+2026-08-26 19:14:10,297 failures appended to /home/ubuntu/projects/lifeplan/mg-ants/data/download_errors_antweb.csv
+2026-08-26 19:14:10,298 done: 0 downloaded, 10 failed

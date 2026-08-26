@@ -4,3 +4,4 @@ pyarrow
 pillow
 tqdm
 pyyaml
+curl_cffi
