@@ -1,9 +1,9 @@
 # Dataset stats
 
-- Images (one per specimen): **0**
-- Genera kept (>= 10 specimens): **0**
-- Genera dropped: **0**
-- Share of rows with coordinates: **nan%**
+- Images (one per specimen): **4346**
+- Genera kept (>= 10 specimens): **40**
+- Genera dropped: **19**
+- Share of rows with coordinates: **99.6%**
 
 ## Media items per occurrence record (raw harvest)
 
@@ -57,81 +57,151 @@
 | dorsal only (no profile) | 41 |
 | neither profile nor dorsal | 135 |
 
-## Caste filter per genus (specimens with usable views)
+## Caste filter per genus (verbatim caste; specimens with usable views)
 
-| genus | dropped: female | dropped: male | dropped: other | dropped: sex null | total |
-|---|---|---|---|---|---|
-| Hypoponera | 13 | 3 | 0 | 883 | 899 |
-| Camponotus | 84 | 115 | 0 | 593 | 792 |
-| Pheidole | 68 | 36 | 0 | 685 | 789 |
-| Tetramorium | 102 | 20 | 0 | 373 | 495 |
-| Strumigenys | 34 | 17 | 0 | 323 | 374 |
-| Crematogaster | 53 | 28 | 0 | 199 | 280 |
-| Mystrium | 30 | 38 | 0 | 107 | 175 |
-| Technomyrmex | 18 | 27 | 2 | 107 | 154 |
-| Leptogenys | 2 | 11 | 0 | 138 | 151 |
-| Carebara | 6 | 3 | 0 | 127 | 136 |
-| Nesomyrmex | 21 | 14 | 0 | 87 | 122 |
-| Monomorium | 22 | 22 | 0 | 55 | 99 |
-| Tetraponera | 18 | 11 | 0 | 62 | 91 |
-| Bothroponera | 6 | 34 | 0 | 47 | 87 |
-| Adetomyrma | 3 | 53 | 0 | 30 | 86 |
-| Pachycondyla | 17 | 20 | 0 | 37 | 74 |
-| Vitsika | 22 | 14 | 0 | 32 | 68 |
-| Anochetus | 8 | 12 | 0 | 39 | 59 |
-| Tapinoma | 8 | 11 | 1 | 38 | 58 |
-| Nylanderia | 11 | 17 | 0 | 29 | 57 |
-| Aphaenogaster | 10 | 5 | 0 | 36 | 51 |
-| Stigmatomma | 8 | 6 | 0 | 36 | 50 |
-| Cataulacus | 12 | 4 | 0 | 31 | 47 |
-| Prionopelta | 4 | 4 | 0 | 34 | 42 |
-| Royidris | 7 | 5 | 0 | 29 | 41 |
-| Malagidris | 6 | 11 | 0 | 21 | 38 |
-| Syllophopsis | 7 | 12 | 0 | 18 | 37 |
-| Platythyrea | 5 | 9 | 1 | 21 | 36 |
-| Simopone | 0 | 5 | 0 | 31 | 36 |
-| Terataner | 4 | 5 | 0 | 24 | 33 |
-| Tanipone | 0 | 3 | 0 | 30 | 33 |
-| Meranoplus | 6 | 4 | 0 | 22 | 32 |
-| Odontomachus | 4 | 7 | 0 | 20 | 31 |
-| Proceratium | 6 | 2 | 0 | 22 | 30 |
-| Paratrechina | 2 | 7 | 0 | 16 | 25 |
-| Cardiocondyla | 1 | 3 | 0 | 17 | 21 |
-| Eutetramorium | 5 | 1 | 0 | 15 | 21 |
-| Metapone | 5 | 3 | 0 | 13 | 21 |
-| Oligomyrmex | 4 | 3 | 0 | 13 | 20 |
-| Lioponera | 0 | 4 | 0 | 15 | 19 |
-| Aptinoma | 1 | 2 | 0 | 12 | 15 |
-| Probolomyrmex | 3 | 3 | 0 | 8 | 14 |
-| Ravavy | 2 | 6 | 0 | 5 | 13 |
-| Pyramica | 4 | 1 | 0 | 8 | 13 |
-| Plagiolepis | 5 | 1 | 0 | 6 | 12 |
-| Pilotrochus | 2 | 2 | 0 | 6 | 10 |
-| Melissotarsus | 2 | 0 | 0 | 7 | 9 |
-| Solenopsis | 2 | 2 | 0 | 4 | 8 |
-| Parasyscia | 2 | 4 | 0 | 2 | 8 |
-| Trichomyrmex | 1 | 1 | 0 | 5 | 7 |
-| Erromyrma | 2 | 2 | 0 | 2 | 6 |
-| Ponera | 2 | 0 | 0 | 4 | 6 |
-| Lividopone | 1 | 1 | 0 | 2 | 4 |
-| Lepisiota | 1 | 2 | 0 | 1 | 4 |
-| Paraparatrechina | 0 | 1 | 0 | 2 | 3 |
-| Brachymyrmex | 0 | 2 | 0 | 1 | 3 |
-| Discothyrea | 0 | 0 | 0 | 1 | 1 |
-| Leptothorax | 0 | 0 | 0 | 1 | 1 |
-| Cerapachys | 0 | 1 | 0 | 0 | 1 |
-| Ooceraea | 0 | 0 | 0 | 1 | 1 |
+| genus | dropped: 1 head | dropped: male | dropped: other | dropped: queen | kept (worker) | total |
+|---|---|---|---|---|---|---|
+| Hypoponera | 1 | 3 | 0 | 13 | 882 | 899 |
+| Camponotus | 0 | 115 | 0 | 84 | 593 | 792 |
+| Pheidole | 0 | 36 | 0 | 68 | 685 | 789 |
+| Tetramorium | 0 | 20 | 0 | 102 | 373 | 495 |
+| Strumigenys | 0 | 17 | 0 | 34 | 323 | 374 |
+| Crematogaster | 0 | 28 | 0 | 53 | 199 | 280 |
+| Mystrium | 0 | 38 | 0 | 30 | 107 | 175 |
+| Technomyrmex | 0 | 27 | 2 | 18 | 107 | 154 |
+| Leptogenys | 0 | 11 | 0 | 2 | 138 | 151 |
+| Carebara | 0 | 3 | 0 | 6 | 127 | 136 |
+| Nesomyrmex | 0 | 14 | 0 | 21 | 87 | 122 |
+| Monomorium | 0 | 22 | 0 | 22 | 55 | 99 |
+| Tetraponera | 0 | 11 | 0 | 18 | 62 | 91 |
+| Bothroponera | 0 | 34 | 0 | 6 | 47 | 87 |
+| Adetomyrma | 0 | 53 | 0 | 3 | 30 | 86 |
+| Pachycondyla | 0 | 20 | 0 | 17 | 37 | 74 |
+| Vitsika | 0 | 14 | 0 | 22 | 32 | 68 |
+| Anochetus | 0 | 12 | 0 | 8 | 39 | 59 |
+| Tapinoma | 0 | 11 | 1 | 8 | 38 | 58 |
+| Nylanderia | 0 | 17 | 0 | 11 | 29 | 57 |
+| Aphaenogaster | 0 | 5 | 0 | 10 | 36 | 51 |
+| Stigmatomma | 0 | 6 | 0 | 8 | 36 | 50 |
+| Cataulacus | 0 | 4 | 0 | 12 | 31 | 47 |
+| Prionopelta | 0 | 4 | 0 | 4 | 34 | 42 |
+| Royidris | 0 | 5 | 0 | 7 | 29 | 41 |
+| Malagidris | 0 | 11 | 0 | 6 | 21 | 38 |
+| Syllophopsis | 0 | 12 | 0 | 7 | 18 | 37 |
+| Platythyrea | 0 | 9 | 1 | 5 | 21 | 36 |
+| Simopone | 0 | 5 | 0 | 0 | 31 | 36 |
+| Terataner | 0 | 5 | 0 | 4 | 24 | 33 |
+| Tanipone | 0 | 3 | 0 | 0 | 30 | 33 |
+| Meranoplus | 0 | 4 | 0 | 6 | 22 | 32 |
+| Odontomachus | 0 | 7 | 0 | 4 | 20 | 31 |
+| Proceratium | 0 | 2 | 0 | 6 | 22 | 30 |
+| Paratrechina | 0 | 7 | 0 | 2 | 16 | 25 |
+| Cardiocondyla | 0 | 3 | 0 | 1 | 17 | 21 |
+| Eutetramorium | 0 | 1 | 0 | 5 | 15 | 21 |
+| Metapone | 0 | 3 | 0 | 5 | 13 | 21 |
+| Oligomyrmex | 0 | 3 | 0 | 4 | 13 | 20 |
+| Lioponera | 0 | 4 | 0 | 0 | 15 | 19 |
+| Aptinoma | 0 | 2 | 0 | 1 | 12 | 15 |
+| Probolomyrmex | 0 | 3 | 0 | 3 | 8 | 14 |
+| Ravavy | 0 | 6 | 0 | 2 | 5 | 13 |
+| Pyramica | 0 | 1 | 0 | 4 | 8 | 13 |
+| Plagiolepis | 0 | 1 | 0 | 5 | 6 | 12 |
+| Pilotrochus | 0 | 2 | 0 | 2 | 6 | 10 |
+| Melissotarsus | 0 | 0 | 0 | 2 | 7 | 9 |
+| Solenopsis | 0 | 2 | 0 | 2 | 4 | 8 |
+| Parasyscia | 0 | 4 | 0 | 2 | 2 | 8 |
+| Trichomyrmex | 0 | 1 | 0 | 1 | 5 | 7 |
+| Erromyrma | 0 | 2 | 0 | 2 | 2 | 6 |
+| Ponera | 0 | 0 | 0 | 2 | 4 | 6 |
+| Lividopone | 0 | 1 | 0 | 1 | 2 | 4 |
+| Lepisiota | 0 | 2 | 0 | 1 | 1 | 4 |
+| Paraparatrechina | 0 | 1 | 0 | 0 | 2 | 3 |
+| Brachymyrmex | 0 | 2 | 0 | 0 | 1 | 3 |
+| Discothyrea | 0 | 0 | 0 | 0 | 1 | 1 |
+| Leptothorax | 0 | 0 | 0 | 0 | 1 | 1 |
+| Cerapachys | 0 | 1 | 0 | 0 | 0 | 1 |
+| Ooceraea | 0 | 0 | 0 | 0 | 1 | 1 |
 
 ## Images per genus per split
 
 | genus | train | test | total |
 |---|---|---|---|
+| Hypoponera | 706 | 176 | 882 |
+| Pheidole | 548 | 137 | 685 |
+| Camponotus | 468 | 117 | 585 |
+| Tetramorium | 298 | 75 | 373 |
+| Strumigenys | 258 | 64 | 322 |
+| Crematogaster | 159 | 40 | 199 |
+| Leptogenys | 110 | 28 | 138 |
+| Carebara | 102 | 25 | 127 |
+| Mystrium | 85 | 21 | 106 |
+| Nesomyrmex | 69 | 17 | 86 |
+| Tetraponera | 50 | 12 | 62 |
+| Monomorium | 42 | 10 | 52 |
+| Technomyrmex | 40 | 10 | 50 |
+| Bothroponera | 36 | 9 | 45 |
+| Anochetus | 31 | 8 | 39 |
+| Pachycondyla | 30 | 7 | 37 |
+| Aphaenogaster | 29 | 7 | 36 |
+| Stigmatomma | 26 | 7 | 33 |
+| Vitsika | 26 | 6 | 32 |
+| Cataulacus | 25 | 6 | 31 |
+| Simopone | 25 | 6 | 31 |
+| Adetomyrma | 24 | 6 | 30 |
+| Tanipone | 24 | 6 | 30 |
+| Nylanderia | 23 | 6 | 29 |
+| Royidris | 22 | 5 | 27 |
+| Prionopelta | 20 | 5 | 25 |
+| Terataner | 19 | 5 | 24 |
+| Proceratium | 18 | 4 | 22 |
+| Tapinoma | 17 | 4 | 21 |
+| Platythyrea | 17 | 4 | 21 |
+| Malagidris | 17 | 4 | 21 |
+| Odontomachus | 16 | 4 | 20 |
+| Meranoplus | 15 | 4 | 19 |
+| Cardiocondyla | 14 | 3 | 17 |
+| Syllophopsis | 14 | 3 | 17 |
+| Paratrechina | 13 | 3 | 16 |
+| Lioponera | 12 | 3 | 15 |
+| Eutetramorium | 12 | 3 | 15 |
+| Oligomyrmex | 10 | 3 | 13 |
+| Metapone | 10 | 3 | 13 |
 
 ## Genera dropped (below threshold)
 
-None.
+| genus | specimens |
+|---|---|
+| Aptinoma | 9 |
+| Probolomyrmex | 8 |
+| Pyramica | 8 |
+| Melissotarsus | 7 |
+| Plagiolepis | 6 |
+| Pilotrochus | 6 |
+| Trichomyrmex | 4 |
+| Solenopsis | 4 |
+| Ponera | 4 |
+| Lividopone | 2 |
+| Paraparatrechina | 2 |
+| Erromyrma | 2 |
+| Parasyscia | 2 |
+| Discothyrea | 1 |
+| Brachymyrmex | 1 |
+| Ooceraea | 1 |
+| Leptothorax | 1 |
+| Lepisiota | 1 |
+| Ravavy | 1 |
 
 ## Top 15 stateProvince values
 
 | stateProvince | images |
 |---|---|
+| Antsiranana | 1256 |
+| Toamasina | 937 |
+| Toliara | 635 |
+| Fianarantsoa | 598 |
+| Antananarivo | 570 |
+| Mahajanga | 283 |
+| Majunga | 49 |
+| (none) | 8 |
+| Toliary | 6 |
+| Diego-Suarez | 4 |
