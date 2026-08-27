@@ -12,12 +12,14 @@ to re-run (outputs are rewritten).
 """
 from __future__ import annotations
 
+import argparse
 import logging
 import random
 import sys
 from pathlib import Path
 
 import pandas as pd
+from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gbif_client import load_config, sanitize_code, setup_logging  # noqa: E402
@@ -99,6 +101,36 @@ def split_by_specimen(df: pd.DataFrame, test_fraction: float, seed: int) -> pd.S
     return df["specimen_code"].map(split_map)
 
 
+def is_valid_image(path: Path) -> bool:
+    try:
+        with Image.open(path) as im:
+            im.verify()
+        return True
+    except Exception:
+        return False
+
+
+def image_source(df: pd.DataFrame) -> pd.Series:
+    """gbif_cache / commons / '' per row. A path counts as gbif_cache only if
+    the cache run succeeded for the SAME url (stale-replaced files whose shot
+    selection changed were re-downloaded from Commons)."""
+    gbif_ok: dict[str, str] = {}
+    p = DATA / "download_status.csv"
+    if p.exists():
+        s = pd.read_csv(p)
+        ok = s[~s["download_failed"]]
+        gbif_ok = dict(zip(ok["image_path"], ok["image_url"]))
+
+    def source(row: pd.Series) -> str:
+        if not (ROOT / str(row["image_path"])).exists():
+            return ""
+        if gbif_ok.get(row["image_path"]) == row["image_url"]:
+            return "gbif_cache"
+        return "commons"
+
+    return df.apply(source, axis=1)
+
+
 def md_table(header: list[str], rows: list[list]) -> list[str]:
     lines = ["| " + " | ".join(header) + " |"]
     lines.append("|" + "|".join("---" for _ in header) + "|")
@@ -115,8 +147,28 @@ def write_stats(
     caste_table: pd.DataFrame,
     merge_notes: list[str],
     cfg: dict,
+    provenance: dict | None = None,
 ) -> None:
     lines = ["# Dataset stats", ""]
+    if provenance:
+        lines.append("## Provenance")
+        lines.append("")
+        lines.append(f"- Target manifest (data/dataset_full.csv): **{provenance['full_rows']}** images, "
+                     f"**{provenance['full_genera']}** genera")
+        lines.append(f"- Obtained on disk: **{provenance['obtained_rows']}** "
+                     f"({provenance['obtained_rows'] / provenance['full_rows']:.1%})")
+        for source, n in provenance["by_source"].items():
+            lines.append(f"  - {source}: {n}")
+        lines.append(f"- Genera kept after >= {cfg['min_specimens_per_genus']} threshold on obtained specimens: "
+                     f"**{provenance['kept_genera']}** (vs {provenance['full_genera']} in the full manifest)")
+        lines.append("")
+        lines.append("### Genera dropped for lack of obtainable images")
+        lines.append("")
+        lines += md_table(
+            ["genus", "obtained", "in full manifest"],
+            [[g, o, f] for g, o, f in provenance["dropped_table"]],
+        )
+        lines.append("")
     lines.append(f"- Images (one per specimen): **{len(df)}**")
     lines.append(f"- Genera kept (>= {cfg['min_specimens_per_genus']} specimens): **{len(kept_counts)}**")
     lines.append(f"- Genera dropped: **{len(dropped_counts)}**")
@@ -200,6 +252,12 @@ def write_stats(
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--available-only", action="store_true",
+                        help="restrict to specimens whose image file exists and "
+                             "verifies before thresholding and splitting")
+    args = parser.parse_args()
+
     setup_logging(REPORTS / "03_build_dataset.log")
     cfg = load_config(ROOT / "config.yaml")
 
@@ -227,6 +285,38 @@ def main() -> None:
     log.info("one image per specimen (%s priority): %d rows",
              "/".join(cfg["views_priority"]), len(df))
 
+    df["image_path"] = (
+        "data/images/" + df["genus"].astype(str) + "/"
+        + df["specimen_code"].map(sanitize_code) + "_" + df["view"] + ".jpg"
+    )
+    df["image_source"] = image_source(df)
+
+    # what the full manifest keeps — reference for provenance reporting
+    full_counts = df.groupby("genus")["specimen_code"].nunique()
+    full_kept = full_counts[full_counts >= cfg["min_specimens_per_genus"]]
+
+    provenance = None
+    if args.available_only:
+        on_disk = df["image_path"].map(lambda p: is_valid_image(ROOT / p))
+        obtained = df[on_disk & df["genus"].isin(full_kept.index)].copy()
+        log.info("available-only: %d of %d manifest rows have a valid image",
+                 len(obtained), int(full_kept.sum()))
+        obtained_counts = obtained.groupby("genus")["specimen_code"].nunique()
+        kept_genera = obtained_counts[obtained_counts >= cfg["min_specimens_per_genus"]]
+        provenance = {
+            "full_rows": int(full_kept.sum()),
+            "full_genera": len(full_kept),
+            "obtained_rows": len(obtained),
+            "by_source": obtained["image_source"].value_counts().to_dict(),
+            "kept_genera": len(kept_genera),
+            "dropped_table": sorted(
+                [(g, int(obtained_counts.get(g, 0)), int(full_kept[g]))
+                 for g in full_kept.index if g not in kept_genera.index],
+                key=lambda t: -t[1],
+            ),
+        }
+        df = obtained
+
     counts = df.groupby("genus")["specimen_code"].nunique()
     kept_counts = counts[counts >= cfg["min_specimens_per_genus"]]
     dropped_counts = counts[counts < cfg["min_specimens_per_genus"]]
@@ -237,16 +327,12 @@ def main() -> None:
     df["split"] = split_by_specimen(df, cfg["test_fraction"], cfg["seed"])
     log.info("split: %s", df["split"].value_counts().to_dict())
 
-    df["image_path"] = (
-        "data/images/" + df["genus"].astype(str) + "/"
-        + df["specimen_code"].map(sanitize_code) + "_" + df["view"] + ".jpg"
-    )
-
     out = DATA / "dataset.csv"
     df.to_csv(out, index=False)
     log.info("dataset written to %s", out)
 
-    write_stats(df, raw, kept_counts, dropped_counts, caste_table, merge_notes, cfg)
+    write_stats(df, raw, kept_counts, dropped_counts, caste_table, merge_notes, cfg,
+                provenance)
 
 
 if __name__ == "__main__":

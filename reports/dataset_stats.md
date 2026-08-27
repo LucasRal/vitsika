@@ -1,9 +1,34 @@
 # Dataset stats
 
-- Images (one per specimen): **4354**
-- Genera kept (>= 10 specimens): **39**
-- Genera dropped: **18**
-- Share of rows with coordinates: **99.6%**
+## Provenance
+
+- Target manifest (data/dataset_full.csv): **4354** images, **39** genera
+- Obtained on disk: **1297** (29.8%)
+  - commons: 1160
+  - gbif_cache: 137
+- Genera kept after >= 10 threshold on obtained specimens: **27** (vs 39 in the full manifest)
+
+### Genera dropped for lack of obtainable images
+
+| genus | obtained | in full manifest |
+|---|---|---|
+| Paratrechina | 9 | 16 |
+| Carebara | 8 | 140 |
+| Eutetramorium | 8 | 15 |
+| Malagidris | 8 | 21 |
+| Metapone | 8 | 13 |
+| Proceratium | 5 | 22 |
+| Adetomyrma | 4 | 30 |
+| Simopone | 4 | 31 |
+| Prionopelta | 3 | 25 |
+| Stigmatomma | 3 | 33 |
+| Vitsika | 1 | 32 |
+| Tanipone | 0 | 30 |
+
+- Images (one per specimen): **1236**
+- Genera kept (>= 10 specimens): **27**
+- Genera dropped: **11**
+- Share of rows with coordinates: **99.4%**
 
 ## Genus names merging several genusKeys
 
@@ -129,80 +154,60 @@
 
 | genus | train | test | total |
 |---|---|---|---|
-| Hypoponera | 706 | 176 | 882 |
-| Pheidole | 548 | 137 | 685 |
-| Camponotus | 468 | 117 | 585 |
-| Tetramorium | 298 | 75 | 373 |
-| Strumigenys | 264 | 66 | 330 |
-| Crematogaster | 159 | 40 | 199 |
-| Carebara | 112 | 28 | 140 |
-| Leptogenys | 110 | 28 | 138 |
-| Mystrium | 85 | 21 | 106 |
-| Nesomyrmex | 69 | 17 | 86 |
-| Tetraponera | 50 | 12 | 62 |
-| Monomorium | 42 | 10 | 52 |
-| Technomyrmex | 40 | 10 | 50 |
-| Bothroponera | 36 | 9 | 45 |
-| Anochetus | 31 | 8 | 39 |
-| Pachycondyla | 30 | 7 | 37 |
-| Aphaenogaster | 29 | 7 | 36 |
-| Stigmatomma | 26 | 7 | 33 |
-| Vitsika | 26 | 6 | 32 |
-| Simopone | 25 | 6 | 31 |
-| Cataulacus | 25 | 6 | 31 |
-| Tanipone | 24 | 6 | 30 |
-| Adetomyrma | 24 | 6 | 30 |
-| Nylanderia | 23 | 6 | 29 |
-| Royidris | 22 | 5 | 27 |
-| Prionopelta | 20 | 5 | 25 |
-| Terataner | 19 | 5 | 24 |
-| Proceratium | 18 | 4 | 22 |
-| Tapinoma | 17 | 4 | 21 |
-| Malagidris | 17 | 4 | 21 |
-| Platythyrea | 17 | 4 | 21 |
-| Odontomachus | 16 | 4 | 20 |
-| Meranoplus | 15 | 4 | 19 |
-| Cardiocondyla | 14 | 3 | 17 |
-| Syllophopsis | 14 | 3 | 17 |
-| Paratrechina | 13 | 3 | 16 |
-| Eutetramorium | 12 | 3 | 15 |
-| Lioponera | 12 | 3 | 15 |
-| Metapone | 10 | 3 | 13 |
+| Camponotus | 190 | 48 | 238 |
+| Strumigenys | 178 | 45 | 223 |
+| Tetramorium | 84 | 21 | 105 |
+| Crematogaster | 66 | 16 | 82 |
+| Pheidole | 62 | 16 | 78 |
+| Mystrium | 35 | 9 | 44 |
+| Tetraponera | 34 | 9 | 43 |
+| Leptogenys | 30 | 8 | 38 |
+| Monomorium | 30 | 7 | 37 |
+| Technomyrmex | 28 | 7 | 35 |
+| Anochetus | 23 | 6 | 29 |
+| Cataulacus | 23 | 6 | 29 |
+| Bothroponera | 22 | 5 | 27 |
+| Aphaenogaster | 22 | 5 | 27 |
+| Hypoponera | 18 | 5 | 23 |
+| Nylanderia | 16 | 4 | 20 |
+| Platythyrea | 14 | 4 | 18 |
+| Nesomyrmex | 14 | 3 | 17 |
+| Terataner | 13 | 3 | 16 |
+| Tapinoma | 12 | 3 | 15 |
+| Syllophopsis | 11 | 3 | 14 |
+| Lioponera | 11 | 3 | 14 |
+| Meranoplus | 11 | 3 | 14 |
+| Odontomachus | 11 | 3 | 14 |
+| Cardiocondyla | 10 | 3 | 13 |
+| Pachycondyla | 10 | 3 | 13 |
+| Royidris | 8 | 2 | 10 |
 
 ## Genera dropped (below threshold)
 
 | genus | specimens |
 |---|---|
-| Aptinoma | 9 |
-| Probolomyrmex | 8 |
-| Melissotarsus | 7 |
-| Pilotrochus | 6 |
-| Plagiolepis | 6 |
-| Ponera | 4 |
-| Solenopsis | 4 |
-| Trichomyrmex | 4 |
-| Paraparatrechina | 2 |
-| Erromyrma | 2 |
-| Parasyscia | 2 |
-| Lividopone | 2 |
-| Brachymyrmex | 1 |
-| Leptothorax | 1 |
-| Ooceraea | 1 |
-| Discothyrea | 1 |
-| Lepisiota | 1 |
-| Ravavy | 1 |
+| Paratrechina | 9 |
+| Eutetramorium | 8 |
+| Carebara | 8 |
+| Metapone | 8 |
+| Malagidris | 8 |
+| Proceratium | 5 |
+| Adetomyrma | 4 |
+| Simopone | 4 |
+| Prionopelta | 3 |
+| Stigmatomma | 3 |
+| Vitsika | 1 |
 
 ## Top 15 stateProvince values
 
 | stateProvince | images |
 |---|---|
-| Antsiranana | 1259 |
-| Toamasina | 937 |
-| Toliara | 636 |
-| Fianarantsoa | 599 |
-| Antananarivo | 572 |
-| Mahajanga | 284 |
-| Majunga | 49 |
+| Toamasina | 295 |
+| Antananarivo | 287 |
+| Antsiranana | 264 |
+| Fianarantsoa | 167 |
+| Toliara | 157 |
+| Mahajanga | 52 |
 | (none) | 8 |
-| Toliary | 6 |
-| Diego-Suarez | 4 |
+| Toliary | 3 |
+| Majunga | 3 |
