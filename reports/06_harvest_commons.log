@@ -1,0 +1,7 @@
+dataset rows: 4354, pending (no valid image on disk): 3070
+category cache: 33082 titles from commons_files.txt
+parsed 7311 distinct specimen codes from Commons titles
+Commons match for 13 of 3070 pending rows
+resolved 13 file URLs
+HTTP 429 on download — waiting 600s
+done: 13 downloaded, 0 failed — status in /home/ubuntu/projects/lifeplan/mg-ants/data/download_status_commons.csv
