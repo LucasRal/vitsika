@@ -7,3 +7,5 @@ castes: [worker]
 image_max_px: 1024
 test_fraction: 0.2
 seed: 42
+embed_model: hf-hub:imageomics/bioclip-2  # open_clip name; ViT-L/14, 768-d
+embed_batch_size: 16

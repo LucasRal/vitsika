@@ -5,3 +5,9 @@ pillow
 tqdm
 pyyaml
 curl_cffi
+# Phase B (embeddings). CPU-only torch:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+open_clip_torch
+numpy

@@ -43,7 +43,13 @@ python3 -m venv .venv
 .venv/bin/python scripts/06_harvest_commons.py  # fallback: images from Wikimedia Commons
 .venv/bin/python scripts/03_build_dataset.py --available-only
                                                 # -> data/dataset.csv (POC set), reports/dataset_stats.md
+.venv/bin/python scripts/05_embed.py            # Phase B: BioCLIP 2 embeddings -> data/embeddings.npy
+                                                # + data/embeddings_index.csv, log: reports/05_embed.log
 ```
+
+Phase B needs torch (CPU build is enough — ~1.4 img/s on 6 cores) and
+open_clip; see the note in `requirements.txt`. The first run downloads the
+BioCLIP 2 weights (~1.7 GB) into the Hugging Face cache.
 
 Key conventions:
 
@@ -58,6 +64,11 @@ Key conventions:
 - Genera with fewer than `min_specimens_per_genus` (10) specimens are dropped.
 - 80/20 train/test split, stratified by genus, grouped by specimen code, seed 42.
 - Images stored as `data/images/<genus>/<specimen>_<view>.jpg`, max 1024 px.
+- Embeddings: frozen BioCLIP 2 image tower (`hf-hub:imageomics/bioclip-2`,
+  ViT-L/14), L2-normalised float32, 768-d. `data/embeddings.npy` row *i* is
+  `data/embeddings_index.csv` row *i*; both are sorted by `specimen_code`
+  and the index SHA256 is logged so downstream steps can pin the exact set.
+  Images that fail to open are skipped (no row), never zero-filled.
 
 ## Image sourcing (why three download scripts)
 

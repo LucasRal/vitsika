@@ -1,0 +1,14 @@
+dataset: 1236 images
+to embed: 1236 images (batch size 16)
+model hf-hub:imageomics/bioclip-2 loaded in 9.1s (6 torch threads)
+batch 10/78  160/1236 images  1.45 img/s (recent)  110s elapsed
+batch 20/78  320/1236 images  1.46 img/s (recent)  220s elapsed
+batch 30/78  480/1236 images  1.43 img/s (recent)  331s elapsed
+batch 40/78  640/1236 images  1.43 img/s (recent)  443s elapsed
+batch 50/78  800/1236 images  1.47 img/s (recent)  552s elapsed
+batch 60/78  960/1236 images  1.43 img/s (recent)  664s elapsed
+batch 70/78  1120/1236 images  1.45 img/s (recent)  774s elapsed
+batch 78/78  1236/1236 images  1.46 img/s (recent)  854s elapsed
+wrote embeddings.npy (1236, 768) and embeddings_index.csv (1236 rows)
+index sha256: ae1153bb775557534dd6541888fa38d91436b1b37c2c45dad54c6cf3cb5e68a9
+done: 1236 newly embedded, 0 reused, 0 skipped, 1236 total, 866s
