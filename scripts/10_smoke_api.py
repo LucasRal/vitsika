@@ -5,9 +5,11 @@
     python scripts/10_smoke_api.py [--base-url http://localhost:8000]
 
 Checks, in order: /health is ok; POST /analyze on a known TEST image returns
-200 with the true genus printed next to the top-1; the three error paths
-(wrong content type -> 400, unreadable image -> 422, oversize -> 413);
-GET /genera, /geo/{genus}, /images/{code} (a similar specimen from the
+200 with the true genus printed next to the top-1 and an atlas_position that
+lands near the specimen's own committed UMAP coordinate; the three error
+paths (wrong content type -> 400, unreadable image -> 422, oversize -> 413);
+GET /genera (with atlas medians), /atlas (all rows, aligned with
+umap_coords.csv), /geo/{genus}, /images/{code} (a similar specimen from the
 /analyze answer), /geo/unknown -> 404. Then /analyze latency, median of 5
 calls on the same image. Any failed assertion exits non-zero.
 """
@@ -30,6 +32,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 REPORTS = ROOT / "reports"
 N_LATENCY_CALLS = 5
+ATLAS_TOLERANCE = 1.0  # UMAP.transform is approximate; fitted coords span ~[-6, 12]
 
 log = logging.getLogger("smoke")
 
@@ -95,6 +98,14 @@ def main() -> None:
                  s["species"] or "-", s["similarity"], s["photographer"], s["license"][:22])
     check(body["model_name"] and body["probe_version"],
           f"model {body['model_name']}, probe {body['probe_version']}")
+    coords = pd.read_csv(DATA / "umap_coords.csv").set_index("specimen_code")
+    own = coords.loc[row["specimen_code"]]
+    pos = body["atlas_position"]
+    check(pos is not None and all(k in pos for k in ("x", "y")), f"atlas_position {pos}")
+    dist = ((pos["x"] - own["x"]) ** 2 + (pos["y"] - own["y"]) ** 2) ** 0.5
+    check(dist < ATLAS_TOLERANCE,
+          f"atlas_position ({pos['x']:.2f}, {pos['y']:.2f}) is {dist:.2f} from the fitted "
+          f"({own['x']:.2f}, {own['y']:.2f})")
 
     # error paths
     r = post_image(base, image, content_type="text/plain")
@@ -110,6 +121,28 @@ def main() -> None:
           f"GET /genera -> {r.status_code}, {r.json()['n']} genera")
     g0 = r.json()["genera"][0]
     log.info("     e.g. %s", g0)
+    check(all("atlas_median" in g and {"x", "y"} <= set(g["atlas_median"])
+              for g in r.json()["genera"]), "every genus has an atlas_median")
+
+    # /atlas
+    t0 = time.perf_counter()
+    r = requests.get(f"{base}/atlas", timeout=60)
+    dt = time.perf_counter() - t0
+    check(r.status_code == 200, f"GET /atlas -> {r.status_code}, {len(r.content) / 1024:.0f} KB "
+                                f"in {dt * 1000:.0f} ms")
+    atlas = r.json()
+    check(atlas["n"] == len(coords) == len(atlas["points"]),
+          f"atlas has {atlas['n']} points == umap_coords.csv rows")
+    pts = pd.DataFrame(atlas["points"]).set_index("specimen_code")
+    check(list(pts.index) == list(coords.index)
+          and (pts[["x", "y"]] - coords[["x", "y"]]).abs().max().max() < 1e-3,
+          "atlas rows and coordinates match umap_coords.csv")
+    check(set(pts.columns) >= {"x", "y", "genus", "subfamily", "species", "image_available"}
+          and pts["image_available"].all(), "atlas fields present, every image available")
+    log.info("     umap params %s; e.g. %s", atlas["umap"], atlas["points"][0])
+    t0 = time.perf_counter()
+    r = requests.get(f"{base}/atlas", timeout=60)
+    log.info("     second (cached) call %.0f ms", (time.perf_counter() - t0) * 1000)
 
     # /geo
     r = requests.get(f"{base}/geo/{top['genus']}", timeout=30)

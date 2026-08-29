@@ -27,9 +27,16 @@ class SimilarSpecimen(BaseModel):
     locality: str | None = None
 
 
+class AtlasPosition(BaseModel):
+    x: float
+    y: float
+
+
 class AnalyzeResponse(BaseModel):
     predictions: list[GenusPrediction] = Field(description="linear-probe top-3")
     similar: list[SimilarSpecimen] = Field(description="5 nearest train specimens")
+    atlas_position: AtlasPosition | None = Field(
+        description="query placed on the UMAP atlas (umap_model.transform); null if it failed")
     model_name: str
     probe_version: str = Field(description="mtime of data/probe.pkl, ISO-8601")
     embed_ms: float
@@ -42,6 +49,7 @@ class GenusInfo(BaseModel):
     n_train: int
     n_test: int
     f1_probe: float
+    atlas_median: AtlasPosition = Field(description="median UMAP position of the genus")
 
 
 class GeneraResponse(BaseModel):
@@ -67,6 +75,22 @@ class GeoResponse(BaseModel):
     n_with_coords: int
     points: list[tuple[float, float]] = Field(description="[lat, lon]; capped")
     points_capped: bool
+
+
+class AtlasPoint(BaseModel):
+    specimen_code: str
+    x: float
+    y: float
+    genus: str
+    subfamily: str
+    species: str | None = None
+    image_available: bool
+
+
+class AtlasResponse(BaseModel):
+    points: list[AtlasPoint]
+    n: int
+    umap: dict[str, float | int | str] = Field(description="fit parameters, for the axes caption")
 
 
 class HealthResponse(BaseModel):

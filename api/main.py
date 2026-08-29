@@ -4,7 +4,9 @@
 
 Routes
   POST /analyze                multipart image -> probe top-3 + 5 similar train specimens
-  GET  /genera                 the 27 POC genera with split sizes and probe F1
+                               + the query's position on the UMAP atlas
+  GET  /genera                 the 27 POC genera with split sizes, probe F1, atlas median
+  GET  /atlas                  every specimen's UMAP position (cached JSON)
   GET  /geo/{genus}            province counts, elevation, years, [lat, lon] points
   GET  /images/{specimen_code} the local profile-view jpg (thumbnails for the UI)
   GET  /health                 status, model_loaded, n_embeddings, versions
@@ -26,13 +28,13 @@ from fastapi import FastAPI, HTTPException, Request, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from PIL import Image
 
-from api.inference import embed_image, find_similar, predict_genus
-from api.schemas import (AnalyzeResponse, ElevationStats, ErrorResponse, GeneraResponse,
-                         GenusInfo, GenusPrediction, GeoResponse, HealthResponse,
-                         SimilarSpecimen)
+from api.inference import atlas_position, embed_image, find_similar, predict_genus
+from api.schemas import (AnalyzeResponse, AtlasPosition, AtlasResponse, ElevationStats,
+                         ErrorResponse, GeneraResponse, GenusInfo, GenusPrediction,
+                         GeoResponse, HealthResponse, SimilarSpecimen)
 from api.state import ROOT, AppState
 
 ANTWEB_SPECIMEN_URL = "https://www.antweb.org/specimen/{code}"
@@ -104,6 +106,7 @@ def _analyze(ctx: AppState, image: Image.Image, base_url: str) -> AnalyzeRespons
     t0 = time.perf_counter()
     with ctx.infer_lock:
         emb = embed_image(ctx.model, ctx.preprocess, image)
+        xy = atlas_position(ctx.umap_model, emb)  # numba code is not re-entrant-safe
     embed_ms = (time.perf_counter() - t0) * 1000
 
     preds = [GenusPrediction(genus=g, subfamily=s, probability=p)
@@ -120,8 +123,10 @@ def _analyze(ctx: AppState, image: Image.Image, base_url: str) -> AnalyzeRespons
             antweb_url=ANTWEB_SPECIMEN_URL.format(code=code),
             photographer=_clean(meta["creator"]), license=_clean(meta["license"]),
             locality=_clean(meta["locality"])))
-    return AnalyzeResponse(predictions=preds, similar=similar, model_name=ctx.model_name,
-                           probe_version=ctx.probe_version, embed_ms=round(embed_ms, 1))
+    return AnalyzeResponse(predictions=preds, similar=similar,
+                           atlas_position=None if xy is None else AtlasPosition(x=xy[0], y=xy[1]),
+                           model_name=ctx.model_name, probe_version=ctx.probe_version,
+                           embed_ms=round(embed_ms, 1))
 
 
 @app.post("/analyze", response_model=AnalyzeResponse, responses=_ERROR_RESPONSES)
@@ -133,9 +138,12 @@ async def analyze(request: Request, file: UploadFile) -> AnalyzeResponse:
     t0 = time.perf_counter()
     out = await run_in_threadpool(_analyze, ctx, image, str(request.base_url))
     out.filename = file.filename
-    log.info("analyze %s %dx%d %.1f KB -> %s (%.2f) in %.0f ms",
+    log.info("analyze %s %dx%d %.1f KB -> %s (%.2f) atlas %s in %.0f ms",
              file.filename, *image.size, len(data) / 1024, out.predictions[0].genus,
-             out.predictions[0].probability, (time.perf_counter() - t0) * 1000)
+             out.predictions[0].probability,
+             "null" if out.atlas_position is None else
+             f"({out.atlas_position.x:.2f}, {out.atlas_position.y:.2f})",
+             (time.perf_counter() - t0) * 1000)
     return out
 
 
@@ -146,9 +154,26 @@ async def genera(request: Request) -> GeneraResponse:
     n_train = ctx.train_index["genus"].value_counts()
     rows = [GenusInfo(name=g, subfamily=str(r["subfamily"]),
                       n_train=int(n_train.get(g, 0)), n_test=int(r["n_test"]),
-                      f1_probe=float(r["f1_linear_probe"]))
+                      f1_probe=float(r["f1_linear_probe"]),
+                      atlas_median=AtlasPosition(x=ctx.genus_atlas_median[g][0],
+                                                 y=ctx.genus_atlas_median[g][1]))
             for g, r in ctx.per_genus.sort_index().iterrows()]
     return GeneraResponse(genera=rows, n=len(rows))
+
+
+# --------------------------------------------------------------------- /atlas
+@app.get("/atlas", response_model=AtlasResponse)
+async def atlas(request: Request) -> Response:
+    """All 1,236 specimens on the UMAP. The JSON body is rendered once
+    (validated through AtlasResponse) and reused for every call."""
+    ctx = _ctx(request)
+    cached = getattr(request.app.state, "atlas_json", None)
+    if cached is None:
+        body = AtlasResponse(points=ctx.atlas, n=len(ctx.atlas), umap=ctx.atlas_params)
+        cached = request.app.state.atlas_json = body.model_dump_json().encode()
+        log.info("atlas payload cached: %d points, %.0f KB", len(ctx.atlas), len(cached) / 1024)
+    return Response(content=cached, media_type="application/json",
+                    headers={"Cache-Control": "public, max-age=3600"})
 
 
 # --------------------------------------------------------------- /geo/{genus}

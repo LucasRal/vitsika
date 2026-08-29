@@ -3,18 +3,22 @@
 embed_image()    PIL image -> L2-normalised BioCLIP 2 vector (768,)
 predict_genus()  vector -> top-k linear-probe (genus, subfamily, probability)
 find_similar()   vector -> top-k cosine neighbours among the train embeddings
+atlas_position() vector -> (x, y) on the fitted UMAP, or None if transform fails
 
 The embedding convention is the one of scripts/06_embed.py (same preprocess,
 same normalisation) so query vectors are comparable with data/embeddings.npy.
 """
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from typing import Mapping
 
 import numpy as np
 import torch
 from PIL import Image
+
+log = logging.getLogger("api")
 
 
 @dataclass(frozen=True)
@@ -46,3 +50,19 @@ def find_similar(embedding: np.ndarray, train_embeddings: np.ndarray,
     sims = train_embeddings @ embedding
     order = np.argsort(-sims, kind="stable")[:k]
     return [Neighbour(int(i), float(sims[i])) for i in order]
+
+
+def atlas_position(reducer, embedding: np.ndarray) -> tuple[float, float] | None:
+    """Project one embedding onto the fitted UMAP (data/umap_model.pkl).
+    UMAP.transform is approximate (a training row lands near, not on, its
+    fitted coordinate) and can fail on degenerate input; failures give None
+    and the caller logs them."""
+    try:
+        xy = reducer.transform(embedding[None, :].astype(np.float32))[0]
+    except Exception as exc:  # noqa: BLE001 — numba/umap raise assorted types
+        log.warning("umap transform failed: %s", exc)
+        return None
+    if not np.all(np.isfinite(xy)):
+        log.warning("umap transform returned non-finite %s", xy)
+        return None
+    return float(xy[0]), float(xy[1])

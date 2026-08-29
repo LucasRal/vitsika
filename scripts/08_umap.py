@@ -3,7 +3,11 @@
 
 Fits UMAP (cosine metric, parameters in config.yaml, random_state = seed) on
 all rows of data/embeddings.npy and writes data/umap_coords.csv
-(specimen_code, x, y — same order as embeddings_index.csv).
+(specimen_code, x, y — same order as embeddings_index.csv) and the fitted
+reducer to data/umap_model.pkl (joblib) so the API can place new query
+embeddings on the same map with reducer.transform(). When a coords file
+already exists the re-fit is asserted identical to it (the fit is
+deterministic: random_state = seed forces single-threaded layout).
 
 Figures: reports/umap_by_subfamily.png (every subfamily coloured) and
 reports/umap_by_genus.png (the 8 largest genera coloured, the rest grey;
@@ -22,6 +26,7 @@ import sys
 import time
 from pathlib import Path
 
+import joblib
 import numpy as np
 import pandas as pd
 from sklearn.metrics import silhouette_score
@@ -35,6 +40,7 @@ DATA = ROOT / "data"
 REPORTS = ROOT / "reports"
 
 COORDS_PATH = DATA / "umap_coords.csv"
+MODEL_PATH = DATA / "umap_model.pkl"
 N_GENERA_COLOURED = 8
 # genus pairs the linear probe confused (reports/eval_notes.md)
 CONFUSED_PAIRS = [("Syllophopsis", "Tetramorium"), ("Royidris", "Monomorium"),
@@ -44,7 +50,7 @@ CONFUSED_PAIRS = [("Syllophopsis", "Tetramorium"), ("Royidris", "Monomorium"),
 log = logging.getLogger("umap")
 
 
-def fit_umap(embs: np.ndarray, cfg: dict) -> np.ndarray:
+def fit_umap(embs: np.ndarray, cfg: dict) -> tuple[np.ndarray, "umap.UMAP"]:
     import warnings
 
     logging.getLogger("numba").setLevel(logging.WARNING)
@@ -61,7 +67,19 @@ def fit_umap(embs: np.ndarray, cfg: dict) -> np.ndarray:
     log.info("UMAP n_neighbors=%d min_dist=%g metric=cosine seed=%d on %s: %.1fs",
              reducer.n_neighbors, reducer.min_dist, reducer.random_state, embs.shape,
              time.perf_counter() - t0)
-    return coords.astype(np.float32)
+    return coords.astype(np.float32), reducer
+
+
+def assert_unchanged(index: pd.DataFrame, coords: np.ndarray) -> None:
+    """A re-run must reproduce the committed coordinates (to the 4 decimals
+    the CSV carries); otherwise the atlas served by the API would drift."""
+    old = pd.read_csv(COORDS_PATH)
+    assert list(old["specimen_code"]) == list(index["specimen_code"]), \
+        "specimen order differs from the existing umap_coords.csv"
+    new = np.round(coords.astype(np.float64), 4)
+    diff = np.abs(old[["x", "y"]].to_numpy() - new).max()
+    assert diff <= 1e-4, f"UMAP re-fit differs from {COORDS_PATH.name}: max |delta| {diff:.4g}"
+    log.info("re-fit reproduces the existing %s (max |delta| %.1e)", COORDS_PATH.name, diff)
 
 
 def plot(index: pd.DataFrame, coords: np.ndarray, by: str, order: list[str],
@@ -147,7 +165,11 @@ def main() -> None:
     log.info("embeddings %s, %d genera, %d subfamilies", embs.shape,
              index["genus"].nunique(), index["subfamily"].nunique())
 
-    coords = fit_umap(embs, cfg)
+    coords, reducer = fit_umap(embs, cfg)
+    if COORDS_PATH.exists():
+        assert_unchanged(index, coords)
+    joblib.dump(reducer, MODEL_PATH)
+    log.info("reducer written to %s (%.1f MB)", MODEL_PATH, MODEL_PATH.stat().st_size / 1e6)
     pd.DataFrame({"specimen_code": index["specimen_code"], "x": coords[:, 0],
                   "y": coords[:, 1]}).to_csv(COORDS_PATH, index=False, float_format="%.4f")
     log.info("coordinates written to %s", COORDS_PATH)

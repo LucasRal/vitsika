@@ -48,7 +48,7 @@ python3 -m venv .venv
 .venv/bin/python scripts/07_eval.py             # Phase C: zero-shot / linear probe / kNN evaluation
                                                 # -> reports/metrics.json, per_genus.csv, errors.csv,
                                                 #    confusion_matrix.png; probe saved to data/probe.pkl
-.venv/bin/python scripts/08_umap.py             # UMAP of the embeddings -> data/umap_coords.csv,
+.venv/bin/python scripts/08_umap.py             # UMAP of the embeddings -> data/umap_coords.csv, umap_model.pkl,
                                                 #    reports/umap_by_subfamily.png, umap_by_genus.png
 .venv/bin/python scripts/09_geo.py              # coverage of the full manifest -> data/geo_summary.csv,
                                                 #    reports/map_specimens.png
@@ -115,8 +115,10 @@ Results are in `reports/metrics.json` (top-1, top-3, macro-F1),
 
 ## Serving (Phase E)
 
-`api/` is a FastAPI app that loads BioCLIP 2, the probe, the embeddings and
-the geo tables once at startup (~10 s on CPU) and serves them:
+`api/` is a FastAPI app that loads BioCLIP 2, the probe, the embeddings, the
+fitted UMAP (`data/umap_model.pkl`, written by `08_umap.py`) and the geo
+tables once at startup (~25 s on CPU, half of it numba compiling the UMAP
+transform so the first request doesn't pay for it) and serves them:
 
 ```bash
 .venv/bin/pip install fastapi uvicorn python-multipart      # already in requirements.txt
@@ -126,8 +128,9 @@ the geo tables once at startup (~10 s on CPU) and serves them:
 
 | Route | Purpose |
 |---|---|
-| `POST /analyze` | multipart `file` (image/*, ≤ 10 MB) → probe top-3 `predictions` (genus, subfamily, probability) **and** the 5 most similar train specimens (`specimen_code`, species, cosine `similarity`, `image_url`, `antweb_url`, photographer, license), plus `model_name` / `probe_version`. Response schema `AnalyzeResponse`. |
-| `GET /genera` | the 27 POC genera: subfamily, `n_train`, `n_test`, probe F1 (from `reports/per_genus.csv`). |
+| `POST /analyze` | multipart `file` (image/*, ≤ 10 MB) → probe top-3 `predictions` (genus, subfamily, probability) **and** the 5 most similar train specimens (`specimen_code`, species, cosine `similarity`, `image_url`, `antweb_url`, photographer, license), plus `atlas_position` `{x, y}` (the query projected onto the UMAP with `umap_model.transform`; `null` if that fails) and `model_name` / `probe_version`. Response schema `AnalyzeResponse`. |
+| `GET /genera` | the 27 POC genera: subfamily, `n_train`, `n_test`, probe F1 (from `reports/per_genus.csv`), `atlas_median` `{x, y}` for the selector's fly-to. |
+| `GET /atlas` | every specimen on the UMAP: `specimen_code`, `x`, `y`, genus, subfamily, species, `image_available`; plus the fit parameters. Built once at startup, served from memory (~150 KB). |
 | `GET /geo/{genus}` | province counts, elevation min/median/max, year range and `[lat, lon]` points (≤ 1000, seeded subsample) from `dataset_full.csv`; 404 if unknown. |
 | `GET /images/{specimen_code}` | the local profile-view jpg — thumbnails for the similar-specimen cards; 404 if absent. |
 | `GET /health` | `status`, `model_loaded`, `n_embeddings`, library / probe / embedding-index versions. |

@@ -1,5 +1,7 @@
 embeddings (1236, 768), 27 genera, 7 subfamilies
 UMAP n_neighbors=15 min_dist=0.1 metric=cosine seed=42 on (1236, 768): 17.3s
+re-fit reproduces the existing umap_coords.csv (max |delta| 0.0e+00)
+reducer written to /home/ubuntu/projects/lifeplan/mg-ants/data/umap_model.pkl (4.0 MB)
 coordinates written to /home/ubuntu/projects/lifeplan/mg-ants/data/umap_coords.csv
 figure written to /home/ubuntu/projects/lifeplan/mg-ants/reports/umap_by_subfamily.png
 figure written to /home/ubuntu/projects/lifeplan/mg-ants/reports/umap_by_genus.png

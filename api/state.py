@@ -8,6 +8,10 @@ AppState.load() reads config.yaml and:
 - data/dataset_full.csv (coordinates / provinces for /geo, provinces
   normalised with the same aliases as 09_geo.py)
 - data/geo_summary.csv, data/geo_by_place.csv, reports/per_genus.csv
+- data/umap_model.pkl (fitted reducer from 08_umap.py, warmed up with one
+  transform so the numba JIT cost is paid at startup, not on the first
+  request) and data/umap_coords.csv (asserted aligned with the index); the
+  /atlas JSON payload and the per-genus median positions are built here once
 """
 from __future__ import annotations
 
@@ -35,6 +39,8 @@ from gbif_client import load_config, quiet_logging, setup_logging  # noqa: E402
 PROBE_PATH = DATA / "probe.pkl"
 EMB_PATH = DATA / "embeddings.npy"
 INDEX_PATH = DATA / "embeddings_index.csv"
+UMAP_MODEL_PATH = DATA / "umap_model.pkl"
+UMAP_COORDS_PATH = DATA / "umap_coords.csv"
 DATASET_META_COLS = ["specimen_code", "genus", "subfamily", "species", "locality",
                      "creator", "license", "image_path", "split"]
 
@@ -72,6 +78,11 @@ class AppState:
     geo_by_place: pd.DataFrame
     per_genus: pd.DataFrame           # indexed by genus
     subfamily_of: dict[str, str]
+    umap_model: Any                   # fitted umap.UMAP
+    umap_coords: np.ndarray           # N x 2 float32, aligned with `index`
+    atlas: list[dict[str, Any]]       # GET /atlas payload, built once
+    atlas_params: dict[str, Any]
+    genus_atlas_median: dict[str, tuple[float, float]]
     load_seconds: float
     infer_lock: Lock = field(default_factory=Lock)
 
@@ -146,6 +157,34 @@ class AppState:
                  len(specimens), len(full), full["genus"].nunique(), len(geo_summary),
                  len(geo_by_place), len(per_genus))
 
+        t = time.perf_counter()
+        logging.getLogger("numba").setLevel(logging.WARNING)
+        umap_model = joblib.load(UMAP_MODEL_PATH)
+        coords_df = pd.read_csv(UMAP_COORDS_PATH)
+        assert list(coords_df["specimen_code"]) == list(index["specimen_code"]), \
+            "umap_coords.csv rows are not aligned with embeddings_index.csv"
+        umap_coords = coords_df[["x", "y"]].to_numpy(dtype=np.float32)
+        t_load = time.perf_counter() - t
+        t = time.perf_counter()
+        warm = umap_model.transform(embeddings[:1])  # numba JIT happens here
+        log.info("umap reducer loaded in %.1fs, warm-up transform %.1fs -> %s "
+                 "(fitted %s)", t_load, time.perf_counter() - t, np.round(warm[0], 3),
+                 np.round(umap_coords[0], 3))
+        atlas_params = {"n_neighbors": int(umap_model.n_neighbors),
+                        "min_dist": float(umap_model.min_dist),
+                        "metric": str(umap_model.metric),
+                        "random_state": int(cfg["seed"]), "n": int(len(index))}
+        atlas = [{"specimen_code": r.specimen_code, "x": round(float(x), 4),
+                  "y": round(float(y), 4), "genus": r.genus, "subfamily": r.subfamily,
+                  "species": None if r.species != r.species else str(r.species),
+                  "image_available": (ROOT / str(r.image_path)).is_file()}
+                 for r, (x, y) in zip(index.itertuples(index=False), umap_coords)]
+        medians = pd.DataFrame(umap_coords, columns=["x", "y"]).groupby(index["genus"]) \
+            .median()
+        genus_atlas_median = {g: (float(r.x), float(r.y)) for g, r in medians.iterrows()}
+        log.info("atlas: %d points (%d with image on disk), medians for %d genera",
+                 len(atlas), sum(p["image_available"] for p in atlas), len(genus_atlas_median))
+
         load_seconds = time.perf_counter() - t0
         log.info("state loaded in %.1fs", load_seconds)
         return cls(config=cfg, model=model, preprocess=preprocess, probe=probe,
@@ -154,6 +193,8 @@ class AppState:
                    train_index=train_index, specimens=specimens, full=full,
                    geo_summary=geo_summary, geo_by_place=geo_by_place,
                    per_genus=per_genus, subfamily_of=subfamily_of,
+                   umap_model=umap_model, umap_coords=umap_coords, atlas=atlas,
+                   atlas_params=atlas_params, genus_atlas_median=genus_atlas_median,
                    load_seconds=load_seconds)
 
     def versions(self) -> dict[str, str]:
@@ -164,6 +205,7 @@ class AppState:
             "model_name": self.model_name,
             "probe_version": self.probe_version,
             "embeddings_index_sha256": self.index_sha256,
+            "umap_model_version": _mtime_iso(UMAP_MODEL_PATH),
             "torch": torch.__version__,
             "open_clip": open_clip.__version__,
             "scikit_learn": sklearn.__version__,
