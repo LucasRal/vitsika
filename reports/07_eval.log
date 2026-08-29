@@ -1,12 +1,12 @@
 embeddings: (1236, 768) float32, 27 genera, norms in [1.00000, 1.00000]
 split: 986 train / 250 test, 27 genera
 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-text model hf-hub:imageomics/bioclip-2 loaded in 7.3s
+text model hf-hub:imageomics/bioclip-2 loaded in 6.9s
 zero-shot zero_shot_template   text embeddings (27, 768), e.g. 'a photo of Anochetus, a genus of ant'
 zero-shot zero_shot_plain      text embeddings (27, 768), e.g. 'Anochetus'
 zero_shot_template   top-1 0.744  top-3 0.940  macro-F1 0.590
 zero_shot_plain      top-1 0.328  top-3 0.488  macro-F1 0.114
-linear probe: 27 classes, C=1, 18 iterations, train acc 0.957, fit 1.3s
+linear probe: 27 classes, C=1, 18 iterations, train acc 0.957, fit 1.7s
 linear_probe         top-1 0.928  top-3 0.984  macro-F1 0.885
 probe saved to /home/ubuntu/projects/lifeplan/mg-ants/data/probe.pkl (27 classes, coef (27, 768))
 nearest_neighbour    top-1 0.916  top-3 0.932  macro-F1 0.834
@@ -19,4 +19,4 @@ probe errors: 18 / 250 written to /home/ubuntu/projects/lifeplan/mg-ants/reports
   Pachycondyla   -> Bothroponera   x1
   Royidris       -> Monomorium     x1
   Technomyrmex   -> Tapinoma       x1
-done in 19s
+done in 18s

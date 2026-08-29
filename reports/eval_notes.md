@@ -22,7 +22,7 @@ Sanity checks passed first:
 | suspicious | 1 | casent0102418 (*Camponotus reaumuri* → *Anochetus* at 0.16): an ordinary big-headed reddish *Camponotus*; nothing resembles *Anochetus*. Second guess is *Camponotus* (0.11), so this is low-confidence noise rather than a labelling problem, but worth a second look. |
 
 Only ~3 of 18 errors are attributable to image quality, and 2 of those are
-`gbif_cache` images (137 of 1,236 in the set); the Commons images are
+`gbif_cache` images (116 of the 1,236 in the set; 137 of the 1,297 obtained); the Commons images are
 uniformly good AntWeb profile shots.
 
 ## The *Camponotus imitator* pair

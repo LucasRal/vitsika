@@ -1,5 +1,5 @@
 embeddings (1236, 768), 27 genera, 7 subfamilies
-UMAP n_neighbors=15 min_dist=0.1 metric=cosine seed=42 on (1236, 768): 17.3s
+UMAP n_neighbors=15 min_dist=0.1 metric=cosine seed=42 on (1236, 768): 16.6s
 re-fit reproduces the existing umap_coords.csv (max |delta| 0.0e+00)
 reducer written to /home/ubuntu/projects/lifeplan/mg-ants/data/umap_model.pkl (4.0 MB)
 coordinates written to /home/ubuntu/projects/lifeplan/mg-ants/data/umap_coords.csv
@@ -8,7 +8,7 @@ figure written to /home/ubuntu/projects/lifeplan/mg-ants/reports/umap_by_genus.p
 silhouette by subfamily 768-d cosine 0.096 | UMAP 2-D 0.138  (7 classes)
 silhouette by genus     768-d cosine 0.197 | UMAP 2-D 0.491  (27 classes)
 median within-genus spread (mean distance to centroid): 0.52 UMAP units
-probe-confused pairs — centroid distance vs the two genera's spread:
+probe-confused pairs: centroid distance vs the two genera's spread:
   Syllophopsis  / Tetramorium    centroids 1.85 apart, spreads 1.26 / 0.88 -> adjacent
   Royidris      / Monomorium     centroids 0.87 apart, spreads 0.90 / 0.37 -> overlapping
   Camponotus    / Aphaenogaster  centroids 7.56 apart, spreads 1.67 / 1.05 -> separated

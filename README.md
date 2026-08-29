@@ -4,8 +4,10 @@ Proof-of-concept data pipeline for a classifier that identifies the **genus**
 of a Malagasy ant from a specimen photo. Metadata comes from **AntWeb**
 (California Academy of Sciences) via its **GBIF** mirror; images come from
 the GBIF image cache and, mostly, from Wikimedia Commons (see "Image
-sourcing" below). Later phases (not in this repo yet) will use BioCLIP 2
-embeddings + a linear probe and a Gradio demo.
+sourcing" below). On top of the data pipeline the repo holds the BioCLIP 2
+embeddings + linear-probe classifier (Phases B/C), a FastAPI service
+(Phase E) and the "Vitsika" web front end; a one-page summary is in
+`reports/onepager.md` and a 6-slide deck in `reports/vitsika_deck.pdf`.
 
 ## Current state
 
@@ -178,6 +180,9 @@ Methods. Setup, env vars and the production/nginx sketch are in
   temporal coverage of the full 4,354-specimen manifest (`09_geo.py`).
   Plot conventions live in `scripts/viz.py`.
 - `reports/10_smoke_api.log`: last smoke-test run of the API (Phase E).
+- `reports/onepager.md`: one-page summary (what, data chain, results,
+  findings, limitations, next steps) with sources; `reports/vitsika_deck.pdf`
+  (6 slides) is built from it by `scripts/11_deck.py`.
 
 ## Attribution
 
