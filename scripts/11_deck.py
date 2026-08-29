@@ -105,18 +105,18 @@ def build_html() -> str:
 
 <!-- S1 -->
 <section class="slide">
-  <div class="two" style="grid-template-columns: 1.05fr 1fr; align-items: center;">
+  <div class="two" style="grid-template-columns: 400px 1fr; gap: 36px; align-items: center;">
     <div>
       <div class="eyebrow">Proof of concept</div>
       <h1>Vitsika</h1>
-      <p style="font-family:'Source Serif 4',Georgia,serif;font-size:30px;margin:14px 0 0;line-height:1.25">Malagasy ant identification<br>from a single photograph</p>
-      <p class="muted" style="margin:18px 0 0;font-size:16px"><i>vitsika</i> is Malagasy for ant. Genus-level, 27 genera, built on public data and a frozen public model.</p>
-      <p style="margin:34px 0 0;font-size:19px"><span class="accent code">vitsika.lucas-ralambo.com</span></p>
-      <p style="margin:18px 0 0;font-size:17px">Lucas R. <span class="muted">· Data Scientist · Antananarivo</span><br><span class="muted">{today}</span></p>
+      <p style="font-family:'Source Serif 4',Georgia,serif;font-size:26px;margin:14px 0 0;line-height:1.25">Malagasy ant identification from a single photograph</p>
+      <p class="muted" style="margin:18px 0 0;font-size:15px"><i>vitsika</i> is Malagasy for ant. Genus-level, 27 genera, built on public data and a frozen public model.</p>
+      <p style="margin:30px 0 0;font-size:18px"><span class="accent code">vitsika.lucas-ralambo.com</span></p>
+      <p style="margin:16px 0 0;font-size:16px">Lucas R. <span class="muted">· Data Scientist · Antananarivo</span><br><span class="muted">{today}</span></p>
     </div>
-    <div class="frame" style="height:560px;box-shadow:0 20px 50px rgba(20,20,20,0.10)"><img src="{img('reports/web_screenshots/light-2f-result-current.png')}" style="object-fit:cover;object-position:top left"></div>
+    <div class="frame" style="height:536px;background:#fff;box-shadow:0 20px 50px rgba(20,20,20,0.10)"><img src="{img('reports/web_screenshots/light-2f-result-current.png')}" style="object-fit:contain"></div>
   </div>
-  <div class="foot"><span><span class="wordmark">Vitsika</span> · images © their photographers via AntWeb (CC BY-SA)</span><span>1 / 6</span></div>
+  <div class="foot"><span><span class="wordmark">Vitsika</span> · the result screen for the example specimen · images © their photographers via AntWeb (CC BY-SA)</span><span>1 / 6</span></div>
 </section>
 
 <!-- S2 -->
