@@ -1,0 +1,8 @@
+province,n_specimens,n_genera,n_species,top5_genera
+Antsiranana,1263,35,329,Hypoponera 247;Pheidole 212;Camponotus 144;Tetramorium 105;Strumigenys 104
+Toamasina,937,36,257,Hypoponera 191;Pheidole 143;Tetramorium 114;Camponotus 100;Strumigenys 86
+Toliara,642,33,204,Camponotus 102;Pheidole 97;Hypoponera 93;Strumigenys 39;Tetramorium 37
+Fianarantsoa,599,36,177,Hypoponera 136;Pheidole 107;Strumigenys 78;Camponotus 61;Tetramorium 53
+Antananarivo,572,33,159,Camponotus 141;Hypoponera 126;Pheidole 70;Tetramorium 42;Crematogaster 37
+Mahajanga,333,27,105,Hypoponera 89;Pheidole 56;Camponotus 36;Carebara 33;Tetramorium 19
+(none),8,4,7,Tetramorium 3;Crematogaster 2;Tetraponera 2;Camponotus 1

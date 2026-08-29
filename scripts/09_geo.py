@@ -6,7 +6,10 @@ stateProvince spellings are normalised with config.yaml `province_aliases`
 (Majunga -> Mahajanga, Toliary -> Toliara, Diego-Suarez -> Antsiranana).
 
 Outputs: data/geo_summary.csv (per genus: specimens, species, provinces,
-elevation min/median/max, year range), reports/map_specimens.png (specimen
+elevation min/median/max, year range), data/geo_by_place.csv (per
+normalised province: specimens, genera, species, top-5 genera),
+data/geo_by_locality.csv (top 100 raw locality strings: specimens, genera,
+median coordinates / elevation), reports/map_specimens.png (specimen
 coordinates coloured by subfamily; the island outline emerges from the
 points themselves, no basemap) and the coverage gaps (least-sampled
 provinces / decades, genera confined to one province) in
@@ -71,6 +74,41 @@ def genus_summary(df: pd.DataFrame) -> pd.DataFrame:
     return out.reset_index(drop=True)
 
 
+def place_summary(df: pd.DataFrame) -> pd.DataFrame:
+    """Per normalised province: specimens, genera, named species, top-5 genera."""
+    rows = []
+    for province, g in df.groupby("province", dropna=False):
+        named = g.loc[g["taxonRank"].isin(["SPECIES", "SUBSPECIES"]), "species"].dropna()
+        top = g["genus"].value_counts().head(5)
+        rows.append({
+            "province": province if pd.notna(province) else "(none)",
+            "n_specimens": len(g),
+            "n_genera": int(g["genus"].nunique()),
+            "n_species": int(named.nunique()),
+            "top5_genera": ";".join(f"{k} {v}" for k, v in top.items()),
+        })
+    return (pd.DataFrame(rows).sort_values("n_specimens", ascending=False)
+            .reset_index(drop=True))
+
+
+def locality_summary(df: pd.DataFrame, top_n: int = 100) -> pd.DataFrame:
+    """Per raw locality string (top_n by specimen count): specimens, genera,
+    province, median coordinates and elevation."""
+    d = df.dropna(subset=["locality"])
+    g = d.groupby("locality")
+    out = pd.DataFrame({
+        "n_specimens": g.size(),
+        "n_genera": g["genus"].nunique(),
+        "province": g["province"].agg(lambda s: ";".join(sorted(s.dropna().unique()))),
+        "lat_median": g["decimalLatitude"].median().round(5),
+        "lon_median": g["decimalLongitude"].median().round(5),
+        "elev_median": g["elevation"].median(),
+    })
+    out = out.sort_values(["n_specimens", "n_genera"], ascending=False).head(top_n)
+    out["elev_median"] = out["elev_median"].round().astype("Int64")
+    return out.reset_index()
+
+
 def plot_map(df: pd.DataFrame, out: Path) -> None:
     plt = viz.pyplot()
     d = df.dropna(subset=["decimalLatitude", "decimalLongitude"])
@@ -132,6 +170,18 @@ def main() -> None:
     summary = genus_summary(df)
     summary.to_csv(DATA / "geo_summary.csv", index=False)
     log.info("summary written to %s (%d genera)", DATA / "geo_summary.csv", len(summary))
+
+    by_place = place_summary(df)
+    by_place.to_csv(DATA / "geo_by_place.csv", index=False)
+    log.info("per-province summary written to %s", DATA / "geo_by_place.csv")
+
+    by_locality = locality_summary(df)
+    by_locality.to_csv(DATA / "geo_by_locality.csv", index=False)
+    log.info("top-%d localities written to %s (%d distinct locality strings, "
+             "%d rows without locality)", len(by_locality), DATA / "geo_by_locality.csv",
+             int(df["locality"].nunique()), int(df["locality"].isna().sum()))
+    log.info("top localities: %s",
+             {r.locality: r.n_specimens for r in by_locality.head(5).itertuples()})
 
     plot_map(df, REPORTS / "map_specimens.png")
     log_gaps(df, summary)

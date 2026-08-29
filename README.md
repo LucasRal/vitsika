@@ -123,7 +123,8 @@ Results are in `reports/metrics.json` (top-1, top-3, macro-F1),
   embeddings (subfamilies form clusters; a few cross-subfamily islands group
   ants by body plan, e.g. the long-legged *Camponotus imitator* /
   *Aphaenogaster* / *Odontomachus coquereli* island).
-- `reports/map_specimens.png`, `data/geo_summary.csv` — geographic and
+- `reports/map_specimens.png`, `data/geo_summary.csv`, `geo_by_place.csv`,
+  `geo_by_locality.csv` — geographic and
   temporal coverage of the full 4,354-specimen manifest (`09_geo.py`).
   Plot conventions live in `scripts/viz.py`.
 

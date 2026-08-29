@@ -1,0 +1,101 @@
+locality,n_specimens,n_genera,province,lat_median,lon_median,elev_median
+[Madagascar]; Ambatomanjaka; Miarinarivo,95,17,Antananarivo,-18.76695,46.86911,1343
+"3 km 41° NE Andranomay, 11.5 km 147° SSE Anjozorobe",78,11,Antananarivo,-18.47333,47.96,1300
+"Parc National de Marojejy, Manantenina River, 27.6 km 35° NE Andapa, 9.6 km 327° NNW Manantenina",55,13,Antsiranana,-14.435,49.76,775
+"9.2 km WSW Befingotra, Rés. Anjanaharibe-Sud",50,7,Antsiranana,-14.75,49.46667,1200
+"6.9 km NE Ambanizana, Ambohitsitondroina",47,11,Toamasina,-15.58506,50.00952,825
+"Parc National Montagne d'Ambre, 3.6 km 235° SW Joffreville",47,9,Antsiranana,-12.53444,49.1795,925
+"Réserve Spéciale Ambatovaky, Sandrangato river",44,8,Toamasina,-16.77274,49.26704,450
+"Parc National d'Andohahela, Col du Sedro, 3.8 km 113° ESE Mahamavo, 37.6 km 341° NNW Tolagnaro",42,9,Toliara,-24.76389,46.75167,900
+"R.S. Manongarivo, 10.8 km 229° SW Antanambao",41,10,Antsiranana,-13.96167,48.43333,400
+Montagne d'Akirindro 7.6 km 341° NNW Ambinanitelo,40,13,Toamasina,-15.28833,49.54833,600
+"Parc National de Marojejy, Antranohofa, 26.6 km 31° NNE Andapa, 10.7 km 318° NW Manantenina",37,11,Antsiranana,-14.44333,49.74333,1325
+"Montagne d'Anjanaharibe, 19.5 km 27° NNE Ambinanitelo",36,10,Toamasina,-15.17833,49.635,1100
+"Réserve Spéciale d'Ambohitantely, Forêt d Ambohitantely, 20.9 km 72° NE d Ankazobe",36,9,Antananarivo,-18.22528,47.28683,1410
+Makirovana forest,35,7,Antsiranana,-14.16044,49.95409,415
+"Réserve Spéciale Marotandrano, Marotandrano 48.3km S Mandritsara",34,8,Mahajanga,-16.28322,48.81443,865
+Ambatomanjaka; Miarinarivo,33,11,Antananarivo,-18.76695,46.86911,1343
+"Parc National de Ranomafana, Vatoharanana River, 4.1 km 231° SW Ranomafana",33,11,Fianarantsoa,-21.29,47.43333,1100
+"Forêt d'Atsirakambiaty, 7.6 km 285° WNW Itremo",33,9,Fianarantsoa,-20.59333,46.56333,1550
+[Fianarantsoa]; 2eme Arrondissement; Fianarantsoa Urban,33,4,Fianarantsoa,-21.43333,47.08333,1160
+"Parc National de Marojejy, Manantenina River, 28.0 km 38° NE Andapa, 8.2 km 333° NNW Manantenina",32,12,Antsiranana,-14.43667,49.775,450
+"6.5 km SSW Befingotra, Rés. Anjanaharibe-Sud",32,11,Antsiranana,-14.75,49.5,875
+"Nosy Be, Réserve Naturelle Intégrale de Lokobe, 6.3 km 112° ESE Hellville",32,8,Antsiranana,-13.41933,48.33117,30
+"Ambondrobe, 41.1km 175° Vohemar",29,7,Antsiranana,-13.71533,50.10167,10
+"Forêt Classée d'Analavelona, 29.2 km 343° NNW Mahaboboka",29,7,Toliara,-22.675,44.19,1100
+[Andrangoloaca]; Mantasoa; Manjakandriana,29,7,Antananarivo,-19.03333,47.91667,1409
+"Parc National d'Isalo, Sahanafa River, 29.2 km 351° N Ranohira",29,6,Fianarantsoa,-22.31333,45.29167,500
+"Réserve Spéciale de l'Ankarana, 22.9 km 224° SW Anivorano Nord",28,11,Antsiranana,-12.90889,49.10983,80
+"5.3 km SSE Ambanizana, Andranobe",28,5,Toamasina,-15.67133,49.97395,425
+"Réserve Spéciale de l'Ankarana, 13.6 km 192° SSW Anivorano Nord",26,10,Antsiranana,-12.86361,49.22583,210
+"R.S. Manongarivo, 14.5 km 220° SW Antanambao",26,7,Antsiranana,-13.99833,48.42833,1175
+45km S. Ambalavao,26,6,Fianarantsoa,-22.21667,47.01667,785
+"Réserve Spéciale d'Ambohijanahary, Forêt d'Ankazotsihitafototra, 35.2 km 312° NW Ambaravaranala",25,10,Mahajanga,-18.26667,45.40667,1050
+[Andrangoloaka]; Mantasoa; Manjakandriana,25,6,Antananarivo,-19.03333,47.91667,1409
+[Antongil]; Maroantsetra,24,9,Toamasina,-15.43333,49.75,12
+[Nosibé]; Nosy be; Nosibe,24,7,Antsiranana,-13.29167,48.25833,146
+"Anosy Region, Anosyenne Mts, 31.2 km NW Manantenina",24,5,Toliara,-24.13894,47.06804,1125
+"Forêt Ambatovy, 14.3 km 57° Moramanga",23,11,Toamasina,-18.85083,48.32,1075
+"Montagne d'Anjanaharibe, 18.0 km 21° NNE Ambinanitelo",23,11,Toamasina,-15.18833,49.615,470
+"11.0 km WSW Befingotra, Rés. Anjanaharibe-Sud",23,6,Antsiranana,-14.75,49.45,1565
+"Ambatovy, 12.4 km NE Moramanga",23,5,Toamasina,-18.84963,48.2947,1010
+"Parc National de Zahamena, Onibe River",23,5,Toamasina,-17.75908,48.85468,
+"S.F. Tampolo, 10 km NNE Fenoarivo Atn.",22,8,Toamasina,-17.2825,49.43,10
+"Galoko chain, Mont Galoko",22,7,Antsiranana,-13.58487,48.71818,520
+F.C. Andriantantely,22,6,Toamasina,-18.695,48.81333,530
+"Forêt Classée d'Analavelona, 33.2 km 344° NNW Mahaboboka",22,5,Toliara,-22.64333,44.17167,1300
+"Forêt de Binara, 9.1km 233° SW Daraina",21,10,Antsiranana,-13.26333,49.60333,725
+"R.S. Manongarivo, 12.8 km 228° SW Antanambao",21,10,Antsiranana,-13.97667,48.42333,780
+[Antananarivo]; Ambatomanjaka; Miarinarivo,21,8,Antananarivo,-18.70515,46.82528,1399
+"Forêt Ambanitaza, 26.1 km 347° Antalaha",21,7,Antsiranana,-14.67933,50.18367,240
+"Parc National de Marojejy, 25.7 km 32° NNE Andapa, 10.3 km 314° NW Manantenina",21,6,Antsiranana,-14.445,49.74167,1575
+"Forêt d' Antsahabe, 11.4km 275° W Daraina",20,11,Antsiranana,-13.21167,49.55667,550
+"Ampasindava, Forêt d'Ambilanivy, 3.9 km 181° S Ambaliha",20,9,Antsiranana,-13.79861,48.16167,600
+"Réserve Spéciale d'Ambre, 3.5 km 235° SW Sakaramy",20,9,Antsiranana,-12.46889,49.24217,325
+"Forêt d' Andavakoera, 21.4km 75° ENE Ambilobe; 4.6km 356° N Betsiaka",20,7,Antsiranana,-13.11833,49.23,425
+"28 km. SSW Ambositra, Ankazomivady",20,5,Fianarantsoa,-20.775,47.16833,1670
+Prov.Antsiranana R.S. Manongarivo 17.3 km 218° SW Antanambao,19,9,Antsiranana,-14.02167,48.41833,1580
+Ankerana,19,7,Toamasina,-18.4061,48.8189,855
+"Parc National Befotaka-Midongy, Papango 27.7km S Midongy-Sud, Mount Papango",19,5,Fianarantsoa,-23.83517,46.96367,940
+"Parc National de Marojejy, 25.4 km 30° NNE Andapa, 10.9 km 311° NW Manantenina",19,5,Antsiranana,-14.445,49.735,2000
+"southern Isoky-Vohimena Forest, 59 km NE Sakaraha",19,5,Toliara,-22.46667,44.85,730
+"Réserve Spéciale d'Ambohijanahary, Forêt d'Ankazotsihitafototra, 34.6 km 314° NW Ambaravaranala",19,4,Mahajanga,-18.26,45.41833,1100
+"Region Sofia, Bemanevika",19,3,Mahajanga,-14.33886,48.58729,1567
+"40 km S Ambalavao, Rés. Andringitra",19,2,Fianarantsoa,-22.21667,46.96667,1275
+"Forêt d'Ampondrabe, 26.3km 10° NNE Daraina",18,11,Antsiranana,-12.97,49.7,175
+"Forêt de Vevembe, 66.6 km 293° Farafangana",18,10,Fianarantsoa,-22.791,47.18183,600
+"Parc National de Zahamena, Tetezambatana forest, near junction of Nosivola and Manakambahiny Rivers",18,6,Toamasina,-17.74298,48.72936,
+Réserve Speciale Manombo 24.5 km 228° Farafangana,18,6,Fianarantsoa,-23.01583,47.719,30
+Torotorofotsy,18,5,Toamasina,-18.87082,48.34737,1070
+"Parc National Montagne d'Ambre, 12.2 km 211° SSW Joffreville",18,4,Antsiranana,-12.59639,49.1595,1300
+"Parc National de Namoroka, 17.8 km 329° WNW Vilanandro",17,10,Mahajanga,-16.37667,45.32667,100
+F.C. Sandranantitra,17,7,Toamasina,-18.04833,49.09167,450
+"Parc National Mananara-Nord, 7.1 km 261° Antanambe",17,7,Toamasina,-16.455,49.7875,225
+"Parc National de Namoroka, 16.9 km 317° NW Vilanandro",17,7,Mahajanga,-16.40667,45.31,100
+"Parc National d'Ankarafantsika, Ampijoroa Station Forestière, 5.4 km 331° NW Andranofasika",17,3,Mahajanga,-16.29889,46.813,70
+"Tsinjoarivo forest, Ankadivory",17,1,Antananarivo,-19.71572,47.82084,1385
+"Ile Sainte Marie, Forêt Ambohidena, 22.8 km 44° Ambodifotatra",16,8,Toamasina,-16.82433,49.96417,20
+[Mangoro ufer]; Ambohibary; Moramanga,16,7,Toamasina,-18.8833,48.1167,861
+[Moramanga],16,6,Toamasina,-18.9489,48.22443,914
+"6.3 km S Ambanizana, Andranobe",16,5,Toamasina,-15.6813,49.958,25
+"Corridor Forestier Analamay-Mantadia, Tsaravoniana",16,4,Toamasina,-18.76124,48.42134,1018
+"Montagne des Français, 7.2 km 142° SE Antsiranana (=Diego Suarez)",15,8,Antsiranana,-12.32278,49.33817,180
+"Sahamalaza Peninsula, Forêt d'Anabohazo, 21.6 km 247° WSW Maromandia",15,8,Antsiranana,-14.30889,47.91433,120
+"Réserve Spéciale de Bemarivo, 23.8 km 223° SW Besalampy",15,7,Mahajanga,-16.925,44.36833,30
+"7.6 km 122º Kianjavato, Forêt Classée Vatovavy",15,6,Fianarantsoa,-21.4,47.94,175
+"Réserve Spéciale d'Ambohitantely, Forêt d Ambohitantely, Jardin Botanique, 24.1km 59° NE d Ankazobe",15,6,Antananarivo,-18.17139,47.28182,1620
+"38 km S Ambalavao, Rés. Andringitra",15,5,Fianarantsoa,-22.2,46.96667,1680
+Makay Mts.,15,5,Toliara,-21.29961,45.16412,570
+"Réserve Spéciale Kalambatritra, Ampanihy",15,5,Fianarantsoa,-23.4635,46.4631,1270
+[Ivondro p. Tamatavé]; Antenina; Toamasina Rural,15,5,Toamasina,-18.23333,49.36667,14
+"11 km NW Enakara, Rés. Andohahela",15,4,Toliara,-24.56667,46.83333,800
+"Parc National de Kirindy Mite, 16.3 km 127° SE Belo sur Mer",15,2,Toliara,-20.79528,44.147,80
+"Tsinjoarivo forest, Mahatsinjo",15,1,Antananarivo,-19.67962,47.77234,1539
+"43 km S Ambalavao, Rés. Andringitra",14,5,Fianarantsoa,-22.23333,47.0,825
+"Forêt de Binara, 7.5 km 230° SW Daraina",14,5,Antsiranana,-13.255,49.61667,375
+"Parc National Tsingy de Bemaraha, 3.4 km 93° E Bekopaka, Tombeau Vazimba",14,5,Mahajanga,-19.14194,44.828,50
+[Morondava],14,5,Toliara,-20.29042,44.3,6
+Analamay,14,4,Toamasina,-18.80623,48.33707,1068
+"Reserve Betampona, Camp Vohitsivalana, 37.1 km 338° Toamasina",14,4,Toamasina,-17.88667,49.2025,520
+[Centr Madag]; Ambatomanjaka; Miarinarivo,13,9,Antananarivo,-18.76695,46.86911,1343
+"Forêt de Bekaraoka, 6.8km 60° ENE Daraina",13,8,Antsiranana,-13.16667,49.71,150

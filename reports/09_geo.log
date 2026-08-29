@@ -4,6 +4,9 @@ province alias Toliary       -> Toliara      (6 rows)
 province alias Diego-Suarez  -> Antsiranana  (4 rows)
 provinces: {'Antsiranana': 1263, 'Toamasina': 937, 'Toliara': 642, 'Fianarantsoa': 599, 'Antananarivo': 572, 'Mahajanga': 333} (8 rows without province)
 summary written to /home/ubuntu/projects/lifeplan/mg-ants/data/geo_summary.csv (39 genera)
+per-province summary written to /home/ubuntu/projects/lifeplan/mg-ants/data/geo_by_place.csv
+top-100 localities written to /home/ubuntu/projects/lifeplan/mg-ants/data/geo_by_locality.csv (705 distinct locality strings, 11 rows without locality)
+top localities: {'[Madagascar]; Ambatomanjaka; Miarinarivo': 95, '3 km 41° NE Andranomay, 11.5 km 147° SSE Anjozorobe': 78, 'Parc National de Marojejy, Manantenina River, 27.6 km 35° NE Andapa, 9.6 km 327° NNW Manantenina': 55, '9.2 km WSW Befingotra, Rés. Anjanaharibe-Sud': 50, '6.9 km NE Ambanizana, Ambohitsitondroina': 47}
 map written to /home/ubuntu/projects/lifeplan/mg-ants/reports/map_specimens.png
 specimens per province (least covered first): {'Mahajanga': 333, 'Antananarivo': 572, 'Fianarantsoa': 599, 'Toliara': 642, 'Toamasina': 937, 'Antsiranana': 1263}
 genera per province (of 39): {'Mahajanga': 27, 'Antananarivo': 33, 'Toliara': 33, 'Antsiranana': 35, 'Fianarantsoa': 36, 'Toamasina': 36}
