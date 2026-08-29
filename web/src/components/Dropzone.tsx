@@ -1,6 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { api, ApiError, imageUrl, type ExampleSpecimen } from "@/lib/api";
 import { useAnalysis, type Analysis } from "@/lib/analysis-context";
 import { Banner } from "@/components/ui";
@@ -28,8 +28,10 @@ type Props = {
  * its place while /analyze runs. Shared by Identify and the Atlas card. */
 export function Dropzone({ onDone, compact = false, submitLabel = "Identify genus" }: Props) {
   const router = useRouter();
-  const { setAnalysis } = useAnalysis();
+  const params = useSearchParams();
+  const { analysis, setAnalysis } = useAnalysis();
   const input = useRef<HTMLInputElement>(null);
+  const zone = useRef<HTMLDivElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [drag, setDrag] = useState(false);
@@ -39,6 +41,19 @@ export function Dropzone({ onDone, compact = false, submitLabel = "Identify genu
   const last = useRef<{ file: File; truth?: ExampleSpecimen } | null>(null);
   const timer = useRef<number | null>(null);
   useEffect(() => () => { if (timer.current) window.clearTimeout(timer.current); }, []);
+
+  // "← Identify another specimen" arrives as /?new=1: forget the previous
+  // answer, start from an empty box and put keyboard focus on it.
+  const fresh = params.get("new") === "1";
+  useEffect(() => {
+    if (!fresh) return;
+    if (analysis) URL.revokeObjectURL(analysis.imageUrl);
+    setAnalysis(null);
+    setFile(null); setPreview(null); setError(null); setStage("idle");
+    zone.current?.focus();
+    router.replace("/", { scroll: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fresh]);
 
   const busy = stage === "loading" || stage === "uploading" || stage === "embedding";
 
@@ -100,13 +115,13 @@ export function Dropzone({ onDone, compact = false, submitLabel = "Identify genu
                          onRetry={last.current ? retry : cancel} onCancel={cancel} />
       ) : (
         <div
-          role="button" tabIndex={0} aria-label="Upload an ant photo"
+          ref={zone} role="button" tabIndex={0} aria-label="Upload an ant photo"
           onClick={() => input.current?.click()}
           onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") input.current?.click(); }}
           onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
           onDragLeave={() => setDrag(false)}
           onDrop={(e) => { e.preventDefault(); setDrag(false); pick(e.dataTransfer.files[0] ?? null); }}
-          className={`flex ${compact ? "min-h-40" : "min-h-56"} cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed p-6 text-center transition-colors
+          className={`dropzone flex ${compact ? "min-h-40" : "min-h-56"} cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed p-6 text-center transition-colors
             ${drag ? "border-accent bg-accent-soft" : "border-hairline bg-surface-2 hover:border-accent"}`}
         >
           <input ref={input} type="file" accept="image/*" className="hidden"

@@ -24,6 +24,14 @@ export function AntwebCredit({ code, photographer }: { code: string; photographe
   );
 }
 
+/** "← Identify another specimen": lands on / with the dropzone reset and focused
+ * (the Dropzone consumes the ?new=1 flag). Secondary button or plain link. */
+export const BackToIdentify = ({ label = "Identify another specimen", plain = false }: { label?: string; plain?: boolean }) => (
+  <Link href="/?new=1" className={plain ? "link" : "btn"} data-testid="back-to-identify">
+    <span aria-hidden>←</span> {label}
+  </Link>
+);
+
 export const Card = ({ children, className = "" }: { children: ReactNode; className?: string }) => (
   <div className={`hairline rounded-md bg-surface p-5 ${className}`}>{children}</div>
 );

@@ -9,7 +9,7 @@ import { antwebUrl, imageUrl } from "@/lib/api";
 import type { Analysis } from "@/lib/analysis-context";
 import { pct } from "@/lib/format";
 import { OTHER, PALETTE, SUBFAMILY_ORDER } from "@/lib/palette";
-import { Genus } from "@/components/ui";
+import { BackToIdentify, Genus } from "@/components/ui";
 import { Dropzone } from "@/components/Dropzone";
 
 type Mode = "subfamily" | "genera" | "one";
@@ -199,6 +199,7 @@ function UploadStrip({ upload, onClear }: { upload: Analysis; onClear: () => voi
         {!placed && <span className="ml-2 text-xs text-warning">couldn’t place this photo on the map</span>}
       </span>
       <Link className="link" href="/result">Full analysis →</Link>
+      <BackToIdentify plain label="Identify another" />
       <button className="text-xs text-muted hover:text-ink" onClick={onClear} aria-label="Remove your photo from the map">✕ remove</button>
     </div>
   );

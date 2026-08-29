@@ -17,7 +17,7 @@ export default function IdentifyPage() {
           a small linear classifier trained on 986 AntWeb specimens proposes the three most likely genera,
           and the five most similar museum specimens are shown so you can judge for yourself.
         </p>
-        <div className="mt-6"><Dropzone /></div>
+        <div className="mt-6"><Suspense fallback={<Spinner label="Loading…" />}><Dropzone /></Suspense></div>
       </section>
       <aside>
         <Suspense fallback={<Spinner label="Loading model card…" />}>

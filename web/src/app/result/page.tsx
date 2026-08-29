@@ -4,7 +4,7 @@ import { useAnalysis } from "@/lib/analysis-context";
 import { imageUrl, antwebUrl } from "@/lib/api";
 import { pct } from "@/lib/format";
 import { subfamilyColour } from "@/lib/palette";
-import { AntwebCredit, Banner, Card, Code, Eyebrow, Genus, InfoIcon, ProbBar, SectionTitle, Species } from "@/components/ui";
+import { AntwebCredit, BackToIdentify, Banner, Card, Code, Eyebrow, Genus, InfoIcon, ProbBar, SectionTitle, Species } from "@/components/ui";
 import { verdict } from "@/lib/verdict";
 
 export default function ResultPage() {
@@ -30,6 +30,7 @@ export default function ResultPage() {
 
   return (
     <div className="space-y-8">
+      <div><BackToIdentify /></div>
       <div className="grid gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <section>
           <Eyebrow>Query image</Eyebrow>
@@ -84,7 +85,7 @@ export default function ResultPage() {
             {atlasHref ? <Link className="btn" href={atlasHref}>See where this lands on the atlas →</Link>
                        : <span className="text-xs text-muted">Atlas position unavailable for this image.</span>}
             <Link className="btn" href={`/distribution?genus=${encodeURIComponent(top.genus)}`}>Where <Genus name={top.genus} /> has been collected →</Link>
-            <Link className="btn" href="/">Try another</Link>
+            <BackToIdentify />
           </div>
           <p className="mt-4 text-xs text-muted">
             {result.model_name} · probe {result.probe_version.slice(0, 10)} · probabilities are the classifier’s softmax over the 27 genera,
