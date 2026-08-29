@@ -14,7 +14,7 @@ Source Serif 4 (display), Inter (UI), JetBrains Mono (specimen codes).
 
 # 2. the site
 cd web
-cp .env.example .env.local            # NEXT_PUBLIC_API_URL=http://localhost:8001
+# dev API URL comes from .env.development; create .env.local only to override it
 pnpm install
 pnpm dev                              # http://localhost:3000
 pnpm lint && pnpm build               # type-check + production build
@@ -27,7 +27,7 @@ pnpm lint && pnpm build               # type-check + production build
 
 | Variable | Where | Meaning |
 |---|---|---|
-| `NEXT_PUBLIC_API_URL` | browser + server | Base URL of the FastAPI backend as the **browser** sees it. Dev: `http://localhost:8001`. Behind nginx: `/api`. |
+| `NEXT_PUBLIC_API_URL` | browser + server | Base URL of the FastAPI backend as the **browser** sees it. Dev: `http://localhost:8001` (`.env.development`). Behind nginx: `/api` (`.env.production`). Inlined at build time — and `.env.local` outranks `.env.production` even for `next build`, so never leave a dev `.env.local` on the server. |
 | `API_URL` | server only, optional | Absolute base used by server components when the public one is relative (`http://127.0.0.1:8001`). |
 
 CORS: the API only allows the origins in `config.yaml` → `api_cors_origins`
@@ -52,9 +52,12 @@ UMAP → update them in `src/app/atlas/AtlasChart.tsx`.
 ## Production
 
 ```bash
-cd web && pnpm install --frozen-lockfile && pnpm build
-NEXT_PUBLIC_API_URL=/api API_URL=http://127.0.0.1:8001 pnpm start   # :3000
+cd web && pnpm install --frozen-lockfile && pnpm build   # reads web/.env.production
+pnpm start -p 3050                                        # API_URL=http://127.0.0.1:8050 from .env.production
 ```
+
+Production ports are **3050** (Next) and **8050** (API); dev keeps 3000/3001 and
+8001. The systemd units and nginx site live in `deploy/` — see `DEPLOY.md`.
 
 `NEXT_PUBLIC_*` is inlined at build time: set it before `pnpm build`. The
 data pages are `force-dynamic` (rendered per request, API responses cached
@@ -64,8 +67,8 @@ up and a down API only ever shows the banner for the current request.
 Keep both processes alive with pm2 …
 
 ```bash
-pm2 start ".venv/bin/uvicorn api.main:app --host 127.0.0.1 --port 8001 --root-path /api" --name vitsika-api --cwd /srv/mg-ants
-pm2 start "pnpm start" --name vitsika-web --cwd /srv/mg-ants/web
+pm2 start ".venv/bin/uvicorn api.main:app --host 127.0.0.1 --port 8050 --root-path /api" --name vitsika-api --cwd /srv/mg-ants
+pm2 start "pnpm start -p 3050" --name vitsika-web --cwd /srv/mg-ants/web
 pm2 save && pm2 startup
 ```
 
@@ -83,13 +86,13 @@ server {
     client_max_body_size 12m;                      # the API rejects > 10 MB itself
 
     location /api/ {
-        proxy_pass http://127.0.0.1:8001/;         # trailing slash strips /api
+        proxy_pass http://127.0.0.1:8050/;         # trailing slash strips /api
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_read_timeout 60s;                    # ~1 s per /analyze on CPU
     }
     location / {
-        proxy_pass http://127.0.0.1:3000;
+        proxy_pass http://127.0.0.1:3050;
         proxy_set_header Host $host;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;    # Next.js HMR only matters in dev

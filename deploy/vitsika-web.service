@@ -1,0 +1,29 @@
+[Unit]
+Description=Vitsika web (Next.js production server for mg-ants)
+Documentation=file:///home/ubuntu/projects/lifeplan/mg-ants/DEPLOY.md
+After=network.target vitsika-api.service
+Wants=vitsika-api.service
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/projects/lifeplan/mg-ants/web
+# `next start` from the committed build in .next/ (run `pnpm build` first).
+# node is called directly rather than through pnpm so the unit has no
+# dependency on ~/.npm-global being on PATH.
+ExecStart=/usr/bin/node /home/ubuntu/projects/lifeplan/mg-ants/web/node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3050
+Environment=NODE_ENV=production
+Environment=PORT=3050
+# NEXT_PUBLIC_API_URL=/api is inlined at build time (web/.env.production);
+# API_URL is read at runtime from the same file for server-side fetches.
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+# No ProtectHome: Next writes its fetch/ISR cache under web/.next/cache.
+
+[Install]
+WantedBy=multi-user.target

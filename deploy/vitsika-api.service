@@ -1,0 +1,38 @@
+[Unit]
+Description=Vitsika API (mg-ants FastAPI: BioCLIP 2 + linear probe)
+Documentation=file:///home/ubuntu/projects/lifeplan/mg-ants/DEPLOY.md
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/projects/lifeplan/mg-ants
+# Exactly ONE worker, on purpose: the process holds the 1.7 GB BioCLIP 2
+# weights plus the UMAP reducer in RAM (2.5 GB RSS measured) and serialises inference
+# behind a lock, so extra workers would multiply memory without adding
+# throughput on a 6-core CPU. --root-path /api makes the API's own absolute
+# URLs (OpenAPI docs, image_url) include the nginx prefix.
+ExecStart=/home/ubuntu/projects/lifeplan/mg-ants/.venv/bin/uvicorn api.main:app \
+    --host 127.0.0.1 --port 8050 --workers 1 --root-path /api \
+    --proxy-headers --forwarded-allow-ips 127.0.0.1 \
+    --timeout-graceful-shutdown 15
+Environment=PYTHONUNBUFFERED=1
+# huggingface_hub reads weights from the cache; never try the network at boot
+Environment=HF_HUB_OFFLINE=1
+Environment=HF_HOME=/home/ubuntu/.cache/huggingface
+Restart=on-failure
+RestartSec=5
+# model + UMAP JIT take ~30 s; give the unit time before systemd gives up
+TimeoutStartSec=180
+TimeoutStopSec=30
+# memory guard: RSS is ~2.5 GB; a leak beyond this restarts the unit
+MemoryMax=6G
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+# No ProtectHome: the service lives in /home/ubuntu and numba/huggingface
+# keep their caches under ~/.cache; a read-only home breaks the UMAP JIT.
+
+[Install]
+WantedBy=multi-user.target
