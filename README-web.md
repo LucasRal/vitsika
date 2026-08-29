@@ -127,6 +127,12 @@ returns `{"status":"loading"}` until then and every page shows a
   (amber banner). Fixtures in `src/lib/__fixtures__/` are real
   `/api/analyze` payloads from production (Royidris casent0002219,
   Tetraponera casent0012838).
+- The last analysis lives in `AnalysisContext` and is mirrored to
+  `sessionStorage` (`vitsika.analysis.v1`, image as a data URL when ≤ 2 MB),
+  so it survives tab-surfing and a reload; Identify shows it as "Last
+  result" with the photo in the box. It is cleared only by
+  "← Identify another specimen" (`/?new=1` or the in-page button) or by
+  choosing a new photo.
 - The Atlas card's "Place your photo on the map" reuses the Identify
   `Dropzone` (`compact` prop, `onDone` callback): one `/analyze` call gives
   the star position and the full answer, which lands in the same

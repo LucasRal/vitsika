@@ -4,11 +4,12 @@ import { useAnalysis } from "@/lib/analysis-context";
 import { imageUrl, antwebUrl } from "@/lib/api";
 import { pct } from "@/lib/format";
 import { subfamilyColour } from "@/lib/palette";
-import { AntwebCredit, BackToIdentify, Banner, Card, Code, Eyebrow, Genus, InfoIcon, ProbBar, SectionTitle, Species } from "@/components/ui";
+import { AntwebCredit, BackToIdentify, Banner, Card, Code, Eyebrow, Genus, InfoIcon, ProbBar, SectionTitle, Species, Spinner } from "@/components/ui";
 import { verdict } from "@/lib/verdict";
 
 export default function ResultPage() {
-  const { analysis } = useAnalysis();
+  const { analysis, hydrated } = useAnalysis();
+  if (!hydrated) return <Spinner label="Loading…" />;
   if (!analysis) {
     return (
       <div className="max-w-prose space-y-3">
@@ -34,8 +35,12 @@ export default function ResultPage() {
       <div className="grid gap-8 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <section>
           <Eyebrow>Query image</Eyebrow>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={query} alt={filename} className="hairline max-h-80 w-full rounded-md object-contain bg-surface-2" />
+          {query ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={query} alt={filename} className="hairline max-h-80 w-full rounded-md object-contain bg-surface-2" />
+          ) : (
+            <div className="hairline flex h-40 items-center justify-center rounded-md bg-surface-2 text-sm text-muted">photo not kept after reload (too large to store)</div>
+          )}
           <p className="mt-1 text-xs text-muted">{filename} · embedded in {result.embed_ms.toFixed(0)} ms</p>
         </section>
         <section>
