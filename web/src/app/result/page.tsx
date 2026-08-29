@@ -25,7 +25,7 @@ export default function ResultPage() {
   const rank = truth ? result.predictions.findIndex((p) => p.genus === truth.genus) : -1;
   const star = result.atlas_position;
   const atlasHref = star
-    ? `/atlas?star=1&x=${star.x.toFixed(3)}&y=${star.y.toFixed(3)}&label=${encodeURIComponent(`Your upload · ${top.genus}? ${pct(top.probability)}`)}`
+    ? `/atlas?star=1&x=${star.x.toFixed(3)}&y=${star.y.toFixed(3)}&label=${encodeURIComponent("your photo")}`
     : null;
 
   return (

@@ -6,7 +6,7 @@ import ReactECharts from "echarts-for-react";
 import type { EChartsOption } from "echarts";
 import type { AtlasPoint } from "@/lib/api";
 import { antwebUrl, imageUrl } from "@/lib/api";
-import type { Analysis } from "@/lib/analysis-context";
+import { useAnalysis, type Analysis } from "@/lib/analysis-context";
 import { pct } from "@/lib/format";
 import { OTHER, PALETTE, SUBFAMILY_ORDER } from "@/lib/palette";
 import { BackToIdentify, Genus } from "@/components/ui";
@@ -53,10 +53,16 @@ export function AtlasChart({ points }: { points: AtlasPoint[] }) {
   // Kept in component state, so it survives colour-scheme flips and mode changes.
   const [upload, setUpload] = useState<Analysis | null>(null);
   const [uploadOpen, setUploadOpen] = useState(false);
+  // The last analysis (from Identify) is still in context when we arrive via
+  // /result's "See where this lands" link: use its image for the star tooltip.
+  const { analysis } = useAnalysis();
   const star = useMemo(() => {
-    if (upload) return upload.result.atlas_position ? { ...upload.result.atlas_position, label: "your photo" } : null;
-    return paramStar;
-  }, [upload, paramStar]);
+    const a = upload ?? (paramStar ? analysis : null);
+    const top = a?.result.predictions[0];
+    const caption = top ? `${top.genus} ${pct(top.probability)}` : null;
+    if (upload) return upload.result.atlas_position ? { ...upload.result.atlas_position, label: "your photo", thumb: upload.imageUrl, caption } : null;
+    return paramStar ? { ...paramStar, thumb: a?.imageUrl ?? null, caption } : null;
+  }, [upload, paramStar, analysis]);
   const [mode, setMode] = useState<Mode>("subfamily");
   const [query, setQuery] = useState("");
   const [one, setOne] = useState<string | null>(null);
@@ -102,7 +108,7 @@ export function AtlasChart({ points }: { points: AtlasPoint[] }) {
       itemStyle: { color: t.accent, borderColor: t.surface, borderWidth: 1 },
       label: { show: true, position: "right", distance: 10, color: t.accent, fontWeight: 600, fontSize: 12, formatter: star.label,
                backgroundColor: t.surface, borderColor: t.hairline, borderWidth: 0.5, padding: [2, 6], borderRadius: 3 },
-      data: [{ value: [star.x, star.y], star: star.label } as { value: number[] }],
+      data: [{ value: [star.x, star.y], star: star.label, thumb: star.thumb, caption: star.caption } as { value: number[] }],
     });
     return {
       animation: false, backgroundColor: "transparent",
@@ -117,9 +123,13 @@ export function AtlasChart({ points }: { points: AtlasPoint[] }) {
         trigger: "item", backgroundColor: t.surface, borderColor: t.hairline, borderWidth: 0.5, padding: 8,
         textStyle: { color: t.ink, fontSize: 12 }, enterable: false, confine: true,
         formatter: (raw) => {
-          const d = (Array.isArray(raw) ? raw[0] : raw).data as { p?: AtlasPoint; title?: string; text?: string; star?: string };
+          const d = (Array.isArray(raw) ? raw[0] : raw).data as { p?: AtlasPoint; title?: string; text?: string; star?: string; thumb?: string | null; caption?: string | null };
           if (d.title) return `<b>${d.title}</b><br/><span style="color:var(--ink-2)">${d.text}</span>`;
-          if (d.star) return `<b>★ ${d.star}</b>`;
+          if (d.star) {
+            const img = d.thumb ? `<img src="${d.thumb}" width="160" height="120" style="display:block;object-fit:contain;background:var(--surface-2);border-radius:3px" />` : "";
+            return `${img}<div style="margin-top:6px"><b>★ ${d.star}</b></div>` +
+                   (d.caption ? `<div style="color:var(--ink-2)">top-1 <i>${d.caption}</i></div>` : "");
+          }
           if (!d.p) return "";
           const p = d.p;
           const thumb = p.image_available
