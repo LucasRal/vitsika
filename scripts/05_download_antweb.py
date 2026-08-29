@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Download dataset images directly from antweb.org with a browser-impersonating
 client (curl_cffi). Standalone: needs only curl_cffi, pandas, pillow, tqdm and
-data/dataset.csv — it can run from a laptop on a residential IP if the VPS is
+data/dataset.csv; it can run from a laptop on a residential IP if the VPS is
 blocked, then the data/images/ tree is rsync'ed back.
 
 Polite by design: one request at a time, random 0.5-1.0 s sleep between
 requests, exponential backoff on 403/429/5xx, and a hard stop after 10
-consecutive 403s (that means Cloudflare is blocking this IP — stop and report
+consecutive 403s (that means Cloudflare is blocking this IP; stop and report
 rather than hammer).
 
 For each row: try the _med size first (smaller, enough for 1024px training
@@ -156,7 +156,7 @@ def main() -> None:
             if success or "403" not in status and "404" not in status:
                 break  # stop on success or a non-retriable oddity
             if "403" in status:
-                break  # blocked — trying other sizes won't help
+                break  # blocked; trying other sizes won't help
         if success:
             downloaded += 1
             consecutive_403 = 0
@@ -169,7 +169,7 @@ def main() -> None:
                 consecutive_403 += 1
                 if consecutive_403 >= MAX_CONSECUTIVE_403:
                     log.error(
-                        "%d consecutive 403s — Cloudflare is blocking this IP. "
+                        "%d consecutive 403s; Cloudflare is blocking this IP. "
                         "Stopping. Run this script from another network "
                         "(e.g. a laptop on a residential connection).",
                         consecutive_403,

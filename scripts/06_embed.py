@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase B — BioCLIP 2 image embeddings for the POC dataset.
+"""Phase B: BioCLIP 2 image embeddings for the POC dataset.
 
 Every row of data/dataset.csv (sorted by specimen_code, so the order is
 deterministic) is embedded once with the frozen BioCLIP 2 image tower
@@ -14,7 +14,7 @@ Outputs, always written together and in identical row order:
 
 Resumable: if both outputs exist they are loaded, only specimen codes not yet
 embedded are computed, and both files are rewritten atomically (tmp + rename)
-in specimen_code order. Images that fail to open are logged and skipped —
+in specimen_code order. Images that fail to open are logged and skipped;
 they get NO row (no zero vector), so a later run retries them. Integrity is
 checked after writing (npy rows == index rows) and the SHA256 of the index
 is logged so downstream steps can pin the exact embedding set.
@@ -62,18 +62,18 @@ def load_existing(dataset: pd.DataFrame) -> tuple[pd.DataFrame, np.ndarray | Non
     empty = pd.DataFrame(columns=INDEX_COLS)
     if not (EMB_PATH.exists() and INDEX_PATH.exists()):
         if EMB_PATH.exists() != INDEX_PATH.exists():
-            log.warning("only one of %s / %s exists — starting fresh",
+            log.warning("only one of %s / %s exists; starting fresh",
                         EMB_PATH.name, INDEX_PATH.name)
         return empty, None
     index = pd.read_csv(INDEX_PATH)
     embs = np.load(EMB_PATH)
     if len(index) != len(embs) or list(index.columns) != INDEX_COLS:
-        log.warning("existing outputs inconsistent (%d index rows, %d embedding rows) "
-                    "— starting fresh", len(index), len(embs))
+        log.warning("existing outputs inconsistent (%d index rows, %d embedding rows); "
+                    "starting fresh", len(index), len(embs))
         return empty, None
     keep = index["specimen_code"].isin(dataset["specimen_code"]).to_numpy()
     if (~keep).any():
-        log.warning("%d embedded specimens are no longer in the dataset — dropped",
+        log.warning("%d embedded specimens are no longer in the dataset; dropped",
                     int((~keep).sum()))
     log.info("resuming: %d embeddings already on disk", int(keep.sum()))
     return index[keep].reset_index(drop=True), embs[keep]
@@ -165,7 +165,7 @@ def main() -> None:
 
     src = DATA / "dataset.csv"
     if not src.exists():
-        log.error("%s missing — run 03_build_dataset.py --available-only first", src)
+        log.error("%s missing; run 03_build_dataset.py --available-only first", src)
         sys.exit(1)
     dataset = pd.read_csv(src).sort_values("specimen_code").reset_index(drop=True)
     if not dataset["specimen_code"].is_unique:
@@ -185,7 +185,7 @@ def main() -> None:
     parts_idx = [p for p in (old_index, new_index) if not p.empty]
     parts_emb = [e for e in (old_embs, new_embs) if e is not None and len(e)]
     if not parts_idx:
-        log.error("nothing embedded and nothing on disk — no outputs written")
+        log.error("nothing embedded and nothing on disk; no outputs written")
         sys.exit(1)
     index = pd.concat(parts_idx, ignore_index=True)
     embs = np.concatenate(parts_emb).astype(np.float32, copy=False)

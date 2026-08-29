@@ -32,16 +32,16 @@ browser ──HTTPS──▶ nginx (:443, Let's Encrypt; :80 → 301)
 | API unit | `/etc/systemd/system/vitsika-api.service` | `deploy/vitsika-api.service` |
 | Web unit | `/etc/systemd/system/vitsika-web.service` | `deploy/vitsika-web.service` |
 | nginx site | `/etc/nginx/sites-available/vitsika.conf` → `sites-enabled/` | `deploy/vitsika.conf` (pre-certbot; certbot appended the 443 block + redirect in place) |
-| TLS | `/etc/letsencrypt/live/vitsika.lucas-ralambo.com/` — renewed by `certbot.timer` (twice daily; `certbot renew --dry-run` to test) | — |
-| Env | `web/.env.production` (committed), `web/.env.development` (dev) | — |
-| Logs | `journalctl -u vitsika-api`, `journalctl -u vitsika-web`, `/var/log/nginx/vitsika.{access,error}.log`; the API also writes `reports/api.log` | — |
+| TLS | `/etc/letsencrypt/live/vitsika.lucas-ralambo.com/`, renewed by `certbot.timer` (twice daily; `certbot renew --dry-run` to test) | - |
+| Env | `web/.env.production` (committed), `web/.env.development` (dev) | - |
+| Logs | `journalctl -u vitsika-api`, `journalctl -u vitsika-web`, `/var/log/nginx/vitsika.{access,error}.log`; the API also writes `reports/api.log` | - |
 
 Changed a template? Re-install it and reload:
 
 ```bash
 sudo install -m 644 deploy/vitsika-api.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl restart vitsika-api
 sudo install -m 644 deploy/vitsika.conf /etc/nginx/sites-available/vitsika.conf && sudo nginx -t && sudo systemctl reload nginx
-# NB: the live vitsika.conf also carries certbot's 443 block — after
+# NB: the live vitsika.conf also carries certbot's 443 block; after
 # re-installing the template run `sudo certbot --nginx -d vitsika.lucas-ralambo.com --reinstall --redirect`
 # (or re-apply the block by hand) so HTTPS comes back.
 ```
@@ -60,7 +60,7 @@ journalctl -u vitsika-api -n 20 --no-pager
 # Data artefacts changed (embeddings / probe / UMAP)? Re-run the pipeline steps first:
 #   scripts/06_embed.py → 07_eval.py → 08_umap.py, then restart the API.
 #   The atlas annotations in web/src/app/atlas/AtlasChart.tsx are hard-coded UMAP
-#   medians — refresh them if 08_umap.py is re-fitted.
+#   medians; refresh them if 08_umap.py is re-fitted.
 
 # Site changed (web/)?
 cd web
@@ -73,7 +73,7 @@ sudo systemctl restart vitsika-web                  # ready in ~2 s
 
 `next build` writes into `web/.next/` while the old server keeps serving
 from it; the restart picks up the new build. For zero-downtime, build into a
-copy and swap — not needed at this scale.
+copy and swap, not needed at this scale.
 
 Smoke after a redeploy:
 

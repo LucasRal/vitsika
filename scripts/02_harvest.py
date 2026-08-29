@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Phase 2 — harvest imaged Madagascar occurrence metadata, one genus at a time.
+"""Phase 2: harvest imaged Madagascar occurrence metadata, one genus at a time.
 
 Paginates /v1/occurrence/search per genusKey (from data/genera.csv), explodes
 media[] into one row per image, keeps only antweb.org identifiers, and writes
 data/raw/records.parquet. For each kept record, one extra call to
-/occurrence/{gbifID}/verbatim retrieves the caste (verbatim dwc:sex — GBIF's
+/occurrence/{gbifID}/verbatim retrieves the caste (verbatim dwc:sex; GBIF's
 interpreted sex field drops 'worker'). Resumable: each finished genus is
 recorded in data/raw/done_genera.txt and stored as its own parquet part.
 
 Refuses to run the inline strategy if the imaged MG count exceeds 90,000
-(offset + limit must stay <= 100,000) — in that case switch to the GBIF
+(offset + limit must stay <= 100,000); in that case switch to the GBIF
 Occurrence Download API.
 """
 from __future__ import annotations
@@ -97,7 +97,7 @@ def media_rows(rec: dict[str, Any]) -> list[dict[str, Any]]:
 def fetch_verbatim_caste(client: GbifClient, gbif_id: Any) -> str:
     """AntWeb stores the caste in the verbatim dwc:sex field ('worker',
     'queen', 'male', 'alate queen', ...). GBIF's interpretation layer only
-    keeps Male/Female/Other, so 'worker' becomes sex=null — the verbatim
+    keeps Male/Female/Other, so 'worker' becomes sex=null; the verbatim
     record is the only reliable source."""
     v = client.get_json(f"occurrence/{gbif_id}/verbatim")
     return (v.get("http://rs.tdwg.org/dwc/terms/sex") or "").strip().lower()
@@ -108,7 +108,7 @@ def harvest_genus(client: GbifClient, cfg: dict, genus_key: str) -> pd.DataFrame
     offset = 0
     while True:
         if offset + PAGE_SIZE > OFFSET_CAP:
-            log.warning("genus %s hit the offset cap at %d — results truncated", genus_key, offset)
+            log.warning("genus %s hit the offset cap at %d; results truncated", genus_key, offset)
             break
         res = client.get_json(
             "occurrence/search",
@@ -162,7 +162,7 @@ def main() -> None:
 
     genera_path = DATA / "genera.csv"
     if not genera_path.exists():
-        log.error("%s missing — run 01_explore.py first", genera_path)
+        log.error("%s missing; run 01_explore.py first", genera_path)
         sys.exit(1)
     with genera_path.open() as fh:
         genera = list(csv.DictReader(fh))

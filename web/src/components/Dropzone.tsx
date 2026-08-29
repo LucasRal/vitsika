@@ -21,7 +21,7 @@ type Props = {
   /** Called with the finished analysis (already stored in the AnalysisContext).
    * Default: navigate to /result. */
   onDone?: (a: Analysis) => void;
-  /** Smaller box and shorter copy — used inside the atlas card. */
+  /** Smaller box and shorter copy, used inside the atlas card. */
   compact?: boolean;
   submitLabel?: string;
 };
@@ -148,7 +148,7 @@ export function Dropzone({ onDone, compact = false, submitLabel = "Identify genu
             // eslint-disable-next-line @next/next/no-img-element
             <img src={preview} alt="Selected specimen" className={`${compact ? "max-h-40" : "max-h-64"} rounded-sm object-contain`} />
           ) : restored ? (
-            <p className="text-sm text-muted">Previous photo not kept (too large to store) — the result is still available.</p>
+            <p className="text-sm text-muted">Previous photo not kept (too large to store), but the result is still available.</p>
           ) : (
             <>
               <p className={`font-serif ${compact ? "text-base" : "text-lg"}`}>Drop a profile-view photo of an ant</p>

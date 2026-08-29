@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 1 — explore the AntWeb dataset on GBIF before harvesting.
+"""Phase 1: explore the AntWeb dataset on GBIF before harvesting.
 
 Verifies the dataset facts, counts imaged Madagascar records, builds the
 genus facet table (cached to data/genera.csv), inspects sample records,

@@ -86,12 +86,12 @@ export default function MethodsPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl">Limitations — please read</h2>
+        <h2 className="text-xl">Limitations (please read)</h2>
         <ul className="list-disc space-y-1.5 pl-5 text-sm">
           <li>Genus only. Species names on similar specimens are AntWeb’s determinations, not predictions.</li>
           <li>Closed world: a photo of a genus outside the 27, of a queen or male, or of something that is not an ant still gets an answer. Probabilities are a softmax, not calibrated confidence; below 50 % we say so.</li>
           <li>Trained on standardised museum photographs (lateral view, white background, pinned specimen). Field photos of live ants are out of distribution and will do worse.</li>
-          <li>Small test sets: several genera have 3–6 test images, so their per-genus scores are coarse — see the reliability flags in Genera.</li>
+          <li>Small test sets: several genera have 3–6 test images, so their per-genus scores are coarse; see the reliability flags in Genera.</li>
           <li>Maps show collecting effort, not abundance or range: they are where museum specimens were collected and georeferenced.</li>
           <li>Roughly 1 s per image on a 6-core CPU; not built for batch use.</li>
         </ul>

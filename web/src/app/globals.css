@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
-/* Vitsika design tokens — scientific-journal feel: white surfaces, hairline
+/* Vitsika design tokens, scientific-journal feel: white surfaces, hairline
    borders, muted ink, one accent. Dark values are swapped by the OS setting. */
 :root {
   color-scheme: light;

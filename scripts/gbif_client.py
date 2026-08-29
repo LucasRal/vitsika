@@ -25,7 +25,7 @@ _MIN_INTERVAL_S = 0.25  # <= 4 requests per second
 _RETRY_STATUSES = {429, 500, 502, 503, 504}
 
 # catalogNumber suffix for the image view, e.g. "casent0214665-d01"
-# only h/d/p/l are view suffixes — don't strip other dash segments
+# only h/d/p/l are view suffixes; don't strip other dash segments
 _CATALOG_SUFFIX_RE = re.compile(r"-[hdpl]\d+$", re.IGNORECASE)
 # view letter inside an AntWeb image URL, e.g. ".../casent0214665_p_1_high.jpg"
 _URL_VIEW_RE = re.compile(r"_([hdpl])_\d+_")
@@ -58,12 +58,12 @@ class GbifClient:
             except requests.RequestException as exc:
                 if attempt == self.max_retries:
                     raise
-                log.warning("request error on %s: %s — retry in %.0fs", url, exc, backoff)
+                log.warning("request error on %s: %s; retry in %.0fs", url, exc, backoff)
                 time.sleep(backoff)
                 backoff *= 2
                 continue
             if resp.status_code in _RETRY_STATUSES and attempt < self.max_retries:
-                log.warning("HTTP %d on %s — retry in %.0fs", resp.status_code, url, backoff)
+                log.warning("HTTP %d on %s; retry in %.0fs", resp.status_code, url, backoff)
                 time.sleep(backoff)
                 backoff *= 2
                 continue

@@ -5,7 +5,7 @@ import { ApiDown, Spinner } from "@/components/ui";
 import { DistributionClient } from "./DistributionClient";
 
 // Render per request: the API data (fetch-cached with revalidate) must never be
-// frozen into a static build — e.g. the "service not reachable" banner.
+// frozen into a static build, e.g. the "service not reachable" banner.
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = { title: "Distribution" };

@@ -45,7 +45,7 @@ export function ExamplePicker({ open, onClose, onPick, busy }: Props) {
           <div className="mr-auto">
             <h2 id="picker-title" className="text-lg">Pick a held-out specimen</h2>
             <p className="text-xs text-muted">
-              {data ? `${data.length} of the 250 test images` : "Test images"} — the classifier was never fitted on these.
+              {data ? `${data.length} of the 250 test images` : "Test images"}. The classifier was never fitted on these.
               Two per genus, chosen deterministically (not the easiest ones).
             </p>
           </div>
@@ -58,7 +58,7 @@ export function ExamplePicker({ open, onClose, onPick, busy }: Props) {
         <div className="overflow-y-auto px-5 py-4">
           {error && <Banner tone="warning" title="Could not load the examples."><p>{error}</p></Banner>}
           {!data && !error && <Spinner label="Loading specimens…" />}
-          {busy && <div className="mb-3"><Spinner label="Embedding with BioCLIP 2 — about a second…" /></div>}
+          {busy && <div className="mb-3"><Spinner label="Embedding with BioCLIP 2 (about a second)…" /></div>}
           {groups.map(([sub, rows]) => (
             <section key={sub} className="mb-5">
               <p className="mb-2 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.12em] text-muted">

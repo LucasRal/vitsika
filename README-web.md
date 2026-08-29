@@ -1,4 +1,4 @@
-# Vitsika — web front end (`web/`)
+# Vitsika: web front end (`web/`)
 
 Next.js 15 (App Router, TypeScript, `src/` layout), Tailwind CSS v4,
 ECharts (`echarts-for-react`) for the atlas, `react-leaflet` 5 with
@@ -27,7 +27,7 @@ pnpm lint && pnpm build               # type-check + production build
 
 | Variable | Where | Meaning |
 |---|---|---|
-| `NEXT_PUBLIC_API_URL` | browser + server | Base URL of the FastAPI backend as the **browser** sees it. Dev: `http://localhost:8001` (`.env.development`). Behind nginx: `/api` (`.env.production`). Inlined at build time — and `.env.local` outranks `.env.production` even for `next build`, so never leave a dev `.env.local` on the server. |
+| `NEXT_PUBLIC_API_URL` | browser + server | Base URL of the FastAPI backend as the **browser** sees it. Dev: `http://localhost:8001` (`.env.development`). Behind nginx: `/api` (`.env.production`). Inlined at build time, and `.env.local` outranks `.env.production` even for `next build`, so never leave a dev `.env.local` on the server. |
 | `API_URL` | server only, optional | Absolute base used by server components when the public one is relative (`http://127.0.0.1:8001`). |
 
 CORS: the API only allows the origins in `config.yaml` → `api_cors_origins`
@@ -43,7 +43,7 @@ does not apply.
 | `/genera` | server fetch, client table (sort / search / filter) | `GET /genera` |
 | `/distribution` | server fetch of genera, client map | `GET /geo/{genus}`; grid clustering above 200 points, no plugin |
 | `/atlas` | server fetch, client ECharts | `GET /atlas`; `?star=1&x=&y=&label=` renders the upload as a star |
-| `/methods` | static | — |
+| `/methods` | static | - |
 
 The two atlas annotations are hard-coded medians from `data/umap_coords.csv`
 (long-legged island 3.51, 9.23; *Anochetus* island 5.48, 9.53). Re-fit the
@@ -57,7 +57,7 @@ pnpm start -p 3050                                        # API_URL=http://127.0
 ```
 
 Production ports are **3050** (Next) and **8050** (API); dev keeps 3000/3001 and
-8001. The systemd units and nginx site live in `deploy/` — see `DEPLOY.md`.
+8001. The systemd units and nginx site live in `deploy/`; see `DEPLOY.md`.
 
 `NEXT_PUBLIC_*` is inlined at build time: set it before `pnpm build`. The
 data pages are `force-dynamic` (rendered per request, API responses cached
@@ -116,12 +116,12 @@ returns `{"status":"loading"}` until then and every page shows a
   exercised on :3001 against the API on :8001; `config.yaml` allows both
   `localhost:3000` and `localhost:3001` as CORS origins.
 - `notebooks/exercise_web.py` (untracked) drives every page in headless
-  Chromium via Playwright — upload flow, atlas modes, table sort/filter,
-  map clustering, dark mode — and reports console errors;
+  Chromium via Playwright (upload flow, atlas modes, table sort/filter,
+  map clustering, dark mode) and reports console errors;
   `notebooks/ux_tiers.py` covers the verdict tiers, the atlas upload flow
   and the staged progress panel (desktop, mobile, reduced motion, error+retry).
 - **Unit tests**: `pnpm test` (vitest). `src/lib/verdict.ts` decides the
-  confidence verdict shown on `/result` — *confident* (top-1 ≥ 0.5, no
+  confidence verdict shown on `/result`: *confident* (top-1 ≥ 0.5, no
   banner), *supported* (top-1 < 0.5 but ≥ 3 of the 5 nearest reference
   specimens share the genus at cosine ≥ 0.85 → neutral note) or *low*
   (amber banner). Fixtures in `src/lib/__fixtures__/` are real

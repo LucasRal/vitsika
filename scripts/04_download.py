@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Phase 4 — download the dataset images.
+"""Phase 4: download the dataset images.
 
 For each row of data/dataset.csv, fetch the image through the GBIF image
 cache: first at image_max_px, then at original size ('x'). If both cache
-attempts fail the row is marked download_failed — there is NO antweb.org
+attempts fail the row is marked download_failed; there is NO antweb.org
 fallback (Cloudflare blocks it, and failures are expected to concentrate in
 the newest records whose images GBIF has not cached yet).
 
@@ -147,7 +147,7 @@ def main() -> None:
 
     src = DATA / "dataset.csv"
     if not src.exists():
-        log.error("%s missing — run 03_build_dataset.py first", src)
+        log.error("%s missing; run 03_build_dataset.py first", src)
         sys.exit(1)
     df = pd.read_csv(src)
     log.info("dataset: %d images to ensure", len(df))
@@ -175,7 +175,7 @@ def main() -> None:
             continue
         dest.parent.mkdir(parents=True, exist_ok=True)
 
-        # two cache attempts only — no antweb.org fallback (Cloudflare)
+        # two cache attempts only, no antweb.org fallback (Cloudflare)
         attempts = [
             cache_url(row.gbifID, row.image_url, size),  # cache, resized
             cache_url(row.gbifID, row.image_url, "x"),   # cache, original

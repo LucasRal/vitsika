@@ -4,7 +4,7 @@ import { ModelCard } from "@/components/ModelCard";
 import { Spinner } from "@/components/ui";
 
 // Render per request: the API data (fetch-cached with revalidate) must never be
-// frozen into a static build — e.g. the "service not reachable" banner.
+// frozen into a static build, e.g. the "service not reachable" banner.
 export const dynamic = "force-dynamic";
 
 export default function IdentifyPage() {

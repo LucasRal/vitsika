@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase E — smoke test for the running API (does NOT start the server).
+"""Phase E: smoke test for the running API (does NOT start the server).
 
     uvicorn api.main:app --host 0.0.0.0 --port 8000     # in another shell
     python scripts/10_smoke_api.py [--base-url http://localhost:8000]

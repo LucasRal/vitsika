@@ -117,7 +117,7 @@ export function Stat({ label, value, sub }: { label: string; value: ReactNode; s
   );
 }
 
-/** "collecting effort, not abundance" — shown wherever specimen counts are mapped. */
+/** "collecting effort, not abundance", shown wherever specimen counts are mapped. */
 export const EffortNote = () => (
   <p className="text-xs text-muted">
     Points are museum specimens with a georeferenced label. Their density reflects{" "}

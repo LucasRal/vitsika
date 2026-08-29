@@ -10,7 +10,7 @@ const CELL_PX = 56;
 type Props = { points: [number, number][]; colour: string; genus: string };
 type Cluster = { lat: number; lon: number; n: number };
 
-/** Grid clustering in screen space at the current zoom — no plugin needed. */
+/** Grid clustering in screen space at the current zoom, no plugin needed. */
 function clusterPoints(map: L.Map, points: [number, number][]): Cluster[] {
   const cells = new Map<string, { lat: number; lon: number; n: number }>();
   for (const [lat, lon] of points) {
@@ -35,7 +35,7 @@ function Clusters({ points, colour }: { points: [number, number][]; colour: stri
         <Marker key={i} position={[c.lat, c.lon]} eventHandlers={{ click: () => map.setView([c.lat, c.lon], Math.min(map.getZoom() + 2, 12)) }}
                 icon={L.divIcon({ className: "leaflet-div-icon", html: `<div class="cluster" style="background:${colour}">${c.n}</div>`,
                                   iconSize: [Math.min(44, 22 + Math.log2(c.n) * 4), Math.min(44, 22 + Math.log2(c.n) * 4)] })}>
-          <Tooltip>{c.n} specimens — click to zoom</Tooltip>
+          <Tooltip>{c.n} specimens (click to zoom)</Tooltip>
         </Marker>
       ))}
     </>

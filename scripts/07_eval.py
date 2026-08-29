@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase C — evaluate genus classification on the frozen BioCLIP 2 embeddings.
+"""Phase C: evaluate genus classification on the frozen BioCLIP 2 embeddings.
 
 Reads data/embeddings.npy + data/embeddings_index.csv (from 06_embed.py) and
 uses the index's split column (train / test). Three methods:
@@ -176,7 +176,7 @@ def plot_confusion(y_true: np.ndarray, y_pred: np.ndarray, order: list[str],
     ax.set_xticklabels(labels, rotation=90, fontsize=8)
     ax.set_yticklabels(labels, fontsize=8)
     ax.set_xlabel("predicted genus"); ax.set_ylabel("true genus")
-    ax.set_title(f"Linear probe confusion matrix — {len(y_true)} test images, "
+    ax.set_title(f"Linear probe confusion matrix: {len(y_true)} test images, "
                  f"{n} genera (ordered by subfamily)", fontsize=11)
     # subfamily boundaries
     for i in range(1, n):
@@ -224,7 +224,7 @@ def main() -> None:
     t_run = time.perf_counter()
 
     if not (EMB_PATH.exists() and INDEX_PATH.exists()):
-        log.error("embeddings missing — run 06_embed.py first")
+        log.error("embeddings missing; run 06_embed.py first")
         sys.exit(1)
     embs, index = load_embeddings()
     is_train = (index["split"] == "train").to_numpy()
@@ -242,14 +242,14 @@ def main() -> None:
     metrics: dict[str, dict] = {}
     top1_preds: dict[str, np.ndarray] = {}
 
-    # A — zero-shot
+    # A: zero-shot
     for name, scores in zero_shot_scores(cfg["embed_model"], genera, x_test).items():
         top3 = topk_from_scores(scores, genera)
         top1_preds[name] = top3[:, 0]
         metrics[name] = summarise(name, y_test, top3[:, 0], (top3 == y_test[:, None]).any(1),
                                   genera)
 
-    # B — linear probe
+    # B: linear probe
     clf = fit_probe(x_train, y_train, float(cfg["probe_C"]), int(cfg["probe_max_iter"]))
     proba = clf.predict_proba(x_test)
     top3 = topk_from_scores(proba, clf.classes_)
@@ -260,7 +260,7 @@ def main() -> None:
     log.info("probe saved to %s (%d classes, coef %s)", PROBE_PATH, len(clf.classes_),
              clf.coef_.shape)
 
-    # C — nearest neighbour
+    # C: nearest neighbour
     nn1, nn_vote = nearest_neighbour(x_train, y_train, x_test)
     top1_preds["nearest_neighbour"] = nn1
     metrics["nearest_neighbour"] = summarise("nearest_neighbour", y_test, nn1,

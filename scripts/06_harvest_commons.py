@@ -9,14 +9,14 @@ Commons years ago with titles like
 1. Enumerate the whole category once (500 titles/call, cached to
    data/commons_files.txt).
 2. Parse specimen code / view / shot index from each title and join against
-   data/dataset.csv locally — no per-specimen search calls.
+   data/dataset.csv locally, no per-specimen search calls.
 3. For pending rows, pick the Commons file matching the row's view (profile
    or dorsal), shot 1 preferred, lowest shot otherwise.
 4. Resolve URLs in batches of 50 via prop=imageinfo (1024px thumb) and
    download from upload.wikimedia.org (not Cloudflare-gated).
 
 Resumable: rows with a valid image on disk are skipped; outcomes go to
-data/download_status_commons.csv. Commons AntWeb files are CC BY-SA — same
+data/download_status_commons.csv. Commons AntWeb files are CC BY-SA, same
 terms as AntWeb's own media.
 """
 from __future__ import annotations
@@ -60,7 +60,7 @@ def api_get(session: requests.Session, params: dict, tries: int = 6) -> dict:
         resp = session.get(API, params={**params, "format": "json"},
                            headers=HEADERS, timeout=60)
         if resp.status_code == 429 or resp.status_code >= 500:
-            log.warning("HTTP %d from Commons API — retry in %.0fs", resp.status_code, backoff)
+            log.warning("HTTP %d from Commons API; retry in %.0fs", resp.status_code, backoff)
             time.sleep(backoff)
             backoff *= 2
             continue
@@ -139,7 +139,7 @@ def download_with_backoff(session: requests.Session, url: str,
         resp = session.get(url, headers=HEADERS, timeout=120)
         if resp.status_code == 429 or resp.status_code >= 500:
             wait = min(900.0, float(resp.headers.get("Retry-After") or backoff))
-            log.warning("HTTP %d on download — waiting %.0fs", resp.status_code, wait)
+            log.warning("HTTP %d on download; waiting %.0fs", resp.status_code, wait)
             time.sleep(wait)
             backoff *= 2
             continue
@@ -240,7 +240,7 @@ def main() -> None:
                                       "image_path", "ok", "error"])
         writer.writeheader()
         writer.writerows(outcomes)
-    log.info("done: %d downloaded, %d failed — status in %s", downloaded, failed, status_path)
+    log.info("done: %d downloaded, %d failed; status in %s", downloaded, failed, status_path)
 
 
 if __name__ == "__main__":

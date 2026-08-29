@@ -1,4 +1,4 @@
-"""Pure inference helpers — no FastAPI imports, no global state.
+"""Pure inference helpers: no FastAPI imports, no global state.
 
 embed_image()    PIL image -> L2-normalised BioCLIP 2 vector (768,)
 predict_genus()  vector -> top-k linear-probe (genus, subfamily, probability)
@@ -59,7 +59,7 @@ def atlas_position(reducer, embedding: np.ndarray) -> tuple[float, float] | None
     and the caller logs them."""
     try:
         xy = reducer.transform(embedding[None, :].astype(np.float32))[0]
-    except Exception as exc:  # noqa: BLE001 — numba/umap raise assorted types
+    except Exception as exc:  # noqa: BLE001 (numba/umap raise assorted types)
         log.warning("umap transform failed: %s", exc)
         return None
     if not np.all(np.isfinite(xy)):

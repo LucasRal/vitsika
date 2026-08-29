@@ -1,4 +1,4 @@
-"""Phase E — FastAPI serving layer for the mg-ants genus classifier.
+"""Phase E: FastAPI serving layer for the mg-ants genus classifier.
 
     uvicorn api.main:app --host 0.0.0.0 --port 8000
 
@@ -246,7 +246,7 @@ async def get_image(request: Request, specimen_code: str) -> FileResponse:
         raise HTTPException(404, f"no image on disk for {specimen_code!r}")
     # Public CC BY-SA assets: an explicit wildcard so a copy the browser cached
     # from an <img> (no Origin header) can be re-read by fetch() from another
-    # origin — the CORS middleware alone only stamps responses to requests
+    # origin; the CORS middleware alone only stamps responses to requests
     # that carried an Origin.
     return FileResponse(path, media_type="image/jpeg",
                         headers={"Cache-Control": "public, max-age=86400",

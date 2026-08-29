@@ -11,7 +11,7 @@ const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", 
 
 export const metadata: Metadata = {
   title: { default: "Vitsika", template: "%s · Vitsika" },
-  description: "Genus-level identification of Malagasy ants from a profile photo — BioCLIP 2 embeddings, a linear probe, and the AntWeb specimen record.",
+  description: "Genus-level identification of Malagasy ants from a profile photo: BioCLIP 2 embeddings, a linear probe, and the AntWeb specimen record.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <footer className="hairline-t">
             <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-6 py-4 text-xs text-muted">
               <span>
-                <span className="wordmark">Vitsika</span> — <span className="genus">vitsika</span> is Malagasy for ant.
+                <span className="wordmark">Vitsika</span>: <span className="genus">vitsika</span> is Malagasy for ant.
                 Images © their photographers via <a className="link" href="https://www.antweb.org" target="_blank" rel="noreferrer">AntWeb</a> (CC BY-SA); metadata via GBIF (CC BY).
               </span>
               <Link className="link" href="/methods">Methods &amp; limitations</Link>

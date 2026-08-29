@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 3 — build the classification dataset from harvested metadata.
+"""Phase 3: build the classification dataset from harvested metadata.
 
 From data/raw/records.parquet: drop label views, keep configured castes
 (default: worker), keep one image per specimen (profile first, dorsal
@@ -54,7 +54,7 @@ def log_merged_genus_keys(df: pd.DataFrame) -> list[str]:
     for genus in merged.index:
         keys = sorted(df.loc[df["genus"] == genus, "genusKey"].unique())
         note = f"{genus}: merged {len(keys)} genusKeys {keys}"
-        log.info("genus name merge — %s", note)
+        log.info("genus name merge: %s", note)
         notes.append(note)
     return notes
 
@@ -72,7 +72,7 @@ def caste_drop_table(spec: pd.DataFrame, castes: list[str]) -> pd.DataFrame:
 
 def pick_one_image_per_specimen(df: pd.DataFrame, views_priority: list[str]) -> pd.DataFrame:
     """Prefer profile shot 1 (fallback: lowest shot index), then dorsal shot 1.
-    The shot index is parsed from the URL (_p_<n>_) as an INTEGER — string
+    The shot index is parsed from the URL (_p_<n>_) as an INTEGER; string
     sort would pick _p_10_ before _p_1_ (often a detail/SEM shot)."""
     rank = {v: i for i, v in enumerate(views_priority)}
     df = df[df["view"].isin(rank)].copy()
@@ -263,7 +263,7 @@ def main() -> None:
 
     src = RAW / "records.parquet"
     if not src.exists():
-        log.error("%s missing — run 02_harvest.py first", src)
+        log.error("%s missing; run 02_harvest.py first", src)
         sys.exit(1)
     raw = pd.read_parquet(src)
     log.info("input: %d media rows, %d records, %d specimens",
@@ -291,7 +291,7 @@ def main() -> None:
     )
     df["image_source"] = image_source(df)
 
-    # what the full manifest keeps — reference for provenance reporting
+    # what the full manifest keeps, reference for provenance reporting
     full_counts = df.groupby("genus")["specimen_code"].nunique()
     full_kept = full_counts[full_counts >= cfg["min_specimens_per_genus"]]
 

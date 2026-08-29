@@ -59,9 +59,9 @@ export function DistributionClient({ genera }: { genera: GenusInfo[] }) {
               <div className="grid grid-cols-2 gap-3">
                 <Stat label="Specimens" value={num(geo.n_specimens)} sub={`${num(geo.n_with_coords)} with coordinates`} />
                 <Stat label="Named species" value={num(geo.n_species)} sub={geo.n_unidentified ? `${num(geo.n_unidentified)} identified to genus only` : "all identified to species"} />
-                <Stat label="Elevation" value={geo.elevation.median === null ? "—" : `${Math.round(geo.elevation.median)} m`}
+                <Stat label="Elevation" value={geo.elevation.median === null ? "-" : `${Math.round(geo.elevation.median)} m`}
                       sub={geo.elevation.n ? `${Math.round(geo.elevation.min!)}–${Math.round(geo.elevation.max!)} m · median of ${num(geo.elevation.n)}` : "no elevation data"} />
-                <Stat label="Collected" value={geo.year_min === null ? "—" : geo.year_min === geo.year_max ? geo.year_min : `${geo.year_min}–${geo.year_max}`} sub="year range of dated records" />
+                <Stat label="Collected" value={geo.year_min === null ? "-" : geo.year_min === geo.year_max ? geo.year_min : `${geo.year_min}–${geo.year_max}`} sub="year range of dated records" />
               </div>
               <div>
                 <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.12em] text-muted">Specimens by province</p>

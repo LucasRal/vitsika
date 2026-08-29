@@ -1,6 +1,6 @@
 dataset_key: 13b70480-bd69-11dd-b15f-b8a03c50a862
 country: MG
-family_key: 4342  # Formicidae — the dataset also contains non-ant bycatch
+family_key: 4342  # Formicidae; the dataset also contains non-ant bycatch
 min_specimens_per_genus: 10
 views_priority: [p, d]
 castes: [worker]
@@ -13,11 +13,11 @@ probe_C: 1.0          # LogisticRegression inverse regularisation (07_eval.py)
 probe_max_iter: 5000
 umap_n_neighbors: 15   # 08_umap.py (random_state = seed)
 umap_min_dist: 0.1
-province_aliases:      # 09_geo.py — old/colonial spellings -> current province name
+province_aliases:      # 09_geo.py: old/colonial spellings -> current province name
   Majunga: Mahajanga
   Toliary: Toliara
   Diego-Suarez: Antsiranana
-api_cors_origins:      # api/main.py — browser origins allowed to call the API
+api_cors_origins:      # api/main.py: browser origins allowed to call the API
   - http://localhost:3000
   - http://localhost:3001   # Next picks 3001 when 3000 is busy (dev box)
   - https://vitsika.lucas-ralambo.com   # production (same-origin via nginx; listed for completeness)

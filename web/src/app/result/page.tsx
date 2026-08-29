@@ -49,8 +49,8 @@ export default function ResultPage() {
           <p className="text-sm text-muted">subfamily {top.subfamily}</p>
           {truth && (
             <p className={`mt-2 rounded-sm px-2 py-1 text-sm ${hit ? "bg-success-soft text-success" : "bg-warning-soft text-warning"}`} role="status">
-              {hit ? "✓" : "✗"} Held-out test specimen <Code code={truth.specimen_code} /> — AntWeb label:{" "}
-              <Species name={truth.species ?? truth.genus} />
+              {hit ? "✓" : "✗"} Held-out test specimen <Code code={truth.specimen_code} /> (AntWeb label:{" "}
+              <Species name={truth.species ?? truth.genus} />)
               {hit ? " · correct" : rank > 0 ? ` · the right genus is rank ${rank + 1}` : " · not in the top 3"}
             </p>
           )}
@@ -59,7 +59,7 @@ export default function ResultPage() {
               <InfoIcon className="mt-0.5 shrink-0 text-muted" />
               <p>
                 Classifier confidence is modest ({pct(v.top1)}), but {v.support} of the {v.nSimilar} nearest reference specimens are{" "}
-                <Genus name={v.genus} /> — <a className="link" href="#similar">see below</a>.
+                <Genus name={v.genus} /> (<a className="link" href="#similar">see below</a>).
               </p>
             </div>
           )}
@@ -67,7 +67,7 @@ export default function ResultPage() {
             <div className="mt-3" data-tier="low">
               <Banner tone="warning" title={`Low confidence: the best guess is only ${pct(top.probability)}.`}>
                 Nothing in the training set looks quite like this. The photo may be a non-profile view, a different
-                caste, a genus outside the 27 covered — or not an ant. Use the similar specimens below to judge.
+                caste, a genus outside the 27 covered, or not an ant. Use the similar specimens below to judge.
               </Banner>
             </div>
           )}

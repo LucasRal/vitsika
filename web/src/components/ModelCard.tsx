@@ -32,7 +32,7 @@ export async function ModelCard() {
         <li>· Genus level only; species shown on similar specimens come from AntWeb labels, not the model.</li>
         <li>· One photo per specimen and a split by genus, so species unseen in training are harder than the headline numbers suggest.</li>
         {weak !== null && weak > 0 && (
-          <li>· {weak} of {data!.n} genera have fewer than 5 test images or F1 below 0.8 — see the reliability column in{" "}
+          <li>· {weak} of {data!.n} genera have fewer than 5 test images or F1 below 0.8; see the reliability column in{" "}
             <Link className="link" href="/genera">Genera</Link>.</li>
         )}
         <li>· Ants outside these {metrics.n_genera} genera (or non-ants) will still get a confident-looking answer; treat probabilities below 50% as “no idea”.</li>

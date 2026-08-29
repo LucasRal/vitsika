@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Phase C — 2-D UMAP of the BioCLIP 2 embeddings, for eyeballing structure.
+"""Phase C: 2-D UMAP of the BioCLIP 2 embeddings, for eyeballing structure.
 
 Fits UMAP (cosine metric, parameters in config.yaml, random_state = seed) on
 all rows of data/embeddings.npy and writes data/umap_coords.csv
-(specimen_code, x, y — same order as embeddings_index.csv) and the fitted
+(specimen_code, x, y, same order as embeddings_index.csv) and the fitted
 reducer to data/umap_model.pkl (joblib) so the API can place new query
 embeddings on the same map with reducer.transform(). When a coords file
 already exists the re-fit is asserted identical to it (the fit is
@@ -117,7 +117,7 @@ def log_claims(index: pd.DataFrame, embs: np.ndarray, coords: np.ndarray,
                        .mean()) for g in cent}
     log.info("median within-genus spread (mean distance to centroid): %.2f UMAP units",
              float(np.median(list(spread.values()))))
-    log.info("probe-confused pairs — centroid distance vs the two genera's spread:")
+    log.info("probe-confused pairs: centroid distance vs the two genera's spread:")
     for a, b in CONFUSED_PAIRS:
         if a not in cent or b not in cent:
             continue
@@ -157,7 +157,7 @@ def main() -> None:
     cfg = load_config(ROOT / "config.yaml")
 
     if not (DATA / "embeddings.npy").exists():
-        log.error("embeddings missing — run 06_embed.py first")
+        log.error("embeddings missing; run 06_embed.py first")
         sys.exit(1)
     embs = np.load(DATA / "embeddings.npy")
     index = pd.read_csv(DATA / "embeddings_index.csv")
@@ -180,11 +180,11 @@ def main() -> None:
     subfamilies = index["subfamily"].value_counts().index.tolist()  # slot order = size
     plot(index, coords, "subfamily", subfamilies, None, None,
          REPORTS / "umap_by_subfamily.png",
-         f"BioCLIP 2 embeddings, UMAP — {len(index)} specimens by subfamily")
+         f"BioCLIP 2 embeddings, UMAP: {len(index)} specimens by subfamily")
     genera = index["genus"].value_counts().index[:N_GENERA_COLOURED].tolist()
     plot(index, coords, "genus", genera, "other genera", errors,
          REPORTS / "umap_by_genus.png",
-         f"BioCLIP 2 embeddings, UMAP — {N_GENERA_COLOURED} largest genera "
+         f"BioCLIP 2 embeddings, UMAP: {N_GENERA_COLOURED} largest genera "
          f"(of {index['genus'].nunique()})")
 
     log_claims(index, embs, coords, errors)

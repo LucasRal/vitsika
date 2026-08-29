@@ -14,8 +14,8 @@ const COLS: { key: Key; label: string; numeric?: boolean }[] = [
 
 /** Reliability: F1 >= 0.8 with at least 5 test images, otherwise say why it is low. */
 export function reliability(g: GenusInfo): { tone: "success" | "warning"; label: string } {
-  if (g.n_test < 5) return { tone: "warning", label: `low — ${g.n_test} test images` };
-  if (g.f1_probe < 0.8) return { tone: "warning", label: `low — F1 ${g.f1_probe.toFixed(2)}` };
+  if (g.n_test < 5) return { tone: "warning", label: `low (${g.n_test} test images)` };
+  if (g.f1_probe < 0.8) return { tone: "warning", label: `low (F1 ${g.f1_probe.toFixed(2)})` };
   return { tone: "success", label: "high" };
 }
 

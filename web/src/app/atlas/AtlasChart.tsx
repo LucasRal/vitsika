@@ -19,7 +19,7 @@ const N_TOP_GENERA = 8;
  * (island A: 47 points within r=1.2, Aphaenogaster 25 / Odontomachus 13 / C. imitator 7;
  *  island B: 32 points, Anochetus 27 + C. reaumuri 3 + Tetraponera grandidieri 2). */
 const ANNOTATIONS = [
-  { x: 3.51, y: 9.23, title: "Long-legged island", text: "Aphaenogaster, Odontomachus and Camponotus imitator — three subfamilies sharing one body plan" },
+  { x: 3.51, y: 9.23, title: "Long-legged island", text: "Aphaenogaster, Odontomachus and Camponotus imitator: three subfamilies sharing one body plan" },
   { x: 5.48, y: 9.53, title: "Anochetus island", text: "Anochetus with a few Camponotus reaumuri and Tetraponera grandidieri" },
 ];
 /** ECharts draws on canvas, where CSS custom properties are not resolved:
@@ -77,7 +77,7 @@ export function AtlasChart({ points }: { points: AtlasPoint[] }) {
   const matches = useMemo(() => genera.filter(([g]) => g.toLowerCase().includes(query.toLowerCase())), [genera, query]);
 
   const option = useMemo<EChartsOption>(() => {
-    // categories -> (name, colour, order) — fixed palette order, never cycled; 9th+ folds to "other"
+    // categories -> (name, colour, order): fixed palette order, never cycled; 9th+ folds to "other"
     let categories: { name: string; colour: string; keyOf: (p: AtlasPoint) => string }[];
     if (mode === "subfamily") {
       const present = SUBFAMILY_ORDER.filter((s) => points.some((p) => p.subfamily === s));
@@ -174,7 +174,7 @@ export function AtlasChart({ points }: { points: AtlasPoint[] }) {
           <input type="checkbox" checked={showAnnotations} onChange={(e) => setShowAnnotations(e.target.checked)} /> island annotations
         </label>
       </div>
-      {star && <p className="text-xs text-accent">★ {star.label} — placed with the fitted UMAP’s transform (approximate: a training image lands near, not on, its own point).</p>}
+      {star && <p className="text-xs text-accent">★ {star.label}, placed with the fitted UMAP’s transform (approximate: a training image lands near, not on, its own point).</p>}
       <div className="hairline rounded-md bg-surface p-2">
         <div className="flex flex-wrap items-start justify-between gap-2 px-1 pb-2 pt-1">
           <div className="min-w-0 flex-1">{upload && <UploadStrip upload={upload} onClear={() => setUpload(null)} />}</div>
@@ -189,7 +189,7 @@ export function AtlasChart({ points }: { points: AtlasPoint[] }) {
         )}
         <ReactECharts option={option} style={{ height: 640 }} notMerge onEvents={{ click: onClick }} opts={{ renderer: "canvas" }} />
       </div>
-      <p className="text-xs text-muted">Scroll to zoom, drag to pan. The two dashed rings mark cross-subfamily islands where the model groups ants by body plan rather than lineage — see Methods.</p>
+      <p className="text-xs text-muted">Scroll to zoom, drag to pan. The two dashed rings mark cross-subfamily islands where the model groups ants by body plan rather than lineage; see Methods.</p>
     </div>
   );
 }

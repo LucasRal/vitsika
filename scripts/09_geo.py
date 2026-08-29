@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Geographic / temporal coverage of the full manifest (data/dataset_full.csv,
-metadata only — no images needed).
+metadata only, no images needed).
 
 stateProvince spellings are normalised with config.yaml `province_aliases`
 (Majunga -> Mahajanga, Toliary -> Toliara, Diego-Suarez -> Antsiranana).
@@ -119,7 +119,7 @@ def plot_map(df: pd.DataFrame, out: Path) -> None:
     # 1° of longitude is shorter than 1° of latitude at these latitudes:
     ax.set_aspect(1 / np.cos(np.radians(d["decimalLatitude"].mean())))
     ax.set_xlabel("longitude (°E)"); ax.set_ylabel("latitude (°N)")
-    ax.set_title(f"AntWeb Malagasy specimens in the manifest — {len(d)} of {len(df)} "
+    ax.set_title(f"AntWeb Malagasy specimens in the manifest: {len(d)} of {len(df)} "
                  f"with coordinates, by subfamily", loc="left")
     fig.tight_layout()
     fig.savefig(out, dpi=150)
@@ -159,7 +159,7 @@ def main() -> None:
 
     src = DATA / "dataset_full.csv"
     if not src.exists():
-        log.error("%s missing — run 03_build_dataset.py first", src)
+        log.error("%s missing; run 03_build_dataset.py first", src)
         sys.exit(1)
     df = pd.read_csv(src)
     log.info("manifest: %d specimens, %d genera, %d subfamilies", len(df),

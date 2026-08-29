@@ -1,4 +1,4 @@
-# mg-ants — Malagasy ant genus classifier, data collection (POC)
+# mg-ants: Malagasy ant genus classifier, data collection (POC)
 
 Proof-of-concept data pipeline for a classifier that identifies the **genus**
 of a Malagasy ant from a specimen photo. Metadata comes from **AntWeb**
@@ -9,16 +9,16 @@ embeddings + a linear probe and a Gradio demo.
 
 ## Current state
 
-- `data/dataset_full.csv` — the **target manifest**: 4,354 specimens,
+- `data/dataset_full.csv`, the **target manifest**: 4,354 specimens,
   39 genera, one image URL per specimen. What we would train on with full
   image access.
-- `data/dataset.csv` — the **POC dataset actually on disk**: 1,236 images,
+- `data/dataset.csv`, the **POC dataset actually on disk**: 1,236 images,
   27 genera, 986 train / 250 test. Built with
   `03_build_dataset.py --available-only` (threshold and split re-applied to
   the obtained images only). Column `image_source` says where each file came
   from (`commons` or `gbif_cache`).
 - 1,297 of 4,354 manifest images were obtainable (29.8%). 12 genera fell
-  below the 10-specimen threshold as a result — including *Tanipone* (0
+  below the 10-specimen threshold as a result, including *Tanipone* (0
   images) and *Vitsika* (1/32), genera described in 2014 that postdate the
   Commons bulk uploads, and *Carebara* (8/140). Full funnel in
   `reports/dataset_stats.md` § Provenance.
@@ -57,7 +57,7 @@ python3 -m venv .venv
 .venv/bin/python scripts/10_smoke_api.py        # smoke-test the running API -> reports/10_smoke_api.log
 ```
 
-Phase B needs torch (CPU build is enough — ~1.4 img/s on 6 cores) and
+Phase B needs torch (CPU build is enough, ~1.4 img/s on 6 cores) and
 open_clip; see the note in `requirements.txt`. The first run downloads the
 BioCLIP 2 weights (~1.7 GB) into the Hugging Face cache.
 
@@ -86,7 +86,7 @@ antweb.org blocks scripted access twice over: Cloudflare challenges for
 scripts, and a plain 403 for datacenter IPs (so `05_download_antweb.py`,
 which impersonates a browser, works only from a residential network).
 It also blocks GBIF's own image fetcher, so the GBIF image cache
-(`04_download.py`) is cold — 96.8% of requests 404, uniformly across years
+(`04_download.py`) is cold: 96.8% of requests 404, uniformly across years
 (evidence in `reports/download_stats.md`).
 
 The working fallback is `06_harvest_commons.py`: ~33k AntWeb images were
@@ -101,11 +101,11 @@ contributed 137 more.
 `07_eval.py` compares three classifiers on the frozen embeddings, using the
 80/20 split from `dataset.csv` (986 train / 250 test, 27 genera):
 
-- **zero-shot** — BioCLIP 2 text tower on the genus name, prompts
+- **zero-shot**: BioCLIP 2 text tower on the genus name, prompts
   `"a photo of {genus}, a genus of ant"` and bare `"{genus}"`;
-- **linear probe** — `LogisticRegression(class_weight="balanced", C=1.0)`,
+- **linear probe**: `LogisticRegression(class_weight="balanced", C=1.0)`,
   saved to `data/probe.pkl` for the demo API;
-- **nearest neighbour** — cosine top-1 against the train set (its top-3 is
+- **nearest neighbour**: cosine top-1 against the train set (its top-3 is
   the majority vote of the 3 nearest).
 
 Results are in `reports/metrics.json` (top-1, top-3, macro-F1),
@@ -133,7 +133,7 @@ transform so the first request doesn't pay for it) and serves them:
 | `GET /examples` | held-out **test** specimens for the demo picker (`per_genus=2` default, `0` = all 250): code, genus, species, subfamily, photographer, `image_url`, `antweb_url`. |
 | `GET /atlas` | every specimen on the UMAP: `specimen_code`, `x`, `y`, genus, subfamily, species, `image_available`; plus the fit parameters. Built once at startup, served from memory (~150 KB). |
 | `GET /geo/{genus}` | `n_specimens`, `n_species`, `n_unidentified`, province counts, elevation min/median/max, year range and `[lat, lon]` points (≤ 1000, seeded subsample) from `dataset_full.csv`; 404 if unknown. |
-| `GET /images/{specimen_code}` | the local profile-view jpg — thumbnails for the similar-specimen cards; 404 if absent. |
+| `GET /images/{specimen_code}` | the local profile-view jpg; thumbnails for the similar-specimen cards; 404 if absent. |
 | `GET /health` | `status`, `model_loaded`, `n_embeddings`, library / probe / embedding-index versions. |
 
 Errors are JSON `{"message": …}`: 400 wrong content type, 413 too large,
@@ -142,7 +142,7 @@ Errors are JSON `{"message": …}`: 400 wrong content type, 413 too large,
 server), the upload cap and the point cap live in `config.yaml`; startup and
 request logs go to `reports/api.log` (untracked). Layout: `api/main.py`
 (app, lifespan, routes), `api/state.py` (loads everything once),
-`api/inference.py` (`embed_image`, `predict_genus`, `find_similar` — pure
+`api/inference.py` (`embed_image`, `predict_genus`, `find_similar`, pure
 functions, no FastAPI), `api/schemas.py` (pydantic models).
 
 ```bash
@@ -154,7 +154,7 @@ ViT-L/14 forward pass; inference is serialised behind a lock).
 
 ## Web front end (`web/`)
 
-"Vitsika" — a Next.js 15 site over the API: Identify (upload → genus +
+"Vitsika", a Next.js 15 site over the API: Identify (upload → genus +
 similar specimens), Genera (reliability table), Distribution (Leaflet
 map per genus), Atlas (ECharts UMAP with the upload as a star) and
 Methods. Setup, env vars and the production/nginx sketch are in
@@ -162,22 +162,22 @@ Methods. Setup, env vars and the production/nginx sketch are in
 
 ## Reports
 
-- `reports/dataset_stats.md` — provenance funnel, per-genus counts and
+- `reports/dataset_stats.md`: provenance funnel, per-genus counts and
   splits, caste/view distributions, provinces.
-- `reports/contact_sheet.jpg` — one random profile image per kept genus (27).
-- `reports/download_stats.md` — GBIF-cache failure evidence (kept as-is).
+- `reports/contact_sheet.jpg`: one random profile image per kept genus (27).
+- `reports/download_stats.md`: GBIF-cache failure evidence (kept as-is).
 - `reports/metrics.json`, `per_genus.csv`, `confusion_matrix.png`,
-  `errors.csv` — Phase C evaluation (see above); `eval_notes.md`,
-  `errors_sheet.jpg`, `confusions_pairs.jpg` — manual error analysis.
-- `reports/umap_by_subfamily.png`, `umap_by_genus.png` — 2-D UMAP of the
+  `errors.csv`: Phase C evaluation (see above); `eval_notes.md`,
+  `errors_sheet.jpg`, `confusions_pairs.jpg`: manual error analysis.
+- `reports/umap_by_subfamily.png`, `umap_by_genus.png`: 2-D UMAP of the
   embeddings (subfamilies form clusters; a few cross-subfamily islands group
   ants by body plan, e.g. the long-legged *Camponotus imitator* /
   *Aphaenogaster* / *Odontomachus coquereli* island).
 - `reports/map_specimens.png`, `data/geo_summary.csv`, `geo_by_place.csv`,
-  `geo_by_locality.csv` — geographic and
+  `geo_by_locality.csv`: geographic and
   temporal coverage of the full 4,354-specimen manifest (`09_geo.py`).
   Plot conventions live in `scripts/viz.py`.
-- `reports/10_smoke_api.log` — last smoke-test run of the API (Phase E).
+- `reports/10_smoke_api.log`: last smoke-test run of the API (Phase E).
 
 ## Attribution
 
