@@ -9,3 +9,5 @@ test_fraction: 0.2
 seed: 42
 embed_model: hf-hub:imageomics/bioclip-2  # open_clip name; ViT-L/14, 768-d
 embed_batch_size: 16
+probe_C: 1.0          # LogisticRegression inverse regularisation (07_eval.py)
+probe_max_iter: 5000

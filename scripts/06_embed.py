@@ -34,7 +34,7 @@ import torch
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gbif_client import load_config, setup_logging  # noqa: E402
+from gbif_client import load_config, quiet_logging, setup_logging  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -82,11 +82,10 @@ def load_existing(dataset: pd.DataFrame) -> tuple[pd.DataFrame, np.ndarray | Non
 def load_model(name: str):
     import open_clip  # slow import; keep it out of --help paths
 
-    for noisy in ("open_clip", "huggingface_hub", "httpx", "timm"):
-        logging.getLogger(noisy).setLevel(logging.WARNING)
     torch.set_num_threads(os.cpu_count() or 1)
     t0 = time.perf_counter()
-    model, _, preprocess = open_clip.create_model_and_transforms(name)
+    with quiet_logging():  # open_clip + huggingface_hub chatter
+        model, _, preprocess = open_clip.create_model_and_transforms(name)
     model.eval()
     log.info("model %s loaded in %.1fs (%d torch threads)",
              name, time.perf_counter() - t0, torch.get_num_threads())
@@ -158,7 +157,7 @@ def write_atomic(index: pd.DataFrame, embs: np.ndarray) -> None:
 
 
 def main() -> None:
-    setup_logging(REPORTS / "05_embed.log")
+    setup_logging(REPORTS / "06_embed.log")
     cfg = load_config(ROOT / "config.yaml")
     model_name = cfg["embed_model"]
     batch_size = int(cfg["embed_batch_size"])

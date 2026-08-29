@@ -8,11 +8,12 @@ from __future__ import annotations
 
 import hashlib
 import logging
+from contextlib import contextmanager
 import re
 import sys
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 from urllib.parse import urlparse
 
 import requests
@@ -88,6 +89,20 @@ def setup_logging(report_path: Path | None = None, level: int = logging.INFO) ->
         report_path.parent.mkdir(parents=True, exist_ok=True)
         handlers.append(logging.FileHandler(report_path, mode="w", encoding="utf-8"))
     logging.basicConfig(level=level, format="%(message)s", handlers=handlers)
+
+
+@contextmanager
+def quiet_logging(level: int = logging.WARNING) -> Iterator[None]:
+    """Temporarily raise the ROOT logger level. open_clip logs its model
+    loading chatter through logging.info() on the root logger, so a
+    per-module logger level cannot silence it."""
+    root = logging.getLogger()
+    previous = root.level
+    root.setLevel(level)
+    try:
+        yield
+    finally:
+        root.setLevel(previous)
 
 
 def specimen_code(catalog_number: str) -> str:

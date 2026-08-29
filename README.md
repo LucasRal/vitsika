@@ -43,8 +43,11 @@ python3 -m venv .venv
 .venv/bin/python scripts/06_harvest_commons.py  # fallback: images from Wikimedia Commons
 .venv/bin/python scripts/03_build_dataset.py --available-only
                                                 # -> data/dataset.csv (POC set), reports/dataset_stats.md
-.venv/bin/python scripts/05_embed.py            # Phase B: BioCLIP 2 embeddings -> data/embeddings.npy
-                                                # + data/embeddings_index.csv, log: reports/05_embed.log
+.venv/bin/python scripts/06_embed.py            # Phase B: BioCLIP 2 embeddings -> data/embeddings.npy
+                                                # + data/embeddings_index.csv, log: reports/06_embed.log
+.venv/bin/python scripts/07_eval.py             # Phase C: zero-shot / linear probe / kNN evaluation
+                                                # -> reports/metrics.json, per_genus.csv, errors.csv,
+                                                #    confusion_matrix.png; probe saved to data/probe.pkl
 ```
 
 Phase B needs torch (CPU build is enough — ~1.4 img/s on 6 cores) and
@@ -86,12 +89,31 @@ locally, downloads originals politely (4–6 s pacing, Retry-After honored)
 and downscales locally. That yielded 1,160 images; the GBIF cache
 contributed 137 more.
 
+## Evaluation (Phase C)
+
+`07_eval.py` compares three classifiers on the frozen embeddings, using the
+80/20 split from `dataset.csv` (986 train / 250 test, 27 genera):
+
+- **zero-shot** — BioCLIP 2 text tower on the genus name, prompts
+  `"a photo of {genus}, a genus of ant"` and bare `"{genus}"`;
+- **linear probe** — `LogisticRegression(class_weight="balanced", C=1.0)`,
+  saved to `data/probe.pkl` for the demo API;
+- **nearest neighbour** — cosine top-1 against the train set (its top-3 is
+  the majority vote of the 3 nearest).
+
+Results are in `reports/metrics.json` (top-1, top-3, macro-F1),
+`reports/per_genus.csv` (recall/F1 per genus and method),
+`reports/confusion_matrix.png` (probe, ordered by subfamily) and
+`reports/errors.csv` (probe misclassifications with probabilities).
+
 ## Reports
 
 - `reports/dataset_stats.md` — provenance funnel, per-genus counts and
   splits, caste/view distributions, provinces.
 - `reports/contact_sheet.jpg` — one random profile image per kept genus (27).
 - `reports/download_stats.md` — GBIF-cache failure evidence (kept as-is).
+- `reports/metrics.json`, `per_genus.csv`, `confusion_matrix.png`,
+  `errors.csv` — Phase C evaluation (see above).
 
 ## Attribution
 
