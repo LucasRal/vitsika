@@ -131,7 +131,7 @@ transform so the first request doesn't pay for it) and serves them:
 | `POST /analyze` | multipart `file` (image/*, ≤ 10 MB) → probe top-3 `predictions` (genus, subfamily, probability) **and** the 5 most similar train specimens (`specimen_code`, species, cosine `similarity`, `image_url`, `antweb_url`, photographer, license), plus `atlas_position` `{x, y}` (the query projected onto the UMAP with `umap_model.transform`; `null` if that fails) and `model_name` / `probe_version`. Response schema `AnalyzeResponse`. |
 | `GET /genera` | the 27 POC genera: subfamily, `n_train`, `n_test`, probe F1 (from `reports/per_genus.csv`), `atlas_median` `{x, y}` for the selector's fly-to. |
 | `GET /atlas` | every specimen on the UMAP: `specimen_code`, `x`, `y`, genus, subfamily, species, `image_available`; plus the fit parameters. Built once at startup, served from memory (~150 KB). |
-| `GET /geo/{genus}` | province counts, elevation min/median/max, year range and `[lat, lon]` points (≤ 1000, seeded subsample) from `dataset_full.csv`; 404 if unknown. |
+| `GET /geo/{genus}` | `n_specimens`, `n_species`, `n_unidentified`, province counts, elevation min/median/max, year range and `[lat, lon]` points (≤ 1000, seeded subsample) from `dataset_full.csv`; 404 if unknown. |
 | `GET /images/{specimen_code}` | the local profile-view jpg — thumbnails for the similar-specimen cards; 404 if absent. |
 | `GET /health` | `status`, `model_loaded`, `n_embeddings`, library / probe / embedding-index versions. |
 
@@ -150,6 +150,14 @@ curl -s -F "file=@data/images/Royidris/casent0002219_p.jpg" localhost:8000/analy
 
 Latency on the 6-core CPU box: ~0.8 s per `/analyze` (almost all of it the
 ViT-L/14 forward pass; inference is serialised behind a lock).
+
+## Web front end (`web/`)
+
+"Vitsika" — a Next.js 15 site over the API: Identify (upload → genus +
+similar specimens), Genera (reliability table), Distribution (Leaflet
+map per genus), Atlas (ECharts UMAP with the upload as a star) and
+Methods. Setup, env vars and the production/nginx sketch are in
+[`README-web.md`](README-web.md); screenshots in `reports/web_screenshots/`.
 
 ## Reports
 

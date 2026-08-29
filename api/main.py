@@ -191,8 +191,11 @@ async def geo(request: Request, genus: str) -> GeoResponse:
     capped = len(coords) > cap
     if capped:
         coords = coords.sample(cap, random_state=int(ctx.config["seed"]))
+    summary = ctx.geo_summary.loc[genus] if genus in ctx.geo_summary.index else None
     return GeoResponse(
         genus=genus, subfamily=str(sub["subfamily"].iloc[0]), n_specimens=len(sub),
+        n_species=0 if summary is None else int(summary["n_species"]),
+        n_unidentified=0 if summary is None else int(summary["n_unidentified"]),
         provinces={str(k): int(v) for k, v in sub["province"].value_counts().items()},
         elevation=ElevationStats(min=float(elev.min()) if len(elev) else None,
                                  median=float(elev.median()) if len(elev) else None,

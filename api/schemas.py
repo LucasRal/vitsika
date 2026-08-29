@@ -68,6 +68,8 @@ class GeoResponse(BaseModel):
     genus: str
     subfamily: str
     n_specimens: int
+    n_species: int = Field(description="named species (geo_summary.csv)")
+    n_unidentified: int = Field(description="specimens identified to genus only")
     provinces: dict[str, int] = Field(description="normalised province -> count")
     elevation: ElevationStats
     year_min: int | None = None
