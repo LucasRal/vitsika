@@ -116,7 +116,7 @@ export default function ResultPage() {
                 <p className="text-xs text-muted">{s.subfamily}</p>
                 <p className="mt-1 flex items-center justify-between text-xs">
                   <Code code={s.specimen_code} />
-                  <span className="text-ink-2" title="cosine similarity">{s.similarity.toFixed(3)}</span>
+                  <span className="code font-semibold text-ink" title="cosine similarity">{s.similarity.toFixed(3)}</span>
                 </p>
                 <div className="mt-1"><AntwebCredit code={s.specimen_code} photographer={s.photographer} /></div>
               </Card>
