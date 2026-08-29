@@ -144,6 +144,16 @@ def main() -> None:
     r = requests.get(f"{base}/atlas", timeout=60)
     log.info("     second (cached) call %.0f ms", (time.perf_counter() - t0) * 1000)
 
+    # /examples
+    r = requests.get(f"{base}/examples", timeout=30)
+    ex = r.json()
+    check(r.status_code == 200 and ex["n"] == 2 * dataset["genus"].nunique()
+          and {e["specimen_code"] for e in ex["examples"]} <= set(dataset.loc[dataset["split"] == "test", "specimen_code"]),
+          f"GET /examples -> {r.status_code}, {ex.get('n')} test specimens (2 per genus)")
+    r = requests.get(f"{base}/examples?per_genus=0", timeout=30)
+    check(r.status_code == 200 and r.json()["n"] == int((dataset["split"] == "test").sum()),
+          f"GET /examples?per_genus=0 -> all {r.json()['n']} test rows")
+
     # /geo
     r = requests.get(f"{base}/geo/{top['genus']}", timeout=30)
     check(r.status_code == 200, f"GET /geo/{top['genus']} -> {r.status_code}")

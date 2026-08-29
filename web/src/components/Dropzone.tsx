@@ -1,12 +1,17 @@
 "use client";
 import { useCallback, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { api, ApiError } from "@/lib/api";
+import { api, ApiError, imageUrl, type ExampleSpecimen } from "@/lib/api";
 import { useAnalysis } from "@/lib/analysis-context";
 import { Banner, Spinner } from "@/components/ui";
+import { ExamplePicker } from "@/components/ExamplePicker";
 
 const MAX_MB = 10;
-const EXAMPLE = { url: "/examples/casent0002219_p.jpg", name: "casent0002219_p.jpg" };
+const EXAMPLE = {
+  url: "/examples/casent0002219_p.jpg", name: "casent0002219_p.jpg",
+  truth: { specimen_code: "casent0002219", genus: "Royidris", subfamily: "myrmicinae", species: "Royidris notorthotenes",
+           photographer: "April Nobile", license: "CC BY-SA", image_url: "", antweb_url: "https://www.antweb.org/specimen/casent0002219" } as ExampleSpecimen,
+};
 
 export function Dropzone() {
   const router = useRouter();
@@ -17,6 +22,7 @@ export function Dropzone() {
   const [drag, setDrag] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
 
   const pick = useCallback((f: File | null) => {
     setError(null);
@@ -27,12 +33,12 @@ export function Dropzone() {
     setPreview((old) => { if (old) URL.revokeObjectURL(old); return URL.createObjectURL(f); });
   }, []);
 
-  const submit = async (f: File) => {
+  const submit = async (f: File, truth?: ExampleSpecimen) => {
     setBusy("Embedding with BioCLIP 2 on CPU — about a second…");
     setError(null);
     try {
       const result = await api.analyze(f);
-      setAnalysis({ result, imageUrl: URL.createObjectURL(f), filename: f.name });
+      setAnalysis({ result, imageUrl: URL.createObjectURL(f), filename: f.name, truth });
       router.push("/result");
     } catch (e) {
       const msg = e instanceof ApiError && e.status === 0
@@ -48,7 +54,20 @@ export function Dropzone() {
       const blob = await (await fetch(EXAMPLE.url)).blob();
       const f = new File([blob], EXAMPLE.name, { type: "image/jpeg" });
       pick(f);
-      await submit(f);
+      await submit(f, EXAMPLE.truth);
+    } catch (e) { setError((e as Error).message); setBusy(null); }
+  };
+
+  /** A held-out test specimen from the picker: fetch its jpg from the API, then analyse it. */
+  const usePicked = async (s: ExampleSpecimen) => {
+    setBusy(`Loading ${s.specimen_code}…`);
+    try {
+      const res = await fetch(imageUrl(s.specimen_code));
+      if (!res.ok) throw new Error(`image ${s.specimen_code}: HTTP ${res.status}`);
+      const f = new File([await res.blob()], `${s.specimen_code}_p.jpg`, { type: "image/jpeg" });
+      pick(f);
+      setPickerOpen(false);
+      await submit(f, s);
     } catch (e) { setError((e as Error).message); setBusy(null); }
   };
 
@@ -81,14 +100,16 @@ export function Dropzone() {
       {error && <Banner tone="warning" title={error} />}
       <div className="flex flex-wrap items-center gap-2">
         <button className="btn btn-primary" disabled={!file || !!busy} onClick={() => file && submit(file)}>Identify genus</button>
-        <button className="btn" disabled={!!busy} onClick={useExample}>Try an example specimen</button>
+        <button className="btn" disabled={!!busy} onClick={() => setPickerOpen(true)}>Pick a held-out specimen…</button>
+        <button className="btn" disabled={!!busy} onClick={useExample}>Quick example</button>
         {file && !busy && <button className="btn" onClick={() => { setFile(null); setPreview(null); }}>Clear</button>}
         {busy && <Spinner label={busy} />}
       </div>
       <p className="text-xs text-muted">
-        The example is <span className="genus">Royidris notorthotenes</span> <span className="code">casent0002219</span>, a held-out
-        test specimen (© April Nobile, AntWeb).
+        Held-out specimens are test images the classifier was never fitted on; the quick example is{" "}
+        <span className="genus">Royidris notorthotenes</span> <span className="code">casent0002219</span> (© April Nobile, AntWeb).
       </p>
+      <ExamplePicker open={pickerOpen} onClose={() => setPickerOpen(false)} onPick={usePicked} busy={!!busy} />
     </div>
   );
 }

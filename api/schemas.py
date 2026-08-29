@@ -52,6 +52,24 @@ class GenusInfo(BaseModel):
     atlas_median: AtlasPosition = Field(description="median UMAP position of the genus")
 
 
+class ExampleSpecimen(BaseModel):
+    specimen_code: str
+    genus: str
+    subfamily: str
+    species: str | None = None
+    photographer: str | None = None
+    license: str | None = None
+    image_url: str
+    antweb_url: str
+
+
+class ExamplesResponse(BaseModel):
+    examples: list[ExampleSpecimen] = Field(description="held-out TEST specimens, grouped by subfamily then genus")
+    n: int
+    n_test_total: int
+    per_genus: int | None = Field(description="cap per genus; null when all test rows are returned")
+
+
 class GeneraResponse(BaseModel):
     genera: list[GenusInfo]
     n: int

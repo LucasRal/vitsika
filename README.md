@@ -130,6 +130,7 @@ transform so the first request doesn't pay for it) and serves them:
 |---|---|
 | `POST /analyze` | multipart `file` (image/*, ≤ 10 MB) → probe top-3 `predictions` (genus, subfamily, probability) **and** the 5 most similar train specimens (`specimen_code`, species, cosine `similarity`, `image_url`, `antweb_url`, photographer, license), plus `atlas_position` `{x, y}` (the query projected onto the UMAP with `umap_model.transform`; `null` if that fails) and `model_name` / `probe_version`. Response schema `AnalyzeResponse`. |
 | `GET /genera` | the 27 POC genera: subfamily, `n_train`, `n_test`, probe F1 (from `reports/per_genus.csv`), `atlas_median` `{x, y}` for the selector's fly-to. |
+| `GET /examples` | held-out **test** specimens for the demo picker (`per_genus=2` default, `0` = all 250): code, genus, species, subfamily, photographer, `image_url`, `antweb_url`. |
 | `GET /atlas` | every specimen on the UMAP: `specimen_code`, `x`, `y`, genus, subfamily, species, `image_available`; plus the fit parameters. Built once at startup, served from memory (~150 KB). |
 | `GET /geo/{genus}` | `n_specimens`, `n_species`, `n_unidentified`, province counts, elevation min/median/max, year range and `[lat, lon]` points (≤ 1000, seeded subsample) from `dataset_full.csv`; 404 if unknown. |
 | `GET /images/{specimen_code}` | the local profile-view jpg — thumbnails for the similar-specimen cards; 404 if absent. |

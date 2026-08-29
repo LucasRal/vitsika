@@ -19,9 +19,11 @@ export default function ResultPage() {
       </div>
     );
   }
-  const { result, imageUrl: query, filename } = analysis;
+  const { result, imageUrl: query, filename, truth } = analysis;
   const top = result.predictions[0];
   const low = top.probability < LOW_CONFIDENCE;
+  const hit = truth ? top.genus === truth.genus : null;
+  const rank = truth ? result.predictions.findIndex((p) => p.genus === truth.genus) : -1;
   const star = result.atlas_position;
   const atlasHref = star
     ? `/atlas?star=1&x=${star.x.toFixed(3)}&y=${star.y.toFixed(3)}&label=${encodeURIComponent(`Your upload · ${top.genus}? ${pct(top.probability)}`)}`
@@ -40,6 +42,13 @@ export default function ResultPage() {
           <Eyebrow>Genus prediction</Eyebrow>
           <h1 className="text-3xl"><Genus name={top.genus} /> <span className="text-lg text-muted">{pct(top.probability)}</span></h1>
           <p className="text-sm text-muted">subfamily {top.subfamily}</p>
+          {truth && (
+            <p className={`mt-2 rounded-sm px-2 py-1 text-sm ${hit ? "bg-success-soft text-success" : "bg-warning-soft text-warning"}`} role="status">
+              {hit ? "✓" : "✗"} Held-out test specimen <Code code={truth.specimen_code} /> — AntWeb label:{" "}
+              <Species name={truth.species ?? truth.genus} />
+              {hit ? " · correct" : rank > 0 ? ` · the right genus is rank ${rank + 1}` : " · not in the top 3"}
+            </p>
+          )}
           {low && (
             <div className="mt-3">
               <Banner tone="warning" title={`Low confidence: the best guess is only ${pct(top.probability)}.`}>

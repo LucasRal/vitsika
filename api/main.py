@@ -6,6 +6,7 @@ Routes
   POST /analyze                multipart image -> probe top-3 + 5 similar train specimens
                                + the query's position on the UMAP atlas
   GET  /genera                 the 27 POC genera with split sizes, probe F1, atlas median
+  GET  /examples               held-out test specimens for the "pick a specimen" demo
   GET  /atlas                  every specimen's UMAP position (cached JSON)
   GET  /geo/{genus}            province counts, elevation, years, [lat, lon] points
   GET  /images/{specimen_code} the local profile-view jpg (thumbnails for the UI)
@@ -33,8 +34,9 @@ from PIL import Image
 
 from api.inference import atlas_position, embed_image, find_similar, predict_genus
 from api.schemas import (AnalyzeResponse, AtlasPosition, AtlasResponse, ElevationStats,
-                         ErrorResponse, GeneraResponse, GenusInfo, GenusPrediction,
-                         GeoResponse, HealthResponse, SimilarSpecimen)
+                         ErrorResponse, ExampleSpecimen, ExamplesResponse, GeneraResponse,
+                         GenusInfo, GenusPrediction, GeoResponse, HealthResponse,
+                         SimilarSpecimen)
 from api.state import ROOT, AppState
 
 ANTWEB_SPECIMEN_URL = "https://www.antweb.org/specimen/{code}"
@@ -147,6 +149,30 @@ async def analyze(request: Request, file: UploadFile) -> AnalyzeResponse:
     return out
 
 
+# ------------------------------------------------------------------ /examples
+@app.get("/examples", response_model=ExamplesResponse)
+async def examples(request: Request, per_genus: int | None = 2) -> ExamplesResponse:
+    """Held-out TEST specimens the probe was never fitted on, for the demo
+    picker. Deterministic: per genus the first `per_genus` rows in
+    specimen_code order (per_genus=0 or omitted -> all test rows). The
+    backbone (BioCLIP 2) may still have met these AntWeb photos in its own
+    pretraining; "unseen" is a claim about the classifier only."""
+    ctx = _ctx(request)
+    test = ctx.specimens[ctx.specimens["split"] == "test"].sort_values(["subfamily", "genus"])
+    test = test.reset_index()  # specimen_code back to a column
+    cap = per_genus if per_genus and per_genus > 0 else None
+    if cap:
+        test = test.sort_values(["subfamily", "genus", "specimen_code"]).groupby("genus", sort=False).head(cap)
+    base = str(request.base_url)
+    rows = [ExampleSpecimen(specimen_code=r.specimen_code, genus=r.genus, subfamily=r.subfamily,
+                            species=_clean(r.species), photographer=_clean(r.creator),
+                            license=_clean(r.license), image_url=f"{base}images/{r.specimen_code}",
+                            antweb_url=ANTWEB_SPECIMEN_URL.format(code=r.specimen_code))
+            for r in test.itertuples(index=False)]
+    return ExamplesResponse(examples=rows, n=len(rows),
+                            n_test_total=int((ctx.specimens["split"] == "test").sum()), per_genus=cap)
+
+
 # -------------------------------------------------------------------- /genera
 @app.get("/genera", response_model=GeneraResponse)
 async def genera(request: Request) -> GeneraResponse:
@@ -218,8 +244,13 @@ async def get_image(request: Request, specimen_code: str) -> FileResponse:
     path = ROOT / str(ctx.specimens.at[specimen_code, "image_path"])
     if not path.is_file():
         raise HTTPException(404, f"no image on disk for {specimen_code!r}")
+    # Public CC BY-SA assets: an explicit wildcard so a copy the browser cached
+    # from an <img> (no Origin header) can be re-read by fetch() from another
+    # origin — the CORS middleware alone only stamps responses to requests
+    # that carried an Origin.
     return FileResponse(path, media_type="image/jpeg",
-                        headers={"Cache-Control": "public, max-age=86400"})
+                        headers={"Cache-Control": "public, max-age=86400",
+                                 "Access-Control-Allow-Origin": "*"})
 
 
 # -------------------------------------------------------------------- /health

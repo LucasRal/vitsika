@@ -1,7 +1,7 @@
 base url http://localhost:8001; test image data/images/Royidris/casent0002219_p.jpg (Royidris Royidris notorthotenes)
 ok   GET /health -> 200 {'status': 'ok', 'model_loaded': True, 'n_embeddings': 1236, 'n_train': 986, 'n_genera': 27, 'versions': {'model_name': 'hf-hub:imageomics/bioclip-2', 'probe_version': '2026-08-29T07:12:53+00:00', 'embeddings_index_sha256': 'ae1153bb775557534dd6541888fa38d91436b1b37c2c45dad54c6cf3cb5e68a9', 'umap_model_version': '2026-08-29T11:14:58+00:00', 'torch': '2.13.0+cpu', 'open_clip': '3.3.0', 'scikit_learn': '1.9.0', 'fastapi': '0.141.1'}}
 ok   model loaded, n_embeddings 1236 == dataset 1236
-ok   POST /analyze -> 200 in 962 ms
+ok   POST /analyze -> 200 in 1195 ms
      true genus Royidris       top-1 Royidris       p=0.373  MATCH
        Royidris       myrmicinae     0.373
        Nesomyrmex     myrmicinae     0.095
@@ -17,26 +17,28 @@ ok   model hf-hub:imageomics/bioclip-2, probe 2026-08-29T07:12:53+00:00
 ok   atlas_position {'x': 8.083983421325684, 'y': 4.300367832183838}
 ok   atlas_position (8.08, 4.30) is 0.10 from the fitted (7.99, 4.26)
 ok   text/plain -> 400 {'message': 'expected an image/* upload, got text/plain'}
-ok   garbage -> 422 {'message': 'cannot decode image: cannot identify image file <_io.BytesIO object at 0x76386e3d1cb0>'}
+ok   garbage -> 422 {'message': 'cannot decode image: cannot identify image file <_io.BytesIO object at 0x79fe706cf470>'}
 ok   11 MB -> 413 {'message': 'image larger than 10 MB'}
 ok   GET /genera -> 200, 27 genera
      e.g. {'name': 'Anochetus', 'subfamily': 'ponerinae', 'n_train': 23, 'n_test': 6, 'f1_probe': 0.923, 'atlas_median': {'x': 5.526100158691406, 'y': 9.52560043334961}}
 ok   every genus has an atlas_median
-ok   GET /atlas -> 200, 192 KB in 10 ms
+ok   GET /atlas -> 200, 192 KB in 11 ms
 ok   atlas has 1236 points == umap_coords.csv rows
 ok   atlas rows and coordinates match umap_coords.csv
 ok   atlas fields present, every image available
      umap params {'n_neighbors': 15, 'min_dist': 0.1, 'metric': 'cosine', 'random_state': 42, 'n': 1236}; e.g. {'specimen_code': 'casent0000550', 'x': 0.178, 'y': -4.7097, 'genus': 'Mystrium', 'subfamily': 'amblyoponinae', 'species': 'Mystrium mysticum', 'image_available': True}
-     second (cached) call 6 ms
+     second (cached) call 3 ms
+ok   GET /examples -> 200, 54 test specimens (2 per genus)
+ok   GET /examples?per_genus=0 -> all 250 test rows
 ok   GET /geo/Royidris -> 200
      27 specimens, provinces {'Toliara': 24, 'Mahajanga': 1, 'Fianarantsoa': 1, 'Antananarivo': 1}, elev {'min': 25.0, 'median': 110.0, 'max': 1513.0, 'n': 27}, years 1969-2010, 27 points
 ok   GET /geo/Notarealgenus -> 404
 ok   GET http://localhost:8001/images/casent0002259 -> 200, 153095 bytes
 ok   GET /images/../config.yaml -> 404
-ok   latency call -> 200 in 847 ms
-ok   latency call -> 200 in 757 ms
-ok   latency call -> 200 in 1015 ms
-ok   latency call -> 200 in 892 ms
-ok   latency call -> 200 in 927 ms
-/analyze latency: median 892 ms, min 757, max 1015 (5 calls, embed only 896 ms)
+ok   latency call -> 200 in 707 ms
+ok   latency call -> 200 in 799 ms
+ok   latency call -> 200 in 869 ms
+ok   latency call -> 200 in 841 ms
+ok   latency call -> 200 in 826 ms
+/analyze latency: median 826 ms, min 707, max 869 (5 calls, embed only 794 ms)
 smoke test passed

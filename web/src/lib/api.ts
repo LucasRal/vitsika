@@ -21,6 +21,11 @@ export type GenusInfo = {
   atlas_median: AtlasPosition;
 };
 export type GeneraResponse = { genera: GenusInfo[]; n: number };
+export type ExampleSpecimen = {
+  specimen_code: string; genus: string; subfamily: string; species: string | null;
+  photographer: string | null; license: string | null; image_url: string; antweb_url: string;
+};
+export type ExamplesResponse = { examples: ExampleSpecimen[]; n: number; n_test_total: number; per_genus: number | null };
 export type ElevationStats = { min: number | null; median: number | null; max: number | null; n: number };
 export type GeoResponse = {
   genus: string; subfamily: string; n_specimens: number; n_species: number; n_unidentified: number;
@@ -73,6 +78,7 @@ export const api = {
   genera: () => request<GeneraResponse>("/genera", revalidate(300)),
   geo: (genus: string) => request<GeoResponse>(`/geo/${encodeURIComponent(genus)}`, revalidate(300)),
   atlas: () => request<AtlasResponse>("/atlas", revalidate(3600)),
+  examples: (perGenus = 2) => request<ExamplesResponse>(`/examples?per_genus=${perGenus}`, revalidate(3600)),
   analyze: (file: File) => {
     const body = new FormData();
     body.append("file", file, file.name);
