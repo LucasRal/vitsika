@@ -169,32 +169,62 @@ def plot_confusion(y_true: np.ndarray, y_pred: np.ndarray, order: list[str],
     for t, p in zip(y_true, y_pred):
         cm[pos[t], pos[p]] += 1
 
-    fig, ax = plt.subplots(figsize=(13, 12))
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import viz  # shared palette: subfamily bands use the same slot order as the web app
+
+    fig, ax = plt.subplots(figsize=(15, 13.5))
     im = ax.imshow(cm, cmap="Blues", vmin=0, vmax=max(cm.max(), 1))
     ax.set_xticks(range(n)); ax.set_yticks(range(n))
-    labels = [f"{g}  ({subfamily_of[g][:5]})" for g in order]
-    ax.set_xticklabels(labels, rotation=90, fontsize=8)
-    ax.set_yticklabels(labels, fontsize=8)
-    ax.set_xlabel("predicted genus"); ax.set_ylabel("true genus")
+    ax.set_xticklabels(order, rotation=90, fontsize=13, fontstyle="italic")
+    ax.set_yticklabels(order, fontsize=13, fontstyle="italic")
+    ax.tick_params(length=0, pad=22)
+    ax.set_xlabel("predicted genus", fontsize=14, labelpad=10)
+    ax.set_ylabel("true genus", fontsize=14, labelpad=10)
     ax.set_title(f"Linear probe confusion matrix: {len(y_true)} test images, "
-                 f"{n} genera (ordered by subfamily)", fontsize=11)
-    # subfamily boundaries
+                 f"{n} genera, grouped by subfamily", fontsize=16, loc="left", pad=16)
+    # subfamily blocks: hairlines between them and a coloured band with the name
+    # along the left and bottom edges (same colour slots as the web atlas).
+    sub_counts: dict[str, int] = {}
+    for t in y_true:
+        sub_counts[subfamily_of[t]] = sub_counts.get(subfamily_of[t], 0) + 1
+    sub_order = sorted(sub_counts, key=lambda k: -sub_counts[k])
+    colour = {k: v[0] for k, v in viz.styles(sub_order).items()}
+    from matplotlib.patches import Rectangle
+    blocks: list[tuple[str, int, int]] = []  # (subfamily, start, end) in row index
+    start = 0
+    for i in range(1, n + 1):
+        if i == n or subfamily_of[order[i]] != subfamily_of[order[start]]:
+            blocks.append((subfamily_of[order[start]], start, i))
+            start = i
     for i in range(1, n):
         if subfamily_of[order[i]] != subfamily_of[order[i - 1]]:
             ax.axhline(i - 0.5, color="#888888", lw=0.8)
             ax.axvline(i - 0.5, color="#888888", lw=0.8)
+    from matplotlib.patches import Patch
+    for sub, a, b in blocks:
+        c = colour.get(sub, viz.OTHER_COLOR)
+        ax.add_patch(Rectangle((-0.9, a - 0.5), 0.3, b - a, color=c, clip_on=False, lw=0))
+        ax.add_patch(Rectangle((a - 0.5, n - 0.4), b - a, 0.3, color=c, clip_on=False, lw=0))
+    handles = [Patch(color=colour.get(sub, viz.OTHER_COLOR), label=f"{sub} ({b - a} genera)" if b - a > 1 else f"{sub} (1 genus)")
+               for sub, a, b in blocks]
+    ax.legend(handles=handles, loc="lower left", bbox_to_anchor=(1.02, 0.0), fontsize=11, frameon=False,
+              title="subfamily (band colour)", title_fontsize=11, handlelength=1.2, borderaxespad=0)
     thresh = cm.max() / 2
     for i in range(n):
         for j in range(n):
             if cm[i, j]:
-                ax.text(j, i, str(cm[i, j]), ha="center", va="center", fontsize=7,
+                ax.text(j, i, str(cm[i, j]), ha="center", va="center", fontsize=11,
+                        fontweight="bold" if i == j else "normal",
                         color="white" if cm[i, j] > thresh else "#222222")
     for spine in ax.spines.values():
         spine.set_visible(False)
-    ax.tick_params(length=0)
-    fig.colorbar(im, ax=ax, fraction=0.03, pad=0.02, label="count")
-    fig.tight_layout()
-    fig.savefig(out, dpi=150)
+    cb = fig.colorbar(im, ax=ax, fraction=0.03, pad=0.02, shrink=0.55, anchor=(0.0, 1.0))
+    cb.set_label("count", fontsize=12)
+    cb.ax.tick_params(labelsize=11)
+    # bbox_inches="tight" so the clip_on=False bands and the legend outside the
+    # axes are included instead of cropping the y tick labels.
+    fig.savefig(out, dpi=150, bbox_inches="tight", pad_inches=0.3)
     plt.close(fig)
     log.info("confusion matrix written to %s", out)
 

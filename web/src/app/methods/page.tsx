@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import metrics from "@/data/metrics.json";
 import { pct } from "@/lib/format";
-import { Card, Genus } from "@/components/ui";
+import { Genus } from "@/components/ui";
 
 export const metadata: Metadata = { title: "Methods" };
 
@@ -43,7 +43,8 @@ export default function MethodsPage() {
       <section className="space-y-3">
         <h2 className="text-xl">Provenance</h2>
         <p className="text-sm">
-          Records come from the AntWeb dataset on GBIF (California Academy of Sciences), restricted to Madagascar,
+          Records come from the AntWeb dataset on GBIF (Fisher B. L., California Academy of Sciences,{" "}
+          <a className="link" href="https://doi.org/10.15468/wqmjjt" target="_blank" rel="noreferrer">doi:10.15468/wqmjjt</a>, accessed 2026-08-26), restricted to Madagascar,
           worker caste and specimens with a profile-view (lateral) image. Genus synonyms were remapped before
           thresholding (<Genus name="Oligomyrmex" /> → <Genus name="Carebara" />, <Genus name="Pyramica" /> → <Genus name="Strumigenys" />).
           Provinces use current names. The full manifest holds 4,354 specimens in 39 genera and 8 subfamilies; images
@@ -107,16 +108,6 @@ export default function MethodsPage() {
         </ul>
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-xl">Citations &amp; licences</h2>
-        <Card className="space-y-2 text-sm">
-          <p>Fisher B. L. (2026). AntWeb. California Academy of Sciences. Occurrence dataset <a className="link" href="https://doi.org/10.15468/wqmjjt" target="_blank" rel="noreferrer">doi:10.15468/wqmjjt</a>, accessed via GBIF.org on 2026-08-26.</p>
-          <p>Gu J., Stevens S., et al. (2025). BioCLIP 2: Emergent properties from scaling hierarchical contrastive learning. <span className="code">imageomics/bioclip-2</span> on Hugging Face.</p>
-          <p>McInnes L., Healy J., Melville J. (2018). UMAP: Uniform Manifold Approximation and Projection for dimension reduction.</p>
-          <p>Specimen images © their photographers, <a className="link" href="https://www.antweb.org" target="_blank" rel="noreferrer">AntWeb</a>, CC BY-SA (+ GFDL). Occurrence metadata CC BY 4.0. Map tiles © OpenStreetMap contributors.</p>
-          <p>Source code and data pipeline: the <span className="code">mg-ants</span> repository (scripts <span className="code">01_explore.py</span> … <span className="code">10_smoke_api.py</span>, <span className="code">api/</span>, <span className="code">web/</span>); see its README for how to reproduce every number on this page.</p>
-        </Card>
-      </section>
     </article>
   );
 }
