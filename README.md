@@ -52,6 +52,9 @@ python3 -m venv .venv
                                                 #    reports/umap_by_subfamily.png, umap_by_genus.png
 .venv/bin/python scripts/09_geo.py              # coverage of the full manifest -> data/geo_summary.csv,
                                                 #    reports/map_specimens.png
+.venv/bin/uvicorn api.main:app --host 0.0.0.0 --port 8000
+                                                # Phase E: serve the classifier (see below)
+.venv/bin/python scripts/10_smoke_api.py        # smoke-test the running API -> reports/10_smoke_api.log
 ```
 
 Phase B needs torch (CPU build is enough — ~1.4 img/s on 6 cores) and
@@ -110,6 +113,41 @@ Results are in `reports/metrics.json` (top-1, top-3, macro-F1),
 `reports/confusion_matrix.png` (probe, ordered by subfamily) and
 `reports/errors.csv` (probe misclassifications with probabilities).
 
+## Serving (Phase E)
+
+`api/` is a FastAPI app that loads BioCLIP 2, the probe, the embeddings and
+the geo tables once at startup (~10 s on CPU) and serves them:
+
+```bash
+.venv/bin/pip install fastapi uvicorn python-multipart      # already in requirements.txt
+.venv/bin/uvicorn api.main:app --host 0.0.0.0 --port 8000
+.venv/bin/python scripts/10_smoke_api.py                    # in another shell; --base-url to override
+```
+
+| Route | Purpose |
+|---|---|
+| `POST /analyze` | multipart `file` (image/*, ≤ 10 MB) → probe top-3 `predictions` (genus, subfamily, probability) **and** the 5 most similar train specimens (`specimen_code`, species, cosine `similarity`, `image_url`, `antweb_url`, photographer, license), plus `model_name` / `probe_version`. Response schema `AnalyzeResponse`. |
+| `GET /genera` | the 27 POC genera: subfamily, `n_train`, `n_test`, probe F1 (from `reports/per_genus.csv`). |
+| `GET /geo/{genus}` | province counts, elevation min/median/max, year range and `[lat, lon]` points (≤ 1000, seeded subsample) from `dataset_full.csv`; 404 if unknown. |
+| `GET /images/{specimen_code}` | the local profile-view jpg — thumbnails for the similar-specimen cards; 404 if absent. |
+| `GET /health` | `status`, `model_loaded`, `n_embeddings`, library / probe / embedding-index versions. |
+
+Errors are JSON `{"message": …}`: 400 wrong content type, 413 too large,
+422 unreadable image, 404 unknown genus or specimen. CORS origins
+(`api_cors_origins`, default `http://localhost:3000` for the Next.js dev
+server), the upload cap and the point cap live in `config.yaml`; startup and
+request logs go to `reports/api.log` (untracked). Layout: `api/main.py`
+(app, lifespan, routes), `api/state.py` (loads everything once),
+`api/inference.py` (`embed_image`, `predict_genus`, `find_similar` — pure
+functions, no FastAPI), `api/schemas.py` (pydantic models).
+
+```bash
+curl -s -F "file=@data/images/Royidris/casent0002219_p.jpg" localhost:8000/analyze | python3 -m json.tool
+```
+
+Latency on the 6-core CPU box: ~0.8 s per `/analyze` (almost all of it the
+ViT-L/14 forward pass; inference is serialised behind a lock).
+
 ## Reports
 
 - `reports/dataset_stats.md` — provenance funnel, per-genus counts and
@@ -127,6 +165,7 @@ Results are in `reports/metrics.json` (top-1, top-3, macro-F1),
   `geo_by_locality.csv` — geographic and
   temporal coverage of the full 4,354-specimen manifest (`09_geo.py`).
   Plot conventions live in `scripts/viz.py`.
+- `reports/10_smoke_api.log` — last smoke-test run of the API (Phase E).
 
 ## Attribution
 

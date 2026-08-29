@@ -4,3 +4,4 @@ __pycache__/
 data/*
 !data/*.csv
 notebooks/
+reports/api.log

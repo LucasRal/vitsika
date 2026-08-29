@@ -1,0 +1,33 @@
+base url http://localhost:8001; test image data/images/Royidris/casent0002219_p.jpg (Royidris Royidris notorthotenes)
+ok   GET /health -> 200 {'status': 'ok', 'model_loaded': True, 'n_embeddings': 1236, 'n_train': 986, 'n_genera': 27, 'versions': {'model_name': 'hf-hub:imageomics/bioclip-2', 'probe_version': '2026-08-29T07:12:53+00:00', 'embeddings_index_sha256': 'ae1153bb775557534dd6541888fa38d91436b1b37c2c45dad54c6cf3cb5e68a9', 'torch': '2.13.0+cpu', 'open_clip': '3.3.0', 'scikit_learn': '1.9.0', 'fastapi': '0.141.1'}}
+ok   model loaded, n_embeddings 1236 == dataset 1236
+ok   POST /analyze -> 200 in 1130 ms
+     true genus Royidris       top-1 Royidris       p=0.373  MATCH
+       Royidris       myrmicinae     0.373
+       Nesomyrmex     myrmicinae     0.095
+       Pheidole       myrmicinae     0.068
+ok   3 predictions and 5 similar specimens
+ok   similar specimens are TRAIN rows and exclude the query
+       casent0002259 Royidris       Royidris notorthotenes       sim 0.950  April Nobile / Attribution-ShareAlike
+       casent0077935 Royidris       Royidris robertsoni          sim 0.901  April Nobile / Attribution-ShareAlike
+       casent0002257 Royidris       Royidris notorthotenes       sim 0.889  April Nobile / Attribution-ShareAlike
+       casent0173589 Monomorium     Monomorium bifidoclypeatum   sim 0.861  April Nobile / Attribution-ShareAlike
+       casent0189276 Nesomyrmex     Nesomyrmex flavus            sim 0.858  Erin Prado / Attribution-ShareAlike
+ok   model hf-hub:imageomics/bioclip-2, probe 2026-08-29T07:12:53+00:00
+ok   text/plain -> 400 {'message': 'expected an image/* upload, got text/plain'}
+ok   garbage -> 422 {'message': 'cannot decode image: cannot identify image file <_io.BytesIO object at 0x7c653d356750>'}
+ok   11 MB -> 413 {'message': 'image larger than 10 MB'}
+ok   GET /genera -> 200, 27 genera
+     e.g. {'name': 'Anochetus', 'subfamily': 'ponerinae', 'n_train': 23, 'n_test': 6, 'f1_probe': 0.923}
+ok   GET /geo/Royidris -> 200
+     27 specimens, provinces {'Toliara': 24, 'Mahajanga': 1, 'Fianarantsoa': 1, 'Antananarivo': 1}, elev {'min': 25.0, 'median': 110.0, 'max': 1513.0, 'n': 27}, years 1969-2010, 27 points
+ok   GET /geo/Notarealgenus -> 404
+ok   GET http://localhost:8001/images/casent0002259 -> 200, 153095 bytes
+ok   GET /images/../config.yaml -> 404
+ok   latency call -> 200 in 823 ms
+ok   latency call -> 200 in 792 ms
+ok   latency call -> 200 in 823 ms
+ok   latency call -> 200 in 781 ms
+ok   latency call -> 200 in 833 ms
+/analyze latency: median 823 ms, min 781, max 833 (5 calls, embed only 808 ms)
+smoke test passed

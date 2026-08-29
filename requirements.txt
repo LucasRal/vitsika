@@ -15,3 +15,6 @@ scikit-learn
 matplotlib
 joblib
 umap-learn
+fastapi
+uvicorn
+python-multipart

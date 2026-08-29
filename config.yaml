@@ -17,3 +17,7 @@ province_aliases:      # 09_geo.py — old/colonial spellings -> current provinc
   Majunga: Mahajanga
   Toliary: Toliara
   Diego-Suarez: Antsiranana
+api_cors_origins:      # api/main.py — browser origins allowed to call the API
+  - http://localhost:3000
+api_max_upload_mb: 10
+api_geo_max_points: 1000   # GET /geo/{genus} coordinate cap (seeded subsample)
