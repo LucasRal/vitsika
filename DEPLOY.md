@@ -66,6 +66,7 @@ journalctl -u vitsika-api -n 20 --no-pager
 cd web
 export PATH="$HOME/.npm-global/bin:$PATH"          # pnpm lives there
 pnpm install --frozen-lockfile                      # only if package.json changed
+pnpm test && pnpm lint                              # vitest unit tests (verdict tiers) + eslint
 pnpm build                                          # ~45 s; reads web/.env.production
 sudo systemctl restart vitsika-web                  # ready in ~2 s
 ```

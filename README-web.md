@@ -117,4 +117,17 @@ returns `{"status":"loading"}` until then and every page shows a
   `localhost:3000` and `localhost:3001` as CORS origins.
 - `notebooks/exercise_web.py` (untracked) drives every page in headless
   Chromium via Playwright — upload flow, atlas modes, table sort/filter,
-  map clustering, dark mode — and reports console errors.
+  map clustering, dark mode — and reports console errors;
+  `notebooks/ux_tiers.py` covers the verdict tiers, the atlas upload flow
+  and the staged progress panel (desktop, mobile, reduced motion, error+retry).
+- **Unit tests**: `pnpm test` (vitest). `src/lib/verdict.ts` decides the
+  confidence verdict shown on `/result` — *confident* (top-1 ≥ 0.5, no
+  banner), *supported* (top-1 < 0.5 but ≥ 3 of the 5 nearest reference
+  specimens share the genus at cosine ≥ 0.85 → neutral note) or *low*
+  (amber banner). Fixtures in `src/lib/__fixtures__/` are real
+  `/api/analyze` payloads from production (Royidris casent0002219,
+  Tetraponera casent0012838).
+- The Atlas card's "Place your photo on the map" reuses the Identify
+  `Dropzone` (`compact` prop, `onDone` callback): one `/analyze` call gives
+  the star position and the full answer, which lands in the same
+  `AnalysisContext` so "Full analysis →" opens `/result`.

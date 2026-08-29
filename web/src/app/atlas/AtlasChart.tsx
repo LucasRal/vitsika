@@ -1,12 +1,16 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import ReactECharts from "echarts-for-react";
 import type { EChartsOption } from "echarts";
 import type { AtlasPoint } from "@/lib/api";
 import { antwebUrl, imageUrl } from "@/lib/api";
+import type { Analysis } from "@/lib/analysis-context";
+import { pct } from "@/lib/format";
 import { OTHER, PALETTE, SUBFAMILY_ORDER } from "@/lib/palette";
 import { Genus } from "@/components/ui";
+import { Dropzone } from "@/components/Dropzone";
 
 type Mode = "subfamily" | "genera" | "one";
 const N_TOP_GENERA = 8;
@@ -43,8 +47,16 @@ const STAR = "path://M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7.1L12 17.3 5.8 21l1.6-7.1L
 
 export function AtlasChart({ points }: { points: AtlasPoint[] }) {
   const params = useSearchParams();
-  const star = useMemo(() => params.get("star") === "1" && params.get("x") && params.get("y")
+  const paramStar = useMemo(() => params.get("star") === "1" && params.get("x") && params.get("y")
     ? { x: Number(params.get("x")), y: Number(params.get("y")), label: params.get("label") ?? "Your upload" } : null, [params]);
+  // A photo placed from this page (one POST /analyze gives the atlas position and the full result).
+  // Kept in component state, so it survives colour-scheme flips and mode changes.
+  const [upload, setUpload] = useState<Analysis | null>(null);
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const star = useMemo(() => {
+    if (upload) return upload.result.atlas_position ? { ...upload.result.atlas_position, label: "your photo" } : null;
+    return paramStar;
+  }, [upload, paramStar]);
   const [mode, setMode] = useState<Mode>("subfamily");
   const [query, setQuery] = useState("");
   const [one, setOne] = useState<string | null>(null);
@@ -90,7 +102,7 @@ export function AtlasChart({ points }: { points: AtlasPoint[] }) {
       itemStyle: { color: t.accent, borderColor: t.surface, borderWidth: 1 },
       label: { show: true, position: "right", distance: 10, color: t.accent, fontWeight: 600, fontSize: 12, formatter: star.label,
                backgroundColor: t.surface, borderColor: t.hairline, borderWidth: 0.5, padding: [2, 6], borderRadius: 3 },
-      data: [{ value: [star.x, star.y] }],
+      data: [{ value: [star.x, star.y], star: star.label } as { value: number[] }],
     });
     return {
       animation: false, backgroundColor: "transparent",
@@ -105,8 +117,9 @@ export function AtlasChart({ points }: { points: AtlasPoint[] }) {
         trigger: "item", backgroundColor: t.surface, borderColor: t.hairline, borderWidth: 0.5, padding: 8,
         textStyle: { color: t.ink, fontSize: 12 }, enterable: false, confine: true,
         formatter: (raw) => {
-          const d = (Array.isArray(raw) ? raw[0] : raw).data as { p?: AtlasPoint; title?: string; text?: string };
+          const d = (Array.isArray(raw) ? raw[0] : raw).data as { p?: AtlasPoint; title?: string; text?: string; star?: string };
           if (d.title) return `<b>${d.title}</b><br/><span style="color:var(--ink-2)">${d.text}</span>`;
+          if (d.star) return `<b>★ ${d.star}</b>`;
           if (!d.p) return "";
           const p = d.p;
           const thumb = p.image_available
@@ -153,9 +166,40 @@ export function AtlasChart({ points }: { points: AtlasPoint[] }) {
       </div>
       {star && <p className="text-xs text-accent">★ {star.label} — placed with the fitted UMAP’s transform (approximate: a training image lands near, not on, its own point).</p>}
       <div className="hairline rounded-md bg-surface p-2">
+        <div className="flex flex-wrap items-start justify-between gap-2 px-1 pb-2 pt-1">
+          <div className="min-w-0 flex-1">{upload && <UploadStrip upload={upload} onClear={() => setUpload(null)} />}</div>
+          <button className="btn shrink-0 !py-1.5 text-xs" onClick={() => setUploadOpen((o) => !o)} aria-expanded={uploadOpen} aria-controls="atlas-upload">
+            <span aria-hidden>★</span> {upload ? "Place another photo" : "Place your photo on the map"}
+          </button>
+        </div>
+        {uploadOpen && (
+          <div id="atlas-upload" className="hairline-b mb-2 px-1 pb-3">
+            <Dropzone compact submitLabel="Place on the map" onDone={(a) => { setUpload(a); setUploadOpen(false); }} />
+          </div>
+        )}
         <ReactECharts option={option} style={{ height: 640 }} notMerge onEvents={{ click: onClick }} opts={{ renderer: "canvas" }} />
       </div>
       <p className="text-xs text-muted">Scroll to zoom, drag to pan. The two dashed rings mark cross-subfamily islands where the model groups ants by body plan rather than lineage — see Methods.</p>
+    </div>
+  );
+}
+
+/** Slim strip above the chart for a photo placed from this page. The full
+ * answer is already in the AnalysisContext, so /result can render it. */
+function UploadStrip({ upload, onClear }: { upload: Analysis; onClear: () => void }) {
+  const top = upload.result.predictions[0];
+  const placed = upload.result.atlas_position !== null;
+  return (
+    <div className="flex flex-wrap items-center gap-3 text-sm" role="status" data-testid="atlas-upload-strip">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={upload.imageUrl} alt="" className="hairline h-10 w-14 rounded-sm bg-surface-2 object-contain" />
+      <span>
+        <span className="text-accent" aria-hidden>★ </span>
+        <Genus name={top.genus} className="font-medium" /> <span className="text-muted">{pct(top.probability)}</span>
+        {!placed && <span className="ml-2 text-xs text-warning">couldn’t place this photo on the map</span>}
+      </span>
+      <Link className="link" href="/result">Full analysis →</Link>
+      <button className="text-xs text-muted hover:text-ink" onClick={onClear} aria-label="Remove your photo from the map">✕ remove</button>
     </div>
   );
 }

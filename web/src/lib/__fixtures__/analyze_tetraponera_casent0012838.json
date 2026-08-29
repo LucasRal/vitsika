@@ -1,0 +1,89 @@
+{
+    "predictions": [
+        {
+            "genus": "Tetraponera",
+            "subfamily": "pseudomyrmecinae",
+            "probability": 0.39658960700035095
+        },
+        {
+            "genus": "Monomorium",
+            "subfamily": "myrmicinae",
+            "probability": 0.07660092413425446
+        },
+        {
+            "genus": "Nesomyrmex",
+            "subfamily": "myrmicinae",
+            "probability": 0.06905502080917358
+        }
+    ],
+    "similar": [
+        {
+            "specimen_code": "casent0012851",
+            "genus": "Tetraponera",
+            "subfamily": "pseudomyrmecinae",
+            "species": "Tetraponera sahlbergii",
+            "similarity": 0.9283949136734009,
+            "image_url": "https://vitsika.lucas-ralambo.com/api/images/casent0012851",
+            "antweb_url": "https://www.antweb.org/specimen/casent0012851",
+            "photographer": "April Nobile",
+            "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+            "locality": "1km NE Ambalavao, nr. Antananarivo"
+        },
+        {
+            "specimen_code": "casent0012842",
+            "genus": "Tetraponera",
+            "subfamily": "pseudomyrmecinae",
+            "species": "Tetraponera hysterica",
+            "similarity": 0.9249078631401062,
+            "image_url": "https://vitsika.lucas-ralambo.com/api/images/casent0012842",
+            "antweb_url": "https://www.antweb.org/specimen/casent0012842",
+            "photographer": "April Nobile",
+            "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+            "locality": "Res. Andohaela, 5 km WNW Mandiso"
+        },
+        {
+            "specimen_code": "casent0012835",
+            "genus": "Tetraponera",
+            "subfamily": "pseudomyrmecinae",
+            "species": "Tetraponera morondaviensis",
+            "similarity": 0.9161113500595093,
+            "image_url": "https://vitsika.lucas-ralambo.com/api/images/casent0012835",
+            "antweb_url": "https://www.antweb.org/specimen/casent0012835",
+            "photographer": "April Nobile",
+            "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+            "locality": "R\u00e9s. Beza Mahafaly, Parcel 2"
+        },
+        {
+            "specimen_code": "casent0012850",
+            "genus": "Tetraponera",
+            "subfamily": "pseudomyrmecinae",
+            "species": "Tetraponera diana",
+            "similarity": 0.9141631126403809,
+            "image_url": "https://vitsika.lucas-ralambo.com/api/images/casent0012850",
+            "antweb_url": "https://www.antweb.org/specimen/casent0012850",
+            "photographer": "April Nobile",
+            "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+            "locality": "Ambohitantely, nr. Ankazobe"
+        },
+        {
+            "specimen_code": "casent0101052",
+            "genus": "Tetraponera",
+            "subfamily": "pseudomyrmecinae",
+            "species": "Tetraponera sahlbergii",
+            "similarity": 0.9042772054672241,
+            "image_url": "https://vitsika.lucas-ralambo.com/api/images/casent0101052",
+            "antweb_url": "https://www.antweb.org/specimen/casent0101052",
+            "photographer": "April Nobile",
+            "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+            "locality": "[Bois d' Ivondro p. Tamatave]; Antenina; Toamasina Rural"
+        }
+    ],
+    "atlas_position": {
+        "x": 3.6128170490264893,
+        "y": 1.3410297632217407
+    },
+    "model_name": "hf-hub:imageomics/bioclip-2",
+    "probe_version": "2026-08-29T07:12:53+00:00",
+    "embed_ms": 757.2,
+    "filename": "casent0012838_p.jpg"
+}

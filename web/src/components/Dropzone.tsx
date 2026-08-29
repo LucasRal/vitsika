@@ -1,28 +1,46 @@
 "use client";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api, ApiError, imageUrl, type ExampleSpecimen } from "@/lib/api";
-import { useAnalysis } from "@/lib/analysis-context";
-import { Banner, Spinner } from "@/components/ui";
+import { useAnalysis, type Analysis } from "@/lib/analysis-context";
+import { Banner } from "@/components/ui";
 import { ExamplePicker } from "@/components/ExamplePicker";
+import { AnalyzeProgress, type Stage } from "@/components/AnalyzeProgress";
 
 const MAX_MB = 10;
+const EMBED_TEXT_AFTER_MS = 300; // "Uploading…" → "Embedding…" once the request is in flight
 const EXAMPLE = {
   url: "/examples/casent0002219_p.jpg", name: "casent0002219_p.jpg",
   truth: { specimen_code: "casent0002219", genus: "Royidris", subfamily: "myrmicinae", species: "Royidris notorthotenes",
            photographer: "April Nobile", license: "CC BY-SA", image_url: "", antweb_url: "https://www.antweb.org/specimen/casent0002219" } as ExampleSpecimen,
 };
 
-export function Dropzone() {
+type Props = {
+  /** Called with the finished analysis (already stored in the AnalysisContext).
+   * Default: navigate to /result. */
+  onDone?: (a: Analysis) => void;
+  /** Smaller box and shorter copy — used inside the atlas card. */
+  compact?: boolean;
+  submitLabel?: string;
+};
+
+/** Upload box + example buttons + the inline progress/error panel that takes
+ * its place while /analyze runs. Shared by Identify and the Atlas card. */
+export function Dropzone({ onDone, compact = false, submitLabel = "Identify genus" }: Props) {
   const router = useRouter();
   const { setAnalysis } = useAnalysis();
   const input = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [drag, setDrag] = useState(false);
-  const [busy, setBusy] = useState<string | null>(null);
+  const [stage, setStage] = useState<Stage>("idle");
   const [error, setError] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const last = useRef<{ file: File; truth?: ExampleSpecimen } | null>(null);
+  const timer = useRef<number | null>(null);
+  useEffect(() => () => { if (timer.current) window.clearTimeout(timer.current); }, []);
+
+  const busy = stage === "loading" || stage === "uploading" || stage === "embedding";
 
   const pick = useCallback((f: File | null) => {
     setError(null);
@@ -34,82 +52,92 @@ export function Dropzone() {
   }, []);
 
   const submit = async (f: File, truth?: ExampleSpecimen) => {
-    setBusy("Embedding with BioCLIP 2 on CPU — about a second…");
+    last.current = { file: f, truth };
     setError(null);
+    setStage("uploading");
+    timer.current = window.setTimeout(() => setStage("embedding"), EMBED_TEXT_AFTER_MS);
     try {
       const result = await api.analyze(f);
-      setAnalysis({ result, imageUrl: URL.createObjectURL(f), filename: f.name, truth });
-      router.push("/result");
+      const a: Analysis = { result, imageUrl: URL.createObjectURL(f), filename: f.name, truth };
+      setAnalysis(a);
+      setStage("done");
+      if (onDone) onDone(a); else router.push("/result");
     } catch (e) {
-      const msg = e instanceof ApiError && e.status === 0
-        ? "The analysis service is not reachable. Is the API running?" : (e as Error).message;
-      setError(msg);
-      setBusy(null);
+      setError(e instanceof ApiError && e.status === 0
+        ? "The analysis service is not reachable. Is the API running?" : (e as Error).message);
+      setStage("error");
+    } finally {
+      if (timer.current) { window.clearTimeout(timer.current); timer.current = null; }
     }
   };
 
-  const useExample = async () => {
-    setBusy("Loading the example specimen…");
-    try {
-      const blob = await (await fetch(EXAMPLE.url)).blob();
-      const f = new File([blob], EXAMPLE.name, { type: "image/jpeg" });
-      pick(f);
-      await submit(f, EXAMPLE.truth);
-    } catch (e) { setError((e as Error).message); setBusy(null); }
-  };
+  const retry = () => { if (last.current) submit(last.current.file, last.current.truth); };
+  const cancel = () => { setStage("idle"); setError(null); };
 
-  /** A held-out test specimen from the picker: fetch its jpg from the API, then analyse it. */
-  const usePicked = async (s: ExampleSpecimen) => {
-    setBusy(`Loading ${s.specimen_code}…`);
+  /** Fetch an example's bytes (local asset or the API's /images), then analyse. */
+  const fetchAndSubmit = async (url: string, name: string, truth: ExampleSpecimen) => {
+    setStage("loading");
+    setError(null);
     try {
-      const res = await fetch(imageUrl(s.specimen_code));
-      if (!res.ok) throw new Error(`image ${s.specimen_code}: HTTP ${res.status}`);
-      const f = new File([await res.blob()], `${s.specimen_code}_p.jpg`, { type: "image/jpeg" });
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`image ${name}: HTTP ${res.status}`);
+      const f = new File([await res.blob()], name, { type: "image/jpeg" });
       pick(f);
-      setPickerOpen(false);
-      await submit(f, s);
-    } catch (e) { setError((e as Error).message); setBusy(null); }
+      await submit(f, truth);
+    } catch (e) {
+      last.current = null;
+      setError((e as Error).message);
+      setStage("error");
+    }
   };
+  const useExample = () => fetchAndSubmit(EXAMPLE.url, EXAMPLE.name, EXAMPLE.truth);
+  const usePicked = (s: ExampleSpecimen) => { setPickerOpen(false); return fetchAndSubmit(imageUrl(s.specimen_code), `${s.specimen_code}_p.jpg`, s); };
 
   return (
     <div className="space-y-3">
-      <div
-        role="button" tabIndex={0} aria-label="Upload an ant photo"
-        onClick={() => input.current?.click()}
-        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") input.current?.click(); }}
-        onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
-        onDragLeave={() => setDrag(false)}
-        onDrop={(e) => { e.preventDefault(); setDrag(false); pick(e.dataTransfer.files[0] ?? null); }}
-        className={`flex min-h-56 cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed p-6 text-center transition-colors
-          ${drag ? "border-accent bg-accent-soft" : "border-hairline bg-surface-2 hover:border-accent"}`}
-      >
-        <input ref={input} type="file" accept="image/*" className="hidden"
-               onChange={(e) => pick(e.target.files?.[0] ?? null)} />
-        {preview ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={preview} alt="Selected specimen" className="max-h-64 rounded-sm object-contain" />
-        ) : (
-          <>
-            <p className="font-serif text-lg">Drop a profile-view photo of an ant</p>
-            <p className="text-sm text-muted">or click to choose a file · JPEG/PNG, up to {MAX_MB} MB</p>
-            <p className="text-xs text-muted">Best results: lateral (side) view of a worker on a plain background, as on AntWeb.</p>
-          </>
-        )}
-      </div>
-      {file && <p className="text-xs text-muted">{file.name} · {(file.size / 1024).toFixed(0)} KB</p>}
-      {error && <Banner tone="warning" title={error} />}
+      {stage !== "idle" ? (
+        <AnalyzeProgress stage={stage} preview={preview} filename={file?.name} error={error} compact={compact}
+                         onRetry={last.current ? retry : cancel} onCancel={cancel} />
+      ) : (
+        <div
+          role="button" tabIndex={0} aria-label="Upload an ant photo"
+          onClick={() => input.current?.click()}
+          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") input.current?.click(); }}
+          onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+          onDragLeave={() => setDrag(false)}
+          onDrop={(e) => { e.preventDefault(); setDrag(false); pick(e.dataTransfer.files[0] ?? null); }}
+          className={`flex ${compact ? "min-h-40" : "min-h-56"} cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed p-6 text-center transition-colors
+            ${drag ? "border-accent bg-accent-soft" : "border-hairline bg-surface-2 hover:border-accent"}`}
+        >
+          <input ref={input} type="file" accept="image/*" className="hidden"
+                 onChange={(e) => pick(e.target.files?.[0] ?? null)} />
+          {preview ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={preview} alt="Selected specimen" className={`${compact ? "max-h-40" : "max-h-64"} rounded-sm object-contain`} />
+          ) : (
+            <>
+              <p className={`font-serif ${compact ? "text-base" : "text-lg"}`}>Drop a profile-view photo of an ant</p>
+              <p className="text-sm text-muted">or click to choose a file · JPEG/PNG, up to {MAX_MB} MB</p>
+              {!compact && <p className="text-xs text-muted">Best results: lateral (side) view of a worker on a plain background, as on AntWeb.</p>}
+            </>
+          )}
+        </div>
+      )}
+      {file && stage === "idle" && <p className="text-xs text-muted">{file.name} · {(file.size / 1024).toFixed(0)} KB</p>}
+      {error && stage === "idle" && <Banner tone="warning" title={error} />}
       <div className="flex flex-wrap items-center gap-2">
-        <button className="btn btn-primary" disabled={!file || !!busy} onClick={() => file && submit(file)}>Identify genus</button>
-        <button className="btn" disabled={!!busy} onClick={() => setPickerOpen(true)}>Pick a held-out specimen…</button>
-        <button className="btn" disabled={!!busy} onClick={useExample}>Quick example</button>
-        {file && !busy && <button className="btn" onClick={() => { setFile(null); setPreview(null); }}>Clear</button>}
-        {busy && <Spinner label={busy} />}
+        <button className="btn btn-primary" disabled={!file || busy || stage === "error"} onClick={() => file && submit(file)}>{submitLabel}</button>
+        <button className="btn" disabled={busy} onClick={() => setPickerOpen(true)}>Pick a held-out specimen…</button>
+        <button className="btn" disabled={busy} onClick={useExample}>Quick example</button>
+        {file && stage === "idle" && <button className="btn" onClick={() => { setFile(null); setPreview(null); }}>Clear</button>}
       </div>
-      <p className="text-xs text-muted">
-        Held-out specimens are test images the classifier was never fitted on; the quick example is{" "}
-        <span className="genus">Royidris notorthotenes</span> <span className="code">casent0002219</span> (© April Nobile, AntWeb).
-      </p>
-      <ExamplePicker open={pickerOpen} onClose={() => setPickerOpen(false)} onPick={usePicked} busy={!!busy} />
+      {!compact && (
+        <p className="text-xs text-muted">
+          Held-out specimens are test images the classifier was never fitted on; the quick example is{" "}
+          <span className="genus">Royidris notorthotenes</span> <span className="code">casent0002219</span> (© April Nobile, AntWeb).
+        </p>
+      )}
+      <ExamplePicker open={pickerOpen} onClose={() => setPickerOpen(false)} onPick={usePicked} busy={busy} />
     </div>
   );
 }

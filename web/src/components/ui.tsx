@@ -75,6 +75,14 @@ export function ApiDown({ error }: { error: string }) {
   );
 }
 
+/** Small "i" glyph for neutral informational notes (never colour-only: always beside text). */
+export const InfoIcon = ({ className = "" }: { className?: string }) => (
+  <svg className={className} width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
+    <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1" />
+    <path d="M8 7v4.5M8 4.6v.2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+  </svg>
+);
+
 export const Spinner = ({ label = "Loading…" }: { label?: string }) => (
   <p className="flex items-center gap-2 text-sm text-muted" role="status">
     <span className="inline-block h-3 w-3 animate-spin rounded-full border border-muted border-t-transparent" />

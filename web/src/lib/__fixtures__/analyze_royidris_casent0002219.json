@@ -1,0 +1,89 @@
+{
+    "predictions": [
+        {
+            "genus": "Royidris",
+            "subfamily": "myrmicinae",
+            "probability": 0.3728832006454468
+        },
+        {
+            "genus": "Nesomyrmex",
+            "subfamily": "myrmicinae",
+            "probability": 0.09523741900920868
+        },
+        {
+            "genus": "Pheidole",
+            "subfamily": "myrmicinae",
+            "probability": 0.06785805523395538
+        }
+    ],
+    "similar": [
+        {
+            "specimen_code": "casent0002259",
+            "genus": "Royidris",
+            "subfamily": "myrmicinae",
+            "species": "Royidris notorthotenes",
+            "similarity": 0.9504736661911011,
+            "image_url": "https://vitsika.lucas-ralambo.com/api/images/casent0002259",
+            "antweb_url": "https://www.antweb.org/specimen/casent0002259",
+            "photographer": "April Nobile",
+            "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+            "locality": "4.4 km 148\u00b0 SSE Lavanono"
+        },
+        {
+            "specimen_code": "casent0077935",
+            "genus": "Royidris",
+            "subfamily": "myrmicinae",
+            "species": "Royidris robertsoni",
+            "similarity": 0.9007097482681274,
+            "image_url": "https://vitsika.lucas-ralambo.com/api/images/casent0077935",
+            "antweb_url": "https://www.antweb.org/specimen/casent0077935",
+            "photographer": "April Nobile",
+            "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+            "locality": "For\u00eat de Tsinjoriaky, 6.2 km 84\u00b0 E Tsifota"
+        },
+        {
+            "specimen_code": "casent0002257",
+            "genus": "Royidris",
+            "subfamily": "myrmicinae",
+            "species": "Royidris notorthotenes",
+            "similarity": 0.8886327743530273,
+            "image_url": "https://vitsika.lucas-ralambo.com/api/images/casent0002257",
+            "antweb_url": "https://www.antweb.org/specimen/casent0002257",
+            "photographer": "April Nobile",
+            "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+            "locality": "R\u00e9serve Sp\u00e9ciale de Cap Sainte Marie, 14.9 km 261\u00b0 W Marovato"
+        },
+        {
+            "specimen_code": "casent0173589",
+            "genus": "Monomorium",
+            "subfamily": "myrmicinae",
+            "species": "Monomorium bifidoclypeatum",
+            "similarity": 0.8614227771759033,
+            "image_url": "https://vitsika.lucas-ralambo.com/api/images/casent0173589",
+            "antweb_url": "https://www.antweb.org/specimen/casent0173589",
+            "photographer": "April Nobile",
+            "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+            "locality": "R.S. Manongarivo, 20.4 km 219\u00b0 SW Antanambao"
+        },
+        {
+            "specimen_code": "casent0189276",
+            "genus": "Nesomyrmex",
+            "subfamily": "myrmicinae",
+            "species": "Nesomyrmex flavus",
+            "similarity": 0.8576241731643677,
+            "image_url": "https://vitsika.lucas-ralambo.com/api/images/casent0189276",
+            "antweb_url": "https://www.antweb.org/specimen/casent0189276",
+            "photographer": "Erin Prado",
+            "license": "Attribution-ShareAlike (BY-SA) Creative Commons License and GNU Free Documentation License (GFDL)",
+            "locality": "29 km SSW Ambositra, Ankazomivady"
+        }
+    ],
+    "atlas_position": {
+        "x": 8.083983421325684,
+        "y": 4.300367832183838
+    },
+    "model_name": "hf-hub:imageomics/bioclip-2",
+    "probe_version": "2026-08-29T07:12:53+00:00",
+    "embed_ms": 856.4,
+    "filename": "casent0002219_p.jpg"
+}

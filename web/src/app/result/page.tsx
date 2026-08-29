@@ -4,9 +4,8 @@ import { useAnalysis } from "@/lib/analysis-context";
 import { imageUrl, antwebUrl } from "@/lib/api";
 import { pct } from "@/lib/format";
 import { subfamilyColour } from "@/lib/palette";
-import { AntwebCredit, Banner, Card, Code, Eyebrow, Genus, ProbBar, SectionTitle, Species } from "@/components/ui";
-
-const LOW_CONFIDENCE = 0.5;
+import { AntwebCredit, Banner, Card, Code, Eyebrow, Genus, InfoIcon, ProbBar, SectionTitle, Species } from "@/components/ui";
+import { verdict } from "@/lib/verdict";
 
 export default function ResultPage() {
   const { analysis } = useAnalysis();
@@ -21,7 +20,7 @@ export default function ResultPage() {
   }
   const { result, imageUrl: query, filename, truth } = analysis;
   const top = result.predictions[0];
-  const low = top.probability < LOW_CONFIDENCE;
+  const v = verdict(result);
   const hit = truth ? top.genus === truth.genus : null;
   const rank = truth ? result.predictions.findIndex((p) => p.genus === truth.genus) : -1;
   const star = result.atlas_position;
@@ -49,8 +48,17 @@ export default function ResultPage() {
               {hit ? " · correct" : rank > 0 ? ` · the right genus is rank ${rank + 1}` : " · not in the top 3"}
             </p>
           )}
-          {low && (
-            <div className="mt-3">
+          {v.tier === "supported" && (
+            <div className="hairline mt-3 flex items-start gap-2 rounded-md bg-surface-2 px-4 py-3 text-sm text-ink-2" role="status" data-tier="supported">
+              <InfoIcon className="mt-0.5 shrink-0 text-muted" />
+              <p>
+                Classifier confidence is modest ({pct(v.top1)}), but {v.support} of the {v.nSimilar} nearest reference specimens are{" "}
+                <Genus name={v.genus} /> — <a className="link" href="#similar">see below</a>.
+              </p>
+            </div>
+          )}
+          {v.tier === "low" && (
+            <div className="mt-3" data-tier="low">
               <Banner tone="warning" title={`Low confidence: the best guess is only ${pct(top.probability)}.`}>
                 Nothing in the training set looks quite like this. The photo may be a non-profile view, a different
                 caste, a genus outside the 27 covered — or not an ant. Use the similar specimens below to judge.
@@ -85,7 +93,7 @@ export default function ResultPage() {
         </section>
       </div>
 
-      <section>
+      <section id="similar">
         <SectionTitle hint="cosine similarity of BioCLIP 2 embeddings; species labels are AntWeb’s, not the model’s">
           Most similar training specimens
         </SectionTitle>
