@@ -11,3 +11,9 @@ embed_model: hf-hub:imageomics/bioclip-2  # open_clip name; ViT-L/14, 768-d
 embed_batch_size: 16
 probe_C: 1.0          # LogisticRegression inverse regularisation (07_eval.py)
 probe_max_iter: 5000
+umap_n_neighbors: 15   # 08_umap.py (random_state = seed)
+umap_min_dist: 0.1
+province_aliases:      # 09_geo.py — old/colonial spellings -> current province name
+  Majunga: Mahajanga
+  Toliary: Toliara
+  Diego-Suarez: Antsiranana

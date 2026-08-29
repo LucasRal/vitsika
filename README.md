@@ -48,6 +48,10 @@ python3 -m venv .venv
 .venv/bin/python scripts/07_eval.py             # Phase C: zero-shot / linear probe / kNN evaluation
                                                 # -> reports/metrics.json, per_genus.csv, errors.csv,
                                                 #    confusion_matrix.png; probe saved to data/probe.pkl
+.venv/bin/python scripts/08_umap.py             # UMAP of the embeddings -> data/umap_coords.csv,
+                                                #    reports/umap_by_subfamily.png, umap_by_genus.png
+.venv/bin/python scripts/09_geo.py              # coverage of the full manifest -> data/geo_summary.csv,
+                                                #    reports/map_specimens.png
 ```
 
 Phase B needs torch (CPU build is enough — ~1.4 img/s on 6 cores) and
@@ -113,7 +117,15 @@ Results are in `reports/metrics.json` (top-1, top-3, macro-F1),
 - `reports/contact_sheet.jpg` — one random profile image per kept genus (27).
 - `reports/download_stats.md` — GBIF-cache failure evidence (kept as-is).
 - `reports/metrics.json`, `per_genus.csv`, `confusion_matrix.png`,
-  `errors.csv` — Phase C evaluation (see above).
+  `errors.csv` — Phase C evaluation (see above); `eval_notes.md`,
+  `errors_sheet.jpg`, `confusions_pairs.jpg` — manual error analysis.
+- `reports/umap_by_subfamily.png`, `umap_by_genus.png` — 2-D UMAP of the
+  embeddings (subfamilies form clusters; a few cross-subfamily islands group
+  ants by body plan, e.g. the long-legged *Camponotus imitator* /
+  *Aphaenogaster* / *Odontomachus coquereli* island).
+- `reports/map_specimens.png`, `data/geo_summary.csv` — geographic and
+  temporal coverage of the full 4,354-specimen manifest (`09_geo.py`).
+  Plot conventions live in `scripts/viz.py`.
 
 ## Attribution
 

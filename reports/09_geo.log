@@ -1,0 +1,15 @@
+manifest: 4354 specimens, 39 genera, 8 subfamilies
+province alias Majunga       -> Mahajanga    (49 rows)
+province alias Toliary       -> Toliara      (6 rows)
+province alias Diego-Suarez  -> Antsiranana  (4 rows)
+provinces: {'Antsiranana': 1263, 'Toamasina': 937, 'Toliara': 642, 'Fianarantsoa': 599, 'Antananarivo': 572, 'Mahajanga': 333} (8 rows without province)
+summary written to /home/ubuntu/projects/lifeplan/mg-ants/data/geo_summary.csv (39 genera)
+map written to /home/ubuntu/projects/lifeplan/mg-ants/reports/map_specimens.png
+specimens per province (least covered first): {'Mahajanga': 333, 'Antananarivo': 572, 'Fianarantsoa': 599, 'Toliara': 642, 'Toamasina': 937, 'Antsiranana': 1263}
+genera per province (of 39): {'Mahajanga': 27, 'Antananarivo': 33, 'Toliara': 33, 'Antsiranana': 35, 'Fianarantsoa': 36, 'Toamasina': 36}
+specimens per decade: {1880: 9, 1890: 36, 1900: 3, 1910: 6, 1920: 4, 1930: 2, 1950: 2, 1960: 29, 1970: 49, 1980: 32, 1990: 766, 2000: 2138, 2010: 491, 2020: 9} (778 undated)
+least covered decades: {1950: 2, 1930: 2, 1900: 3}
+genera recorded in <= 1 province: {}
+16 specimens without coordinates (5 genera affected)
+specimens per elevation band (m): {'[0, 250)': 1309, '[250, 500)': 389, '[500, 1000)': 996, '[1000, 1500)': 1209, '[1500, 2200)': 328} (123 without elevation)
+done

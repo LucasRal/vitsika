@@ -82,6 +82,26 @@ Cross-subfamily errors are rare and each has a reason: the *C. imitator*
 mimicry case above, the long-legged *Pheidole grallatrix* → *Odontomachus*,
 and the two bad-photo *Tetramorium*.
 
+## Addendum after 08_umap.py
+
+The UMAP map (`umap_by_genus.png`, probe errors marked ×) resolves two of
+the cases above:
+
+- A small island of 51 specimens at UMAP ≈ (3.5, 9.3) contains all 7
+  *Camponotus imitator*, 25 *Aphaenogaster* (*swammerdami*, *gonacantha*),
+  14 *Odontomachus* (mostly *coquereli*), *Pheidole grallatrix* and a few
+  *Strumigenys agra* — long-legged, slender ants from **three
+  subfamilies**. The embedding groups them by body plan; the *C. imitator*
+  and *P. grallatrix* errors are exactly the members of this island whose
+  genus is a minority there.
+- The "suspicious" *Camponotus reaumuri* → *Anochetus* case is not
+  suspicious: the 3 *C. reaumuri* in the set sit inside the *Anochetus*
+  island at ≈ (5.5, 9.6) (27 *Anochetus*, 2 *Tetraponera grandidieri*),
+  far from the main *Camponotus* cluster.
+
+See `08_umap.log` for the 10-nearest-neighbour genus composition around
+every error.
+
 ## Verdict
 
 No evidence of leakage or labelling bugs. The linear probe's 92.8 % top-1 /

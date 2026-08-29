@@ -1,0 +1,63 @@
+embeddings (1236, 768), 27 genera, 7 subfamilies
+UMAP n_neighbors=15 min_dist=0.1 metric=cosine seed=42 on (1236, 768): 17.3s
+coordinates written to /home/ubuntu/projects/lifeplan/mg-ants/data/umap_coords.csv
+figure written to /home/ubuntu/projects/lifeplan/mg-ants/reports/umap_by_subfamily.png
+figure written to /home/ubuntu/projects/lifeplan/mg-ants/reports/umap_by_genus.png
+silhouette by subfamily 768-d cosine 0.096 | UMAP 2-D 0.138  (7 classes)
+silhouette by genus     768-d cosine 0.197 | UMAP 2-D 0.491  (27 classes)
+median within-genus spread (mean distance to centroid): 0.52 UMAP units
+probe-confused pairs — centroid distance vs the two genera's spread:
+  Syllophopsis  / Tetramorium    centroids 1.85 apart, spreads 1.26 / 0.88 -> adjacent
+  Royidris      / Monomorium     centroids 0.87 apart, spreads 0.90 / 0.37 -> overlapping
+  Camponotus    / Aphaenogaster  centroids 7.56 apart, spreads 1.67 / 1.05 -> separated
+  Pachycondyla  / Bothroponera   centroids 1.51 apart, spreads 1.75 / 0.42 -> overlapping
+  Technomyrmex  / Tapinoma       centroids 0.26 apart, spreads 0.37 / 0.35 -> overlapping
+  Nesomyrmex    / Crematogaster  centroids 2.30 apart, spreads 0.99 / 0.82 -> separated
+UMAP neighbourhood of each probe test error (10 nearest specimens):
+  casent0101118  true Camponotus    pred Aphaenogaster neighbours: Aphaenogaster 6, Camponotus 4
+  casent0101119  true Camponotus    pred Aphaenogaster neighbours: Aphaenogaster 5, Camponotus 5
+  casent0048930  true Pachycondyla  pred Bothroponera  neighbours: Bothroponera 9, Pachycondyla 1
+  casent0128362  true Royidris      pred Monomorium    neighbours: Monomorium 10
+  casent0443365  true Technomyrmex  pred Tapinoma      neighbours: Tapinoma 9, Technomyrmex 1
+  casent0010867  true Syllophopsis  pred Tetramorium   neighbours: Tetramorium 8, Nesomyrmex 2
+  casent0101139  true Tetramorium   pred Strumigenys   neighbours: Strumigenys 10
+  casent0101583  true Cataulacus    pred Terataner     neighbours: Cataulacus 10
+  casent0101943  true Pheidole      pred Odontomachus  neighbours: Aphaenogaster 9, Camponotus 1
+  casent0102035  true Tetraponera   pred Crematogaster neighbours: Tetraponera 10
+  casent0317759  true Crematogaster pred Syllophopsis  neighbours: Monomorium 4, Nesomyrmex 3, Royidris 2
+  casent0101616  true Nesomyrmex    pred Crematogaster neighbours: Crematogaster 10
+  casent0102418  true Camponotus    pred Anochetus     neighbours: Anochetus 8, Camponotus 2
+  casent0102037  true Tetraponera   pred Lioponera     neighbours: Tetraponera 10
+  casent0467063  true Tetramorium   pred Syllophopsis  neighbours: Tetramorium 10
+  casent0101053  true Aphaenogaster pred Pheidole      neighbours: Syllophopsis 5, Tetramorium 2, Aphaenogaster 1
+  casent0173591  true Syllophopsis  pred Tetramorium   neighbours: Tetramorium 7, Nesomyrmex 3
+  casent0101146  true Tetramorium   pred Crematogaster neighbours: Tetramorium 10
+nearest neighbouring genus centroid in the 2-D map:
+  Anochetus      -> Aphaenogaster  1.68
+  Aphaenogaster  -> Anochetus      1.68
+  Bothroponera   -> Leptogenys     1.23
+  Camponotus     -> Odontomachus   6.73
+  Cardiocondyla  -> Nesomyrmex     0.68
+  Cataulacus     -> Terataner      1.47
+  Crematogaster  -> Cardiocondyla  1.68
+  Hypoponera     -> Lioponera      1.08
+  Leptogenys     -> Platythyrea    0.62
+  Lioponera      -> Pachycondyla   0.35
+  Meranoplus     -> Syllophopsis   2.54
+  Monomorium     -> Syllophopsis   0.69
+  Mystrium       -> Bothroponera   4.33
+  Nesomyrmex     -> Cardiocondyla  0.68
+  Nylanderia     -> Tapinoma       1.12
+  Odontomachus   -> Aphaenogaster  1.69
+  Pachycondyla   -> Lioponera      0.35
+  Pheidole       -> Nylanderia     1.59
+  Platythyrea    -> Leptogenys     0.62
+  Royidris       -> Syllophopsis   0.34
+  Strumigenys    -> Meranoplus     6.09
+  Syllophopsis   -> Royidris       0.34
+  Tapinoma       -> Technomyrmex   0.26
+  Technomyrmex   -> Tapinoma       0.26
+  Terataner      -> Cataulacus     1.47
+  Tetramorium    -> Nesomyrmex     0.85
+  Tetraponera    -> Crematogaster  2.58
+done
