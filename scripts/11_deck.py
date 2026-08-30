@@ -199,7 +199,7 @@ def build_html() -> str:
     <li><b>Honest generalisation and an open set</b> Group the split by species (one flag in <span class="code">03_build_dataset.py</span>), calibrate the probe's probabilities on the held-out set, and turn the nearest-neighbour similarity the API already returns into a "none of the 27" reject.</li>
     <li><b>Multi-view, multi-caste embeddings</b> The harvest already holds 6,634 head and 5,127 dorsal media rows plus 673 queens and 640 males; <span class="code">config.yaml</span> (<span class="code">views_priority</span>, <span class="code">castes</span>) and <span class="code">06_embed.py</span> make view-wise embedding and late fusion a configuration change.</li>
   </ol>
-  <p style="margin-top:auto;font-size:18px">Lucas R. · Data Scientist, Antananarivo · <span class="accent code">lu.ralambo@gmail.com</span> · <span class="accent code">vitsika.lucas-ralambo.com</span></p>
+  <p style="margin-top:auto;font-size:18px">Lucas R. · Data Scientist, Antananarivo · <span class="accent code">aina@lucas-ralambo.com</span> · <span class="accent code">vitsika.lucas-ralambo.com</span></p>
   <div class="foot"><span>reports/onepager.md · README.md § Current state · reports/dataset_stats.md</span><span>6 / 6</span></div>
 </section>
 </body></html>"""
