@@ -122,15 +122,15 @@ def build_html() -> str:
 <!-- S2 -->
 <section class="slide">
   <div class="eyebrow">Problem</div>
-  <h2>Identification is the bottleneck, and it happens far from the field</h2>
+  <h2 style="font-size:31px;margin-bottom:16px">Genus-level identification is scarce expertise - a local first pass multiplies it</h2>
   <div class="two" style="grid-template-columns: 1.15fr 1fr; align-items:start">
-    <ul class="big">
-      <li>AntWeb holds <b>141,430</b> Malagasy ant records, <b>6,995</b> of them with images, across <b>60</b> imaged genera. Naming even the genus takes a specialist and a microscope.</li>
-      <li>The specimens, the imaging and the determinations are curated and published by the California Academy of Sciences (San Francisco); MBC's stated goal is to move more of this work to Madagascar.</li>
-      <li>A photo-to-genus first pass that runs on a CPU box in Antananarivo in <b>~0.8 s</b> per image lets a local team triage, then send only the hard cases to a specialist.</li>
+    <ul class="big" style="font-size:19px;line-height:1.4">
+      <li style="padding-top:11px;padding-bottom:11px">AntWeb's GBIF dataset held <b>141,430</b> Malagasy ant records on 2026-08-26, <b>6,995</b> with images, across <b>60</b> imaged genera (GBIF occurrence API; doi:10.15468/wqmjjt). Naming even the genus takes a specialist and a microscope.</li>
+      <li style="padding-top:11px;padding-bottom:11px">Three decades of collecting, imaging and determination by the California Academy of Sciences and Malagasy field teams make this data trainable at all. MBC's Phase III roadmap: "with training, more steps can be done in Madagascar" (madagascarbio.org/monitoring.html).</li>
+      <li style="padding-top:11px;padding-bottom:11px">Vitsika demonstrates the complement: a photo-to-genus triage running in <b>~0.8 s</b> on a CPU in Antananarivo, so local teams handle the routine cases and specialists' time goes to the hard and the new.</li>
     </ul>
     <div>
-      <div class="frame" style="height:420px"><img src="{img('reports/contact_sheet.jpg')}"></div>
+      <div class="frame" style="height:380px"><img src="{img('reports/contact_sheet.jpg')}"></div>
       <p class="muted" style="font-size:12.5px;margin:8px 0 0">One AntWeb profile shot per genus in scope (27). Sources: reports/01_explore.txt, README.md.</p>
     </div>
   </div>
