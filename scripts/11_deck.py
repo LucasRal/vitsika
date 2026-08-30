@@ -126,8 +126,8 @@ def build_html() -> str:
   <div class="two" style="grid-template-columns: 1.15fr 1fr; align-items:start">
     <ul class="big" style="font-size:19px;line-height:1.4">
       <li style="padding-top:11px;padding-bottom:11px">AntWeb's GBIF dataset held <b>141,430</b> Malagasy ant records on 2026-08-26, <b>6,995</b> with images, across <b>60</b> imaged genera (GBIF occurrence API; doi:10.15468/wqmjjt). Naming even the genus takes a specialist and a microscope.</li>
-      <li style="padding-top:11px;padding-bottom:11px">Three decades of collecting, imaging and determination by the California Academy of Sciences and Malagasy field teams make this data trainable at all. MBC's Phase III roadmap: "with training, more steps can be done in Madagascar" (madagascarbio.org/monitoring.html).</li>
-      <li style="padding-top:11px;padding-bottom:11px">Vitsika demonstrates the complement: a photo-to-genus triage running in <b>~0.8 s</b> on a CPU in Antananarivo, so local teams handle the routine cases and specialists' time goes to the hard and the new.</li>
+      <li style="padding-top:11px;padding-bottom:11px">Three decades of collecting, imaging and determination by the California Academy of Sciences and Malagasy field teams make this data trainable at all. MBC's Phase III roadmap: ‘with training, more steps can be done in Madagascar’ (madagascarbio.org/monitoring.html).</li>
+      <li style="padding-top:11px;padding-bottom:11px">Vitsika demonstrates the division of labour: a photo-to-genus first pass runs in under a second on an ordinary computer in Antananarivo - fast enough to process a full night's camera-trap haul locally, with standard optimizations still to apply. It clears the routine identifications and flags what it cannot place, so specialist time goes to the ambiguous and the possibly new.</li>
     </ul>
     <div>
       <div class="frame" style="height:380px"><img src="{img('reports/contact_sheet.jpg')}"></div>
