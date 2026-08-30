@@ -131,10 +131,10 @@ def build_html() -> str:
     </ul>
     <div>
       <div class="frame" style="height:380px"><img src="{img('reports/contact_sheet.jpg')}"></div>
-      <p class="muted" style="font-size:12.5px;margin:8px 0 0">One AntWeb profile shot per genus in scope (27). Sources: reports/01_explore.txt, README.md.</p>
+      <p class="muted" style="font-size:12.5px;margin:8px 0 0">One AntWeb profile shot per genus in scope (27).</p>
     </div>
   </div>
-  <div class="foot"><span>reports/01_explore.txt · README.md § Serving</span><span>2 / 6</span></div>
+  <div class="foot"><span><span class="wordmark">Vitsika</span> · vitsika.lucas-ralambo.com</span><span>2 / 6</span></div>
 </section>
 
 <!-- S3 -->
@@ -156,7 +156,7 @@ def build_html() -> str:
     <div class="callout"><b>Finding 2: caste is not in GBIF's interpreted fields</b>
       GBIF maps <span class="code">sex</span> to Male / Female / Other, so every worker arrives as null: 4,540 of 5,857 specimens. The caste has to be read from the verbatim record (<span class="code">dwc:sex</span>): 4,539 workers, 673 queens, 640 males, and only workers are kept.</div>
   </div>
-  <div class="foot"><span>reports/dataset_stats.md · reports/download_stats.md · reports/01_explore.txt · data/raw/records.parquet</span><span>3 / 6</span></div>
+  <div class="foot"><span><span class="wordmark">Vitsika</span> · vitsika.lucas-ralambo.com</span><span>3 / 6</span></div>
 </section>
 
 <!-- S4 -->
@@ -174,11 +174,12 @@ def build_html() -> str:
         </tbody>
       </table>
       <p class="muted" style="font-size:13px;margin:10px 0 0">{n_train} train / {n_test} test, {n_genera} genera, split grouped by specimen, stratified by genus (seed 42). Bare genus name as the zero-shot prompt: {fmt('zero_shot_plain','top1')} top-1. Embeddings: <span class="code">imageomics/bioclip-2</span> ViT-L/14, 768-d, no fine-tuning.</p>
+      <p class="muted" style="font-size:13px;margin:6px 0 0">Full evaluation, error analysis and reproducible pipeline: <span class="accent code">github.com/LucasRal/vitsika</span></p>
       <div class="takeaway" style="font-size:17px">18 errors: 12 genuine look-alikes or species unseen in training (<i>Syllophopsis</i> vs <i>Tetramorium</i>, <i>Royidris</i> vs <i>Monomorium</i>), 3 poor photos, 2 odd angles, 1 unexplained. Almost every confusion stays inside a subfamily block.</div>
     </div>
     <div class="frame" style="height:500px;background:#fff"><img src="{img('reports/confusion_matrix.png')}"></div>
   </div>
-  <div class="foot"><span>reports/metrics.json · reports/confusion_matrix.png · reports/eval_notes.md</span><span>4 / 6</span></div>
+  <div class="foot"><span><span class="wordmark">Vitsika</span> · vitsika.lucas-ralambo.com</span><span>4 / 6</span></div>
 </section>
 
 <!-- S5 -->
@@ -187,7 +188,7 @@ def build_html() -> str:
   <h2>The embedding space recapitulates taxonomy, with body-plan islands</h2>
   <div class="frame" style="flex:1;min-height:0;background:#fff"><img src="{img('reports/umap_by_subfamily_annotated.png')}"></div>
   <div class="takeaway">Subfamilies form clean clusters; where the model "errs", it groups <i>Camponotus imitator</i> with long-legged <i>Aphaenogaster</i> and <i>Odontomachus</i>, a resemblance a taxonomist would recognise, not noise.</div>
-  <div class="foot"><span>reports/umap_by_subfamily_annotated.png (data/umap_coords.csv) · reports/eval_notes.md § Addendum</span><span>5 / 6</span></div>
+  <div class="foot"><span><span class="wordmark">Vitsika</span> · vitsika.lucas-ralambo.com</span><span>5 / 6</span></div>
 </section>
 
 <!-- S6 -->
@@ -199,8 +200,8 @@ def build_html() -> str:
     <li><b>Species-grouped split and an open-set reject</b> Group the split by species (one flag in <span class="code">03_build_dataset.py</span>) and turn the nearest-neighbour similarity the API already returns into a "none of the 27" reject (probability calibration: done, live since 2026-08-30).</li>
     <li><b>Multi-view, multi-caste embeddings</b> The harvest already holds 6,634 head and 5,127 dorsal media rows plus 673 queens and 640 males; <span class="code">config.yaml</span> (<span class="code">views_priority</span>, <span class="code">castes</span>) and <span class="code">06_embed.py</span> make view-wise embedding and late fusion a configuration change.</li>
   </ol>
-  <p style="margin-top:auto;font-size:18px">Lucas R. · Data Scientist, Antananarivo · <span class="accent code">aina@lucas-ralambo.com</span> · <span class="accent code">vitsika.lucas-ralambo.com</span></p>
-  <div class="foot"><span>reports/onepager.md · README.md § Current state · reports/dataset_stats.md</span><span>6 / 6</span></div>
+  <p style="margin-top:auto;font-size:18px">Lucas R. · Data Scientist, Antananarivo · <span class="accent code">aina@lucas-ralambo.com</span> · <span class="accent code">vitsika.lucas-ralambo.com</span> · <span class="accent code">github.com/LucasRal/vitsika</span></p>
+  <div class="foot"><span><span class="wordmark">Vitsika</span> · vitsika.lucas-ralambo.com</span><span>6 / 6</span></div>
 </section>
 </body></html>"""
 
