@@ -60,7 +60,7 @@
   --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
-html { -webkit-font-smoothing: antialiased; }
+html { -webkit-font-smoothing: antialiased; scroll-padding-top: 5rem; }
 body {
   background: var(--surface);
   color: var(--ink);
