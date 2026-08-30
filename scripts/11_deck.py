@@ -126,7 +126,7 @@ def build_html() -> str:
   <div class="two" style="grid-template-columns: 1.15fr 1fr; align-items:start">
     <ul class="big">
       <li>AntWeb holds <b>141,430</b> Malagasy ant records, <b>6,995</b> of them with images, across <b>60</b> imaged genera. Naming even the genus takes a specialist and a microscope.</li>
-      <li>The specimens, the imaging and the determinations are curated and published by the California Academy of Sciences (San Francisco); the expertise sits outside Madagascar, and a field team waits for it.</li>
+      <li>The specimens, the imaging and the determinations are curated and published by the California Academy of Sciences (San Francisco); MBC's stated goal is to move more of this work to Madagascar.</li>
       <li>A photo-to-genus first pass that runs on a CPU box in Antananarivo in <b>~0.8 s</b> per image lets a local team triage, then send only the hard cases to a specialist.</li>
     </ul>
     <div>
@@ -173,7 +173,7 @@ def build_html() -> str:
           {row("Nearest neighbour, cosine", "nearest_neighbour")}
         </tbody>
       </table>
-      <p class="muted" style="font-size:13px;margin:10px 0 0">{n_train} train / {n_test} test, {n_genera} genera, split by genus (seed 42). Bare genus name as the zero-shot prompt: {fmt('zero_shot_plain','top1')} top-1. Embeddings: <span class="code">imageomics/bioclip-2</span> ViT-L/14, 768-d, no fine-tuning.</p>
+      <p class="muted" style="font-size:13px;margin:10px 0 0">{n_train} train / {n_test} test, {n_genera} genera, split grouped by specimen, stratified by genus (seed 42). Bare genus name as the zero-shot prompt: {fmt('zero_shot_plain','top1')} top-1. Embeddings: <span class="code">imageomics/bioclip-2</span> ViT-L/14, 768-d, no fine-tuning.</p>
       <div class="takeaway" style="font-size:17px">18 errors: 12 genuine look-alikes or species unseen in training (<i>Syllophopsis</i> vs <i>Tetramorium</i>, <i>Royidris</i> vs <i>Monomorium</i>), 3 poor photos, 2 odd angles, 1 unexplained. Almost every confusion stays inside a subfamily block.</div>
     </div>
     <div class="frame" style="height:500px;background:#fff"><img src="{img('reports/confusion_matrix.png')}"></div>
@@ -196,7 +196,7 @@ def build_html() -> str:
   <h2>Three things this codebase already supports</h2>
   <ol class="steps">
     <li><b>Complete the image set</b> 70.2 % of the manifest's images are missing. <span class="code">05_download_antweb.py</span> + <span class="code">dataset_full.csv</span> are ready for a residential IP or an AntWeb bulk export; re-thresholding brings <i>Vitsika</i>, <i>Tanipone</i>, <i>Carebara</i> and 9 more genera into scope (39 in total).</li>
-    <li><b>Honest generalisation and an open set</b> Group the split by species (one flag in <span class="code">03_build_dataset.py</span>) and turn the nearest-neighbour similarity the API already returns into a "none of the 27" reject. Probabilities are already calibrated (temperature scaling on train folds, ECE 0.55 → 0.02).</li>
+    <li><b>Species-grouped split and an open-set reject</b> Group the split by species (one flag in <span class="code">03_build_dataset.py</span>) and turn the nearest-neighbour similarity the API already returns into a "none of the 27" reject (probability calibration: done, live since 2026-08-30).</li>
     <li><b>Multi-view, multi-caste embeddings</b> The harvest already holds 6,634 head and 5,127 dorsal media rows plus 673 queens and 640 males; <span class="code">config.yaml</span> (<span class="code">views_priority</span>, <span class="code">castes</span>) and <span class="code">06_embed.py</span> make view-wise embedding and late fusion a configuration change.</li>
   </ol>
   <p style="margin-top:auto;font-size:18px">Lucas R. · Data Scientist, Antananarivo · <span class="accent code">aina@lucas-ralambo.com</span> · <span class="accent code">vitsika.lucas-ralambo.com</span></p>
