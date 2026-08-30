@@ -106,10 +106,11 @@ contributed 137 more.
 - **zero-shot**: BioCLIP 2 text tower on the genus name, prompts
   `"a photo of {genus}, a genus of ant"` and bare `"{genus}"`;
 - **linear probe**: `LogisticRegression(class_weight="balanced", C=1.0)`,
-  wrapped in `CalibratedClassifierCV(method="sigmoid", cv=5)` fitted on the
-  train split only, so the probabilities the API shows are calibrated;
-  saved to `data/probe.pkl` for the demo API (raw probe in
-  `data/probe_uncalibrated.pkl`; before/after ECE in `metrics.json`);
+  then temperature-scaled (`api/probe.py`: one scalar T on the logits, fitted
+  by NLL on 5-fold out-of-fold train logits, so the ranking is untouched and
+  the probabilities the API shows are calibrated); saved to `data/probe.pkl`
+  for the demo API (raw probe in `data/probe_uncalibrated.pkl`; before/after
+  ECE and the rejected sklearn sigmoid-CV alternative in `metrics.json`);
 - **nearest neighbour**: cosine top-1 against the train set (its top-3 is
   the majority vote of the 3 nearest).
 
