@@ -7,8 +7,14 @@ uses the index's split column (train / test). Three methods:
 - A, zero-shot: BioCLIP 2 text tower on the genus name, two prompts
   ("a photo of {genus}, a genus of ant" and the bare "{genus}").
 - B, linear probe: sklearn LogisticRegression (balanced, C from config.yaml)
-  on the train embeddings; the fitted estimator is saved to data/probe.pkl
-  (joblib) for the demo API.
+  on the train embeddings, then temperature-scaled (api/probe.py): one scalar
+  T on the logits, fitted by NLL on 5-fold out-of-fold TRAIN logits, so the
+  probabilities the API shows are calibrated while the ranking is untouched.
+  The calibrated model is saved to data/probe.pkl (joblib) for the demo API,
+  the raw probe to data/probe_uncalibrated.pkl. metrics.json reports mean
+  max-probability and 10-bin ECE before/after, plus the same numbers for
+  sklearn's CalibratedClassifierCV(sigmoid, cv=5), which was tried first and
+  rejected because its per-class sigmoids re-rank test images.
 - C, nearest neighbour: cosine top-1 against the train embeddings; its
   "top-3" is the majority vote of the 3 nearest (ties -> nearest wins).
 
@@ -31,11 +37,15 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score, precision_recall_fscore_support
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from gbif_client import load_config, quiet_logging, setup_logging  # noqa: E402
+from api.probe import TemperatureScaledProbe, fit_temperature  # noqa: E402
+from sklearn.model_selection import StratifiedKFold, cross_val_predict  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -44,6 +54,9 @@ REPORTS = ROOT / "reports"
 EMB_PATH = DATA / "embeddings.npy"
 INDEX_PATH = DATA / "embeddings_index.csv"
 PROBE_PATH = DATA / "probe.pkl"
+PROBE_RAW_PATH = DATA / "probe_uncalibrated.pkl"
+CALIBRATION_FOLDS = 5
+ECE_BINS = 10
 
 TEMPLATES = {
     "zero_shot_template": "a photo of {genus}, a genus of ant",
@@ -108,6 +121,48 @@ def fit_probe(x_train: np.ndarray, y_train: np.ndarray, C: float, max_iter: int
              len(clf.classes_), C, int(np.max(clf.n_iter_)),
              clf.score(x_train, y_train), time.perf_counter() - t0)
     return clf
+
+
+def fit_temperature_scaled(raw: LogisticRegression, x_train: np.ndarray, y_train: np.ndarray,
+                           C: float, max_iter: int) -> TemperatureScaledProbe:
+    """Temperature scaling fitted on out-of-fold TRAIN logits (5 folds): the
+    fold models never see the rows they score, and the test split never
+    enters. The deployed model is the full-train probe with that T."""
+    t0 = time.perf_counter()
+    cv = StratifiedKFold(n_splits=CALIBRATION_FOLDS, shuffle=True, random_state=0)
+    oof = cross_val_predict(LogisticRegression(max_iter=max_iter, class_weight="balanced", C=C),
+                            x_train, y_train, cv=cv, method="decision_function")
+    y_idx = np.searchsorted(raw.classes_, y_train)
+    T = fit_temperature(np.asarray(oof), y_idx)
+    log.info("temperature scaling: T = %.3f from %d-fold out-of-fold logits, %.1fs",
+             T, CALIBRATION_FOLDS, time.perf_counter() - t0)
+    return TemperatureScaledProbe(raw, T)
+
+
+def fit_sigmoid_cv(x_train: np.ndarray, y_train: np.ndarray, C: float, max_iter: int
+                   ) -> CalibratedClassifierCV:
+    """sklearn's Platt calibration (per-class sigmoids, 5 folds). Kept only as a
+    comparison in metrics.json: it re-ranks test images, so it is not deployed."""
+    cal = CalibratedClassifierCV(
+        estimator=LogisticRegression(max_iter=max_iter, class_weight="balanced", C=C),
+        method="sigmoid", cv=CALIBRATION_FOLDS)
+    cal.fit(x_train, y_train)
+    return cal
+
+
+def expected_calibration_error(proba: np.ndarray, y_true: np.ndarray, classes: np.ndarray,
+                               n_bins: int = ECE_BINS) -> float:
+    """ECE on the top-1 probability: equal-width bins on [0, 1], weighted mean of
+    |accuracy - confidence| per bin."""
+    conf = proba.max(axis=1)
+    hit = (classes[proba.argmax(axis=1)] == y_true).astype(float)
+    edges = np.linspace(0.0, 1.0, n_bins + 1)
+    ece = 0.0
+    for lo, hi in zip(edges[:-1], edges[1:]):
+        m = (conf > lo) & (conf <= hi) if lo > 0 else (conf >= lo) & (conf <= hi)
+        if m.any():
+            ece += m.mean() * abs(hit[m].mean() - conf[m].mean())
+    return float(ece)
 
 
 # ----------------------------------------------------------- method C: nearest neighbour
@@ -279,16 +334,56 @@ def main() -> None:
         metrics[name] = summarise(name, y_test, top3[:, 0], (top3 == y_test[:, None]).any(1),
                                   genera)
 
-    # B: linear probe
-    clf = fit_probe(x_train, y_train, float(cfg["probe_C"]), int(cfg["probe_max_iter"]))
+    # B: linear probe, raw ...
+    raw = fit_probe(x_train, y_train, float(cfg["probe_C"]), int(cfg["probe_max_iter"]))
+    proba_raw = raw.predict_proba(x_test)
+    top3_raw = topk_from_scores(proba_raw, raw.classes_)
+    metrics["linear_probe_uncalibrated"] = summarise(
+        "linear_probe_uncal", y_test, top3_raw[:, 0], (top3_raw == y_test[:, None]).any(1), genera)
+    joblib.dump(raw, PROBE_RAW_PATH)
+    # ... and temperature-scaled (the deployed model: "linear_probe" everywhere below)
+    clf = fit_temperature_scaled(raw, x_train, y_train, float(cfg["probe_C"]), int(cfg["probe_max_iter"]))
+    assert list(clf.classes_) == list(raw.classes_)
     proba = clf.predict_proba(x_test)
+    assert (proba.argmax(1) == proba_raw.argmax(1)).all(), "temperature scaling must not re-rank"
     top3 = topk_from_scores(proba, clf.classes_)
     top1_preds["linear_probe"] = top3[:, 0]
     metrics["linear_probe"] = summarise("linear_probe", y_test, top3[:, 0],
                                         (top3 == y_test[:, None]).any(1), genera)
     joblib.dump(clf, PROBE_PATH)
-    log.info("probe saved to %s (%d classes, coef %s)", PROBE_PATH, len(clf.classes_),
-             clf.coef_.shape)
+    log.info("calibrated probe saved to %s, raw probe to %s (%d classes)",
+             PROBE_PATH, PROBE_RAW_PATH, len(clf.classes_))
+    sig = fit_sigmoid_cv(x_train, y_train, float(cfg["probe_C"]), int(cfg["probe_max_iter"]))
+    proba_sig = sig.predict_proba(x_test)
+    top3_sig = topk_from_scores(proba_sig, sig.classes_)
+    sig_metrics = summarise("sigmoid_cv (not used)", y_test, top3_sig[:, 0],
+                            (top3_sig == y_test[:, None]).any(1), genera)
+    calibration = {
+        "method": "temperature scaling (api/probe.py)", "temperature": clf.temperature,
+        "cv_folds": CALIBRATION_FOLDS, "fitted_on": "train only (out-of-fold logits)",
+        "ece_bins": ECE_BINS,
+        "sigmoid_cv_alternative": {
+            "note": "sklearn CalibratedClassifierCV(sigmoid, cv=5) on train; rejected: per-class sigmoids re-rank",
+            **sig_metrics,
+            "top1_changed_images": int((top3_raw[:, 0] != top3_sig[:, 0]).sum()),
+            "mean_max_prob": float(proba_sig.max(axis=1).mean()),
+            "ece": expected_calibration_error(proba_sig, y_test, sig.classes_),
+        },
+        "top1_changed_images": int((top3_raw[:, 0] != top3[:, 0]).sum()),
+        "top3_set_changed_images": int((np.sort(top3_raw, axis=1) != np.sort(top3, axis=1)).any(1).sum()),
+        "mean_max_prob_before": float(proba_raw.max(axis=1).mean()),
+        "mean_max_prob_after": float(proba.max(axis=1).mean()),
+        "ece_before": expected_calibration_error(proba_raw, y_test, raw.classes_),
+        "ece_after": expected_calibration_error(proba, y_test, clf.classes_),
+        "share_top1_below_0.5_before": float((proba_raw.max(axis=1) < 0.5).mean()),
+        "share_top1_below_0.5_after": float((proba.max(axis=1) < 0.5).mean()),
+    }
+    log.info("calibration: top-1 changed on %d / %d test images, top-3 set on %d; "
+             "mean max-prob %.3f -> %.3f; ECE(%d bins) %.3f -> %.3f; top-1 < 0.5: %.1f%% -> %.1f%%",
+             calibration["top1_changed_images"], len(x_test), calibration["top3_set_changed_images"],
+             calibration["mean_max_prob_before"], calibration["mean_max_prob_after"], ECE_BINS,
+             calibration["ece_before"], calibration["ece_after"],
+             100 * calibration["share_top1_below_0.5_before"], 100 * calibration["share_top1_below_0.5_after"])
 
     # C: nearest neighbour
     nn1, nn_vote = nearest_neighbour(x_train, y_train, x_test)
@@ -301,10 +396,11 @@ def main() -> None:
         "n_train": int(len(x_train)), "n_test": int(len(x_test)), "n_genera": int(len(genera)),
         "embed_model": cfg["embed_model"],
         "probe": {"C": float(cfg["probe_C"]), "max_iter": int(cfg["probe_max_iter"]),
-                  "class_weight": "balanced"},
+                  "class_weight": "balanced", "calibration": "temperature scaling, T fitted on 5-fold out-of-fold train logits"},
+        "calibration": calibration,
         "zero_shot_templates": TEMPLATES,
         "nearest_neighbour_top3": "majority vote of 3 nearest train embeddings",
-        "methods": {m: metrics[m] for m in METHODS},
+        "methods": {m: metrics[m] for m in [*METHODS, "linear_probe_uncalibrated"]},
     }
     (REPORTS / "metrics.json").write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
     log.info("metrics written to %s", REPORTS / "metrics.json")

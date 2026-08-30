@@ -6,7 +6,32 @@
   "probe": {
     "C": 1.0,
     "max_iter": 5000,
-    "class_weight": "balanced"
+    "class_weight": "balanced",
+    "calibration": "temperature scaling, T fitted on 5-fold out-of-fold train logits"
+  },
+  "calibration": {
+    "method": "temperature scaling (api/probe.py)",
+    "temperature": 0.22432117692838643,
+    "cv_folds": 5,
+    "fitted_on": "train only (out-of-fold logits)",
+    "ece_bins": 10,
+    "sigmoid_cv_alternative": {
+      "note": "sklearn CalibratedClassifierCV(sigmoid, cv=5) on train; rejected: per-class sigmoids re-rank",
+      "top1": 0.904,
+      "top3": 0.98,
+      "macro_f1": 0.7900483231337622,
+      "top1_changed_images": 18,
+      "mean_max_prob": 0.6838884671103603,
+      "ece": 0.22011153288963953
+    },
+    "top1_changed_images": 0,
+    "top3_set_changed_images": 0,
+    "mean_max_prob_before": 0.37966570258140564,
+    "mean_max_prob_after": 0.9314705697332583,
+    "ece_before": 0.5483343024253845,
+    "ece_after": 0.023014465686271135,
+    "share_top1_below_0.5_before": 0.748,
+    "share_top1_below_0.5_after": 0.024
   },
   "zero_shot_templates": {
     "zero_shot_template": "a photo of {genus}, a genus of ant",
@@ -33,6 +58,11 @@
       "top1": 0.916,
       "top3": 0.932,
       "macro_f1": 0.8339583779531293
+    },
+    "linear_probe_uncalibrated": {
+      "top1": 0.928,
+      "top3": 0.984,
+      "macro_f1": 0.884561770358233
     }
   }
 }

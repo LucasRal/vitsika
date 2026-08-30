@@ -3,17 +3,17 @@
         {
             "genus": "Royidris",
             "subfamily": "myrmicinae",
-            "probability": 0.3728832006454468
+            "probability": 0.9969284396188295
         },
         {
             "genus": "Nesomyrmex",
             "subfamily": "myrmicinae",
-            "probability": 0.09523741900920868
+            "probability": 0.002270803396878617
         },
         {
             "genus": "Pheidole",
             "subfamily": "myrmicinae",
-            "probability": 0.06785805523395538
+            "probability": 0.0005011296973771969
         }
     ],
     "similar": [
@@ -83,7 +83,7 @@
         "y": 4.300367832183838
     },
     "model_name": "hf-hub:imageomics/bioclip-2",
-    "probe_version": "2026-08-29T07:12:53+00:00",
-    "embed_ms": 856.4,
+    "probe_version": "2026-08-30T07:03:48+00:00",
+    "embed_ms": 1056.1,
     "filename": "casent0002219_p.jpg"
 }

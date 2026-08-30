@@ -2,7 +2,7 @@
 
 AppState.load() reads config.yaml and:
 - the BioCLIP 2 image tower (open_clip) and its preprocess
-- data/probe.pkl (LogisticRegression from 07_eval.py)
+- data/probe.pkl (CalibratedClassifierCV over LogisticRegression, from 07_eval.py)
 - data/embeddings.npy + embeddings_index.csv (rows asserted to match)
 - data/dataset.csv (specimen metadata for the similar-specimen cards)
 - data/dataset_full.csv (coordinates / provinces for /geo, provinces

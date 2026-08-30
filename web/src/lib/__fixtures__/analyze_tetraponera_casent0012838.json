@@ -3,17 +3,17 @@
         {
             "genus": "Tetraponera",
             "subfamily": "pseudomyrmecinae",
-            "probability": 0.39658960700035095
+            "probability": 0.9987845297338068
         },
         {
             "genus": "Monomorium",
             "subfamily": "myrmicinae",
-            "probability": 0.07660092413425446
+            "probability": 0.0006547224539249667
         },
         {
             "genus": "Nesomyrmex",
             "subfamily": "myrmicinae",
-            "probability": 0.06905502080917358
+            "probability": 0.00041236243274463705
         }
     ],
     "similar": [
@@ -83,7 +83,7 @@
         "y": 1.3410297632217407
     },
     "model_name": "hf-hub:imageomics/bioclip-2",
-    "probe_version": "2026-08-29T07:12:53+00:00",
-    "embed_ms": 757.2,
+    "probe_version": "2026-08-30T07:03:48+00:00",
+    "embed_ms": 842.3,
     "filename": "casent0012838_p.jpg"
 }

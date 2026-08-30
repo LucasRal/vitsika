@@ -9,7 +9,8 @@ taken from a file in this repository; the source is given in brackets.
 Vitsika takes one lateral photo of a worker ant, embeds it with the frozen
 BioCLIP 2 image tower (ViT-L/14, 768-d, no fine-tuning) and proposes the
 three most likely genera among the 27 covered with a balanced logistic-
-regression probe fitted on those embeddings [README.md § Evaluation;
+regression probe fitted on those embeddings (probabilities temperature-scaled
+on cross-validated training folds) [README.md § Evaluation;
 config.yaml]. Alongside the classifier it retrieves the five most similar
 training specimens by cosine similarity, places the photo on a fitted UMAP
 of all 1,236 specimens, and links every image back to its AntWeb record, so
@@ -64,11 +65,11 @@ nearly all sit inside a subfamily block of the confusion matrix
 - 12 of 39 manifest genera are not covered, including *Vitsika* itself (1 of 32 images obtained), *Tanipone* (0 of 30) and *Carebara* (8 of 140) [reports/dataset_stats.md § Provenance].
 - Workers only: 673 queens and 640 males were dropped; a queen or male photo still gets a worker-genus answer [reports/dataset_stats.md].
 - Studio images only: 1,232 of 1,236 training images are AntWeb pinned-specimen profile shots; field photos are out of distribution [data/dataset.csv].
-- Closed world, uncalibrated softmax: 13 of 27 genera are flagged low-reliability (fewer than 5 test images or probe F1 < 0.8); 10 genera have <= 3 test images; the split is by genus, not species, so some test species have no training example (359 species in the set) [reports/per_genus.csv; reports/eval_notes.md].
+- Closed world (probabilities are temperature-calibrated on train folds, ECE 0.548 → 0.023, but a photo outside the 27 genera still gets an answer): 13 of 27 genera are flagged low-reliability (fewer than 5 test images or probe F1 < 0.8); 10 genera have <= 3 test images; the split is by genus, not species, so some test species have no training example (359 species in the set) [reports/per_genus.csv; reports/eval_notes.md].
 - Maps show collecting effort, not abundance; ~0.8 s per image on a 6-core CPU, single worker [DEPLOY.md; README.md].
 
 ## Next steps this code already supports
 
 1. **Complete the image set** with `scripts/05_download_antweb.py` from a residential IP or an AntWeb bulk export: `data/dataset_full.csv` already lists all 4,354 specimens / 39 genera and every script is resumable; re-running `03_build_dataset.py --available-only` re-thresholds and would bring *Vitsika*, *Tanipone*, *Carebara* and 9 more genera into scope [README.md § Current state].
-2. **Species-grouped split, calibrated probabilities and an open-set reject**: group the split by species (one flag in `03_build_dataset.py`) to measure cross-species generalisation honestly; calibrate the probe's softmax on the held-out set; use the nearest-neighbour similarity the API already returns (`find_similar`) as a "none of the 27" threshold [reports/eval_notes.md § Unseen-species effect; api/inference.py].
+2. **Species-grouped split and an open-set reject**: group the split by species (one flag in `03_build_dataset.py`) to measure cross-species generalisation honestly, and use the nearest-neighbour similarity the API already returns (`find_similar`) as a "none of the 27" threshold; probability calibration is already done (temperature scaling on train folds, `api/probe.py`) [reports/eval_notes.md § Unseen-species effect; api/inference.py].
 3. **Multi-view and multi-caste embeddings**: the harvest already holds 6,634 head and 5,127 dorsal media rows plus the queen/male records; `config.yaml` (`views_priority`, `castes`) and `06_embed.py` make view-wise embedding and late fusion a configuration change rather than a new pipeline [reports/dataset_stats.md § View distribution; config.yaml].

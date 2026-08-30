@@ -1,14 +1,18 @@
 embeddings: (1236, 768) float32, 27 genera, norms in [1.00000, 1.00000]
 split: 986 train / 250 test, 27 genera
 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-text model hf-hub:imageomics/bioclip-2 loaded in 6.4s
+text model hf-hub:imageomics/bioclip-2 loaded in 6.8s
 zero-shot zero_shot_template   text embeddings (27, 768), e.g. 'a photo of Anochetus, a genus of ant'
 zero-shot zero_shot_plain      text embeddings (27, 768), e.g. 'Anochetus'
 zero_shot_template   top-1 0.744  top-3 0.940  macro-F1 0.590
 zero_shot_plain      top-1 0.328  top-3 0.488  macro-F1 0.114
-linear probe: 27 classes, C=1, 18 iterations, train acc 0.957, fit 1.9s
+linear probe: 27 classes, C=1, 18 iterations, train acc 0.957, fit 2.0s
+linear_probe_uncal   top-1 0.928  top-3 0.984  macro-F1 0.885
+temperature scaling: T = 0.224 from 5-fold out-of-fold logits, 8.6s
 linear_probe         top-1 0.928  top-3 0.984  macro-F1 0.885
-probe saved to /home/ubuntu/projects/lifeplan/mg-ants/data/probe.pkl (27 classes, coef (27, 768))
+calibrated probe saved to /home/ubuntu/projects/lifeplan/mg-ants/data/probe.pkl, raw probe to /home/ubuntu/projects/lifeplan/mg-ants/data/probe_uncalibrated.pkl (27 classes)
+sigmoid_cv (not used) top-1 0.904  top-3 0.980  macro-F1 0.790
+calibration: top-1 changed on 0 / 250 test images, top-3 set on 0; mean max-prob 0.380 -> 0.931; ECE(10 bins) 0.548 -> 0.023; top-1 < 0.5: 74.8% -> 2.4%
 nearest_neighbour    top-1 0.916  top-3 0.932  macro-F1 0.834
 metrics written to /home/ubuntu/projects/lifeplan/mg-ants/reports/metrics.json
 per-genus table written to /home/ubuntu/projects/lifeplan/mg-ants/reports/per_genus.csv
@@ -16,7 +20,7 @@ confusion matrix written to /home/ubuntu/projects/lifeplan/mg-ants/reports/confu
 probe errors: 18 / 250 written to /home/ubuntu/projects/lifeplan/mg-ants/reports/errors.csv
   Camponotus     -> Aphaenogaster  x2
   Syllophopsis   -> Tetramorium    x2
-  Pachycondyla   -> Bothroponera   x1
   Royidris       -> Monomorium     x1
-  Technomyrmex   -> Tapinoma       x1
-done in 17s
+  Pachycondyla   -> Bothroponera   x1
+  Tetramorium    -> Strumigenys    x1
+done in 35s

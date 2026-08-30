@@ -93,8 +93,8 @@ export default function ResultPage() {
             <BackToIdentify />
           </div>
           <p className="mt-4 text-xs text-muted">
-            {result.model_name} · probe {result.probe_version.slice(0, 10)} · probabilities are the classifier’s softmax over the 27 genera,
-            not a calibrated chance of being right.
+            {result.model_name} · probe {result.probe_version.slice(0, 10)} · probabilities calibrated on cross-validated training folds
+            (sigmoid, 5 folds); still an answer among the 27 genera only.
           </p>
         </section>
       </div>
