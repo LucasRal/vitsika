@@ -94,7 +94,7 @@ export default function ResultPage() {
           </div>
           <p className="mt-4 text-xs text-muted">
             {result.model_name} · probe {result.probe_version.slice(0, 10)} · probabilities calibrated on cross-validated training folds
-            (sigmoid, 5 folds); still an answer among the 27 genera only.
+            (temperature scaling, 5 folds); still an answer among the 27 genera only.
           </p>
         </section>
       </div>

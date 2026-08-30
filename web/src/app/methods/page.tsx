@@ -11,7 +11,7 @@ const STEPS = [
   ["Images", "1,236 profile photos obtained (Wikimedia Commons + AntWeb)"],
   ["Filter & split", "≥ 10 images per genus → 27 genera · 80/20 by genus, seed 42"],
   ["Embed", "BioCLIP 2 ViT-L/14, frozen · 768-d · L2-normalised"],
-  ["Classify", "Logistic-regression probe · balanced classes · C = 1 · sigmoid-calibrated (5 folds)"],
+  ["Classify", "Logistic-regression probe · balanced classes · C = 1 · temperature-calibrated (5 train folds)"],
   ["Evaluate", "250 held-out specimens · top-1 / top-3 / macro-F1"],
   ["Serve", "FastAPI · this site"],
 ];
@@ -100,7 +100,7 @@ export default function MethodsPage() {
         <h2 className="text-xl">Limitations (please read)</h2>
         <ul className="list-disc space-y-1.5 pl-5 text-sm">
           <li>Genus only. Species names on similar specimens are AntWeb’s determinations, not predictions.</li>
-          <li>Closed world: a photo of a genus outside the 27, of a queen or male, or of something that is not an ant still gets an answer. Probabilities are calibrated on cross-validated training folds (Platt sigmoid, 5 folds), so “70 %” means about 7 in 10 such calls were right on held-out data; but that holds only for photos like the training ones. Below 50 % we say so.</li>
+          <li>Closed world: a photo of a genus outside the 27, of a queen or male, or of something that is not an ant still gets an answer. Probabilities are calibrated on cross-validated training folds (temperature scaling fitted on 5 training folds), so “70 %” means about 7 in 10 such calls were right on held-out data; but that holds only for photos like the training ones. Below 50 % we say so.</li>
           <li>Trained on standardised museum photographs (lateral view, white background, pinned specimen). Field photos of live ants are out of distribution and will do worse.</li>
           <li>Small test sets: several genera have 3–6 test images, so their per-genus scores are coarse; see the reliability flags in Genera.</li>
           <li>Maps show collecting effort, not abundance or range: they are where museum specimens were collected and georeferenced.</li>
