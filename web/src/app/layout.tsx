@@ -27,7 +27,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <span className="wordmark">Vitsika</span>: <span className="genus">vitsika</span> is Malagasy for ant.
                 Images © their photographers via <a className="link" href="https://www.antweb.org" target="_blank" rel="noreferrer">AntWeb</a> (CC BY-SA); metadata via GBIF (CC BY).
               </span>
-              <Link className="link" href="/methods">Methods &amp; limitations</Link>
+              <span className="flex gap-4">
+                <Link className="link" href="/saliency">Where the model looks</Link>
+                <Link className="link" href="/methods">Methods &amp; limitations</Link>
+              </span>
             </div>
           </footer>
         </AnalysisProvider>

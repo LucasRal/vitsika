@@ -94,6 +94,12 @@ export default function MethodsPage() {
           <Genus name="Camponotus imitator" /> are called <Genus name="Aphaenogaster" />: the model is recapitulating a
           resemblance in body plan, which is exactly what its atlas shows as the “long-legged island”.
         </p>
+        <p className="text-sm">
+          To see <em>which parts of a photograph</em> drive these decisions, we also computed RISE saliency maps
+          (random-mask probing of the deployed pipeline) for the trap-jaw pair, the dolichoderine confusion pair and
+          two more genera:{" "}
+          <a className="link" href="/saliency">Where the model looks →</a>
+        </p>
       </section>
 
       <section className="space-y-3">
