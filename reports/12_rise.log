@@ -1,0 +1,74 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+model hf-hub:imageomics/bioclip-2 loaded in 6.2s
+400 masks, 7x7 grid, p=0.50, probs=raw, mean coverage 0.495
+casent0104549 (Odontomachus): RISE for Odontomachus, full-image P=0.5453
+  80/400 masks, 45s elapsed, ETA 181s
+  160/400 masks, 90s elapsed, ETA 134s
+  240/400 masks, 135s elapsed, ETA 90s
+  320/400 masks, 180s elapsed, ETA 45s
+  400/400 masks, 227s elapsed, ETA 0s
+wrote casent0104549_Odontomachus.png (masked P: mean 0.330, max 0.516)
+casent0104549 (Odontomachus): RISE for Anochetus, full-image P=0.0382
+  80/400 masks, 46s elapsed, ETA 185s
+  160/400 masks, 93s elapsed, ETA 139s
+  240/400 masks, 139s elapsed, ETA 93s
+  320/400 masks, 185s elapsed, ETA 46s
+  400/400 masks, 230s elapsed, ETA 0s
+wrote casent0104549_Anochetus.png (masked P: mean 0.038, max 0.074)
+casent0102933 (Anochetus): RISE for Anochetus, full-image P=0.4382
+  80/400 masks, 45s elapsed, ETA 180s
+  160/400 masks, 93s elapsed, ETA 139s
+  240/400 masks, 139s elapsed, ETA 93s
+  320/400 masks, 185s elapsed, ETA 46s
+  400/400 masks, 230s elapsed, ETA 0s
+wrote casent0102933_Anochetus.png (masked P: mean 0.170, max 0.331)
+casent0102933 (Anochetus): RISE for Odontomachus, full-image P=0.0476
+  80/400 masks, 47s elapsed, ETA 188s
+  160/400 masks, 93s elapsed, ETA 140s
+  240/400 masks, 140s elapsed, ETA 93s
+  320/400 masks, 187s elapsed, ETA 47s
+  400/400 masks, 235s elapsed, ETA 0s
+wrote casent0102933_Odontomachus.png (masked P: mean 0.074, max 0.155)
+casent0101358 (Camponotus): RISE for Camponotus, full-image P=0.5570
+  80/400 masks, 45s elapsed, ETA 180s
+  160/400 masks, 91s elapsed, ETA 136s
+  240/400 masks, 136s elapsed, ETA 91s
+  320/400 masks, 183s elapsed, ETA 46s
+  400/400 masks, 229s elapsed, ETA 0s
+wrote casent0101358_Camponotus.png (masked P: mean 0.427, max 0.591)
+casent0499794 (Technomyrmex): RISE for Technomyrmex, full-image P=0.3836
+  80/400 masks, 46s elapsed, ETA 183s
+  160/400 masks, 92s elapsed, ETA 138s
+  240/400 masks, 136s elapsed, ETA 91s
+  320/400 masks, 182s elapsed, ETA 45s
+  400/400 masks, 228s elapsed, ETA 0s
+wrote casent0499794_Technomyrmex.png (masked P: mean 0.244, max 0.341)
+casent0499794 (Technomyrmex): RISE for Tapinoma, full-image P=0.1264
+  80/400 masks, 46s elapsed, ETA 186s
+  160/400 masks, 93s elapsed, ETA 139s
+  240/400 masks, 138s elapsed, ETA 92s
+  320/400 masks, 185s elapsed, ETA 46s
+  400/400 masks, 230s elapsed, ETA 0s
+wrote casent0499794_Tapinoma.png (masked P: mean 0.129, max 0.200)
+casent0453991 (Tapinoma): RISE for Tapinoma, full-image P=0.3704
+  80/400 masks, 45s elapsed, ETA 180s
+  160/400 masks, 91s elapsed, ETA 136s
+  240/400 masks, 138s elapsed, ETA 92s
+  320/400 masks, 184s elapsed, ETA 46s
+  400/400 masks, 230s elapsed, ETA 0s
+wrote casent0453991_Tapinoma.png (masked P: mean 0.267, max 0.381)
+casent0453991 (Tapinoma): RISE for Technomyrmex, full-image P=0.2310
+  80/400 masks, 45s elapsed, ETA 180s
+  160/400 masks, 92s elapsed, ETA 138s
+  240/400 masks, 137s elapsed, ETA 91s
+  320/400 masks, 181s elapsed, ETA 45s
+  400/400 masks, 228s elapsed, ETA 0s
+wrote casent0453991_Technomyrmex.png (masked P: mean 0.190, max 0.280)
+casent0005580 (Strumigenys): RISE for Strumigenys, full-image P=0.5827
+  80/400 masks, 45s elapsed, ETA 181s
+  160/400 masks, 91s elapsed, ETA 136s
+  240/400 masks, 137s elapsed, ETA 91s
+  320/400 masks, 183s elapsed, ETA 46s
+  400/400 masks, 228s elapsed, ETA 0s
+wrote casent0005580_Strumigenys.png (masked P: mean 0.275, max 0.485)
+done: 10 runs -> /home/ubuntu/projects/lifeplan/mg-ants/reports/rise
