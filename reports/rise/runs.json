@@ -1,0 +1,129 @@
+{
+  "n_masks": 400,
+  "grid": 7,
+  "p_keep": 0.5,
+  "probs": "raw",
+  "seed": 0,
+  "runs": [
+    {
+      "specimen_code": "casent0104549",
+      "true_genus": "Odontomachus",
+      "species": "Odontomachus coquereli",
+      "target": "Odontomachus",
+      "top1": "Odontomachus",
+      "p_full": 0.5453,
+      "p_masked_mean": 0.3303,
+      "p_masked_max": 0.516,
+      "creator": "April Nobile",
+      "figure": "casent0104549_Odontomachus.png"
+    },
+    {
+      "specimen_code": "casent0104549",
+      "true_genus": "Odontomachus",
+      "species": "Odontomachus coquereli",
+      "target": "Anochetus",
+      "top1": "Odontomachus",
+      "p_full": 0.0382,
+      "p_masked_mean": 0.038,
+      "p_masked_max": 0.0739,
+      "creator": "April Nobile",
+      "figure": "casent0104549_Anochetus.png"
+    },
+    {
+      "specimen_code": "casent0102933",
+      "true_genus": "Anochetus",
+      "species": "Anochetus madagascarensis",
+      "target": "Anochetus",
+      "top1": "Anochetus",
+      "p_full": 0.4382,
+      "p_masked_mean": 0.1702,
+      "p_masked_max": 0.3313,
+      "creator": "April Nobile",
+      "figure": "casent0102933_Anochetus.png"
+    },
+    {
+      "specimen_code": "casent0102933",
+      "true_genus": "Anochetus",
+      "species": "Anochetus madagascarensis",
+      "target": "Odontomachus",
+      "top1": "Anochetus",
+      "p_full": 0.0476,
+      "p_masked_mean": 0.0739,
+      "p_masked_max": 0.155,
+      "creator": "April Nobile",
+      "figure": "casent0102933_Odontomachus.png"
+    },
+    {
+      "specimen_code": "casent0101358",
+      "true_genus": "Camponotus",
+      "species": "Camponotus concolor",
+      "target": "Camponotus",
+      "top1": "Camponotus",
+      "p_full": 0.557,
+      "p_masked_mean": 0.4267,
+      "p_masked_max": 0.5912,
+      "creator": "Nick Olgeirson",
+      "figure": "casent0101358_Camponotus.png"
+    },
+    {
+      "specimen_code": "casent0499794",
+      "true_genus": "Technomyrmex",
+      "species": "Technomyrmex mayri",
+      "target": "Technomyrmex",
+      "top1": "Technomyrmex",
+      "p_full": 0.3836,
+      "p_masked_mean": 0.2445,
+      "p_masked_max": 0.3409,
+      "creator": "April Nobile",
+      "figure": "casent0499794_Technomyrmex.png"
+    },
+    {
+      "specimen_code": "casent0499794",
+      "true_genus": "Technomyrmex",
+      "species": "Technomyrmex mayri",
+      "target": "Tapinoma",
+      "top1": "Technomyrmex",
+      "p_full": 0.1264,
+      "p_masked_mean": 0.1288,
+      "p_masked_max": 0.2005,
+      "creator": "April Nobile",
+      "figure": "casent0499794_Tapinoma.png"
+    },
+    {
+      "specimen_code": "casent0453991",
+      "true_genus": "Tapinoma",
+      "species": "Tapinoma subtile",
+      "target": "Tapinoma",
+      "top1": "Tapinoma",
+      "p_full": 0.3704,
+      "p_masked_mean": 0.2675,
+      "p_masked_max": 0.3813,
+      "creator": "April Nobile",
+      "figure": "casent0453991_Tapinoma.png"
+    },
+    {
+      "specimen_code": "casent0453991",
+      "true_genus": "Tapinoma",
+      "species": "Tapinoma subtile",
+      "target": "Technomyrmex",
+      "top1": "Tapinoma",
+      "p_full": 0.231,
+      "p_masked_mean": 0.1898,
+      "p_masked_max": 0.2799,
+      "creator": "April Nobile",
+      "figure": "casent0453991_Technomyrmex.png"
+    },
+    {
+      "specimen_code": "casent0005580",
+      "true_genus": "Strumigenys",
+      "species": "Strumigenys livens",
+      "target": "Strumigenys",
+      "top1": "Strumigenys",
+      "p_full": 0.5827,
+      "p_masked_mean": 0.2746,
+      "p_masked_max": 0.485,
+      "creator": "April Nobile",
+      "figure": "casent0005580_Strumigenys.png"
+    }
+  ]
+}

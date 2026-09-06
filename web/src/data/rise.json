@@ -1,0 +1,98 @@
+{
+  "n_masks": 400,
+  "grid": 7,
+  "p_keep": 0.5,
+  "probs": "raw",
+  "runs": [
+    {
+      "code": "casent0104549",
+      "trueGenus": "Odontomachus",
+      "species": "Odontomachus coquereli",
+      "target": "Odontomachus",
+      "pFull": 0.5453,
+      "caption": "The hotspot sits on the head capsule and the mandible bases - exactly the region a key uses to separate the trap-jaw genera.",
+      "creator": "April Nobile"
+    },
+    {
+      "code": "casent0104549",
+      "trueGenus": "Odontomachus",
+      "species": "Odontomachus coquereli",
+      "target": "Anochetus",
+      "pFull": 0.0382,
+      "caption": "Diffuse and mostly background. P(Anochetus) is only 0.04 on this photo and rises mainly when the Odontomachus mesosoma is hidden (deep blue), not when any one region is revealed.",
+      "creator": "April Nobile"
+    },
+    {
+      "code": "casent0102933",
+      "trueGenus": "Anochetus",
+      "species": "Anochetus madagascarensis",
+      "target": "Anochetus",
+      "pFull": 0.4382,
+      "caption": "Again the head and mandible-base region carries the decision; the gaster contributes little.",
+      "creator": "April Nobile"
+    },
+    {
+      "code": "casent0102933",
+      "trueGenus": "Anochetus",
+      "species": "Anochetus madagascarensis",
+      "target": "Odontomachus",
+      "pFull": 0.0476,
+      "caption": "Odontomachus evidence on this Anochetus also concentrates at the head end, matching the 2018 comparison, though the hot region spills onto the background left of the head.",
+      "creator": "April Nobile"
+    },
+    {
+      "code": "casent0101358",
+      "trueGenus": "Camponotus",
+      "species": "Camponotus concolor",
+      "target": "Camponotus",
+      "pFull": 0.557,
+      "caption": "Attention spreads over the whole mid-body rather than any single character - plausible for a genus told by overall habitus, but the least localised map of the true-genus set.",
+      "creator": "Nick Olgeirson"
+    },
+    {
+      "code": "casent0499794",
+      "trueGenus": "Technomyrmex",
+      "species": "Technomyrmex mayri",
+      "target": "Technomyrmex",
+      "pFull": 0.3836,
+      "caption": "The gaster is the hottest region, with a secondary spot toward the head - plausibly the gastral segmentation that separates Technomyrmex from Tapinoma.",
+      "creator": "April Nobile"
+    },
+    {
+      "code": "casent0499794",
+      "trueGenus": "Technomyrmex",
+      "species": "Technomyrmex mayri",
+      "target": "Tapinoma",
+      "pFull": 0.1264,
+      "caption": "Tapinoma evidence on the same photograph comes from the head region instead: the two look-alike dolichoderines are read from different body parts.",
+      "creator": "April Nobile"
+    },
+    {
+      "code": "casent0453991",
+      "trueGenus": "Tapinoma",
+      "species": "Tapinoma subtile",
+      "target": "Tapinoma",
+      "pFull": 0.3704,
+      "caption": "One clean hotspot on the head and the front of the mesosoma.",
+      "creator": "April Nobile"
+    },
+    {
+      "code": "casent0453991",
+      "trueGenus": "Tapinoma",
+      "species": "Tapinoma subtile",
+      "target": "Technomyrmex",
+      "pFull": 0.231,
+      "caption": "Head and gaster light up - the same gaster signal as on the true Technomyrmex above - but one blob at bottom right sits on plain background.",
+      "creator": "April Nobile"
+    },
+    {
+      "code": "casent0005580",
+      "trueGenus": "Strumigenys",
+      "species": "Strumigenys livens",
+      "target": "Strumigenys",
+      "pFull": 0.5827,
+      "caption": "An honest surprise: the map favours the head capsule and the gaster, not the famous trap jaws - the long mandibles alone are apparently not what the embedding keys on.",
+      "creator": "April Nobile"
+    }
+  ]
+}

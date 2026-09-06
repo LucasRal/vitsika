@@ -187,6 +187,12 @@ Methods. Setup, env vars and the production/nginx sketch are in
 - `reports/onepager.md`: one-page summary (what, data chain, results,
   findings, limitations, next steps) with sources; `reports/vitsika_deck.pdf`
   (6 slides) is built from it by `scripts/11_deck.py`.
+- `reports/rise/`: RISE saliency maps (Petsiuk et al. 2018, arXiv:1806.07421)
+  for the deployed pipeline, built by `scripts/12_rise.py --gallery` (the
+  weights use the probe's raw softmax; the temperature-calibrated
+  probabilities saturate at 1.0 under masking and carry no signal). Shown on
+  the site at `/saliency`; `reports/rise_onepager.pdf` (A4, the four best
+  maps) is built by `scripts/13_rise_onepager.py`.
 
 ## Attribution
 
