@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """RISE saliency maps for the BioCLIP + probe pipeline (Petsiuk et al. 2018,
-arXiv:1806.07421), reproducing the analysis of Fisher et al.'s unpublished
-2018 study on our model.
+arXiv:1806.07421): which part of a photograph does the deployed classifier
+actually use when it names a genus?
 
 RISE is black-box: N random binary masks (s x s cell grid, keep probability
 p, upsampled bilinearly to the input size with a random sub-cell shift, as in

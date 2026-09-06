@@ -27,12 +27,13 @@ export default function SaliencyPage() {
           <a className="link" href="https://arxiv.org/abs/1806.07421" target="_blank" rel="noreferrer">
             arXiv:1806.07421
           </a>
-          ), reproducing the approach of Fisher et al.&rsquo;s unpublished 2018 study on our BioCLIP + probe
-          pipeline. The idea is simple: cover random parts of the photo with {rise.n_masks} coarse masks, ask the
-          classifier for the probability of a target genus each time, and average the masks weighted by that
-          probability. Regions that must stay visible for the probability to stay high glow red; regions the model
-          ignores stay blue. The model is a black box here (no gradients, no architecture access), which is exactly
-          what makes the method honest about what the deployed pipeline actually uses.
+          ) computed on our BioCLIP + probe pipeline, asking a question the accuracy numbers cannot answer: when the
+          classifier names a genus, which part of the photograph is it actually using? The idea is simple: cover
+          random parts of the photo with {rise.n_masks} coarse masks, ask our classifier for the probability of a
+          target genus each time, and average the masks weighted by that probability. Regions that must stay visible
+          for the probability to stay high glow red; regions the model ignores stay blue. The model is a black box
+          here (no gradients, no architecture access), which is exactly what makes the method honest about what the
+          deployed pipeline actually uses.
         </p>
       </header>
 
