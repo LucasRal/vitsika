@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 const NAV = [
   ["/", "Identify"], ["/genera", "Genera"], ["/distribution", "Distribution"],
-  ["/atlas", "Atlas"], ["/methods", "Methods"],
+  ["/atlas", "Atlas"], ["/saliency", "Saliency"], ["/methods", "Methods"],
 ] as const;
 
 export function SiteHeader() {
