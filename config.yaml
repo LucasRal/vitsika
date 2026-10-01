@@ -8,6 +8,11 @@ image_max_px: 1024
 test_fraction: 0.2
 seed: 42
 embed_model: hf-hub:imageomics/bioclip-2  # open_clip name; ViT-L/14, 768-d
+# Hugging Face commit the POC was built with. Every model load goes through
+# gbif_client.pinned_model_name(), which fetches exactly this snapshot and
+# loads it as open_clip 'local-dir:' (open_clip 3.3 has no revision argument).
+# Weights: open_clip_model.safetensors, sha256 b7b2bf6fbc95799e42630e394cf95803892ab447c1a8ab629dbc82fbeaf7dfef
+embed_model_revision: 2957b322090f9cb17ae72c71981c7218a28d81e0
 embed_batch_size: 16
 probe_C: 1.0          # LogisticRegression inverse regularisation (07_eval.py)
 probe_max_iter: 5000

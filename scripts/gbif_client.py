@@ -82,6 +82,41 @@ def load_config(path: Path) -> dict[str, Any]:
         return yaml.safe_load(fh)
 
 
+HF_HUB_PREFIX = "hf-hub:"
+MODEL_FILES = ["open_clip_config.json", "open_clip_model.safetensors"]
+
+
+def pinned_model_name(cfg: dict[str, Any]) -> str:
+    """open_clip model name for cfg["embed_model"] at cfg["embed_model_revision"].
+
+    open_clip 3.3 resolves "hf-hub:org/repo" to whatever the Hub's main
+    branch is and offers no revision argument. So the pinned commit is
+    fetched with huggingface_hub (from the local cache when present, else
+    downloaded at exactly that commit) and handed to open_clip as
+    "local-dir:<snapshot>"; config, weights, preprocess and tokenizer then
+    all come from that one snapshot. Without a revision in the config the
+    name is returned unchanged.
+    """
+    name = str(cfg["embed_model"])
+    revision = cfg.get("embed_model_revision")
+    if not revision or not name.startswith(HF_HUB_PREFIX):
+        return name
+    from huggingface_hub import snapshot_download
+    from huggingface_hub.errors import LocalEntryNotFoundError
+
+    repo_id = name[len(HF_HUB_PREFIX):]
+    try:
+        path = snapshot_download(repo_id, revision=revision, allow_patterns=MODEL_FILES,
+                                 local_files_only=True)
+    except LocalEntryNotFoundError:
+        log.info("model %s@%s not in the local cache; downloading it", repo_id, revision[:12])
+        path = snapshot_download(repo_id, revision=revision, allow_patterns=MODEL_FILES)
+    missing = [f for f in MODEL_FILES if not (Path(path) / f).is_file()]
+    if missing:
+        raise FileNotFoundError(f"{repo_id}@{revision}: snapshot {path} lacks {missing}")
+    return f"local-dir:{path}"
+
+
 def setup_logging(report_path: Path | None = None, level: int = logging.INFO) -> None:
     """Log to stdout, and also to a file when report_path is given."""
     handlers: list[logging.Handler] = [logging.StreamHandler(sys.stdout)]

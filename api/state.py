@@ -34,7 +34,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 REPORTS = ROOT / "reports"
 sys.path.insert(0, str(ROOT / "scripts"))
-from gbif_client import load_config, quiet_logging, setup_logging  # noqa: E402
+from gbif_client import load_config, pinned_model_name, quiet_logging, setup_logging  # noqa: E402
 
 PROBE_PATH = DATA / "probe.pkl"
 EMB_PATH = DATA / "embeddings.npy"
@@ -104,10 +104,11 @@ class AppState:
         logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
         t = time.perf_counter()
         with quiet_logging():
-            model, _, preprocess = open_clip.create_model_and_transforms(cfg["embed_model"])
+            model, _, preprocess = open_clip.create_model_and_transforms(pinned_model_name(cfg))
         model.eval()
-        log.info("model %s loaded in %.1fs (%d torch threads)",
-                 cfg["embed_model"], time.perf_counter() - t, torch.get_num_threads())
+        log.info("model %s@%s loaded in %.1fs (%d torch threads)",
+                 cfg["embed_model"], str(cfg.get("embed_model_revision", "main"))[:12],
+                 time.perf_counter() - t, torch.get_num_threads())
 
         probe = joblib.load(PROBE_PATH)
         probe_version = _mtime_iso(PROBE_PATH)

@@ -58,7 +58,7 @@ from PIL import Image
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from gbif_client import load_config, quiet_logging, setup_logging  # noqa: E402
+from gbif_client import load_config, pinned_model_name, quiet_logging, setup_logging  # noqa: E402
 import api.probe  # noqa: E402,F401  (joblib needs the class to unpickle data/probe.pkl)
 
 DATA = ROOT / "data"
@@ -243,9 +243,10 @@ def compute(args, ds: pd.DataFrame) -> dict:
     import open_clip
     t = time.perf_counter()
     with quiet_logging():
-        model, _, preprocess = open_clip.create_model_and_transforms(cfg["embed_model"])
+        model, _, preprocess = open_clip.create_model_and_transforms(pinned_model_name(cfg))
     model.eval()
-    log.info("model %s loaded in %.1fs", cfg["embed_model"], time.perf_counter() - t)
+    log.info("model %s@%s loaded in %.1fs", cfg["embed_model"],
+             str(cfg.get("embed_model_revision", "main"))[:12], time.perf_counter() - t)
     normalize = find_normalize(preprocess)
     probe = joblib.load(DATA / "probe.pkl")
     proba_fn = probe.predict_proba if args.probs == "calibrated" else probe.base.predict_proba

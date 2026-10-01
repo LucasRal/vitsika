@@ -16,6 +16,7 @@ Exact Python package versions are in [`requirements.lock`](requirements.lock).
 | numpy / pandas | 2.5.2 / 3.0.5 |
 | umap-learn | 0.5.12 |
 | Pillow | 12.3.0 |
+| Model weights | `hf-hub:imageomics/bioclip-2` at commit `2957b322090f9cb17ae72c71981c7218a28d81e0` (`config.yaml: embed_model_revision`); `open_clip_model.safetensors` sha256 `b7b2bf6fbc95799e42630e394cf95803892ab447c1a8ab629dbc82fbeaf7dfef` |
 | Web front end | Node.js 22.22.1, pnpm 10.11.0, versions locked in `web/pnpm-lock.yaml` |
 
 ## Hardware

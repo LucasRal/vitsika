@@ -43,7 +43,7 @@ from sklearn.metrics import f1_score, precision_recall_fscore_support
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from gbif_client import load_config, quiet_logging, setup_logging  # noqa: E402
+from gbif_client import load_config, pinned_model_name, quiet_logging, setup_logging  # noqa: E402
 from api.probe import TemperatureScaledProbe, fit_temperature  # noqa: E402
 from sklearn.model_selection import StratifiedKFold, cross_val_predict  # noqa: E402
 
@@ -328,7 +328,7 @@ def main() -> None:
     top1_preds: dict[str, np.ndarray] = {}
 
     # A: zero-shot
-    for name, scores in zero_shot_scores(cfg["embed_model"], genera, x_test).items():
+    for name, scores in zero_shot_scores(pinned_model_name(cfg), genera, x_test).items():
         top3 = topk_from_scores(scores, genera)
         top1_preds[name] = top3[:, 0]
         metrics[name] = summarise(name, y_test, top3[:, 0], (top3 == y_test[:, None]).any(1),
@@ -395,6 +395,7 @@ def main() -> None:
     out = {
         "n_train": int(len(x_train)), "n_test": int(len(x_test)), "n_genera": int(len(genera)),
         "embed_model": cfg["embed_model"],
+        "embed_model_revision": cfg.get("embed_model_revision"),
         "probe": {"C": float(cfg["probe_C"]), "max_iter": int(cfg["probe_max_iter"]),
                   "class_weight": "balanced", "calibration": "temperature scaling, T fitted on 5-fold out-of-fold train logits"},
         "calibration": calibration,

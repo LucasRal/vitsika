@@ -34,7 +34,7 @@ import torch
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gbif_client import load_config, quiet_logging, setup_logging  # noqa: E402
+from gbif_client import load_config, pinned_model_name, quiet_logging, setup_logging  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -179,7 +179,7 @@ def main() -> None:
 
     new_index, new_embs, skipped = pd.DataFrame(columns=INDEX_COLS), None, []
     if not todo.empty:
-        model, preprocess = load_model(model_name)
+        model, preprocess = load_model(pinned_model_name(cfg))
         new_index, new_embs, skipped = embed(model, preprocess, todo, batch_size)
 
     parts_idx = [p for p in (old_index, new_index) if not p.empty]
