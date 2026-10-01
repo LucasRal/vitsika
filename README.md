@@ -40,7 +40,7 @@ All scripts are resumable and safe to re-run. Configuration lives in
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
+.venv/bin/pip install -r requirements.txt   # or requirements.lock for the exact versions
 
 .venv/bin/python scripts/01_explore.py          # verify dataset facts, build data/genera.csv
                                                 # report: reports/01_explore.txt
@@ -88,6 +88,81 @@ Key conventions:
   `data/embeddings_index.csv` row *i*; both are sorted by `specimen_code`
   and the index SHA256 is logged so downstream steps can pin the exact set.
   Images that fail to open are skipped (no row), never zero-filled.
+
+## Reproduce the results
+
+The reference results are the tag `poc-baseline`. `ENVIRONMENT.md` records
+the Python version, the CPU-only torch build, the pinned model revision,
+the hardware and the timings. Seeds: `seed: 42` in `config.yaml` drives the
+train/test split, UMAP and the API's map subsample; the 5-fold temperature
+calibration (`07_eval.py`) and the RISE masks (`12_rise.py --seed`) use 0.
+
+**1. Environment.** Install the exact versions, not the loose ranges:
+
+```bash
+python3.14 -m venv .venv
+.venv/bin/pip install -r requirements.lock
+```
+
+**2. Restore the gitignored inputs** from the archive (list below), then
+check every image the dataset uses against its recorded sha256:
+
+```bash
+.venv/bin/python -c "import hashlib, pandas as pd; m = pd.read_csv('data/image_manifest.csv'); \
+bad = [p for p, h in zip(m.image_path, m.sha256) if hashlib.sha256(open(p, 'rb').read()).hexdigest() != h]; \
+print(len(m) - len(bad), 'match,', len(bad), 'differ:', bad[:5])"
+```
+
+**3. Offline checks.** These run without network and write to a separate
+folder, so the committed outputs are never overwritten:
+
+```bash
+export HF_HUB_OFFLINE=1   # fail instead of downloading if the pinned BioCLIP 2 snapshot is missing
+.venv/bin/python scripts/03_build_dataset.py --available-only --output-dir /tmp/check03
+cmp /tmp/check03/dataset.csv data/dataset.csv && diff /tmp/check03/dataset_stats.md reports/dataset_stats.md
+.venv/bin/python scripts/07_eval.py --output-dir /tmp/check07
+for f in metrics.json per_genus.csv errors.csv confusion_matrix.png; do cmp /tmp/check07/$f reports/repro_check/07_eval/$f; done
+.venv/bin/python scripts/16_sync_rise_web.py --check   # web/public/rise and rise.json match reports/rise
+```
+
+All of these were byte-identical on the reference machine. The last
+comparison uses `reports/repro_check/07_eval/`, the re-run of the baseline:
+its `metrics.json` is the baseline's plus the `embed_model_revision` field,
+and `COMPARISON.md` there shows every value is unchanged.
+
+`06_embed.py`, `08_umap.py` and `12_rise.py` write their outputs in place;
+back up `data/` and `reports/rise/` before re-running them. Re-embedding
+with the pinned model gave cosine similarity above 0.9999 with the archived
+`embeddings.npy` (5 images checked), not bit-identical vectors, so downstream
+steps should start from the archived embeddings.
+
+**Steps that need the network.** Upstream sources change, so re-running
+these does not reproduce the baseline; the archive does.
+
+| Script | Contacts | Baseline copy |
+|---|---|---|
+| `01_explore.py`, `02_harvest.py` | GBIF occurrence API | `data/raw/` (harvest of 2026-08-26) |
+| `04_download.py` | GBIF image cache | `data/images/` (116 files used) |
+| `05_download_antweb.py` | antweb.org (blocked from datacenter IPs) | none; not used for the baseline |
+| `06_harvest_commons.py` | Wikimedia Commons | `data/commons_files.txt`, `data/images/` (1,120 files used) |
+| `14_commons_provenance.py` | Wikimedia Commons, read-only | `data/commons_provenance.csv` |
+| `06_embed.py`, `07_eval.py`, `12_rise.py`, `api/` | Hugging Face, only if the pinned snapshot is not cached | the snapshot itself (see below) |
+| `11_deck.py`, `13_rise_onepager.py` | Google Fonts, when rendering the PDFs | the committed PDFs |
+
+**Archive alongside the tag.** These files are gitignored but the results
+depend on them:
+
+- `data/images/`: all 1,297 downloaded images; the 1,236 that
+  `data/dataset.csv` uses are listed with sha256, size and source in
+  `data/image_manifest.csv` (written by `15_image_manifest.py`).
+- `data/raw/`: the GBIF harvest that `03_build_dataset.py` reads.
+- `data/commons_files.txt`: the Commons category listing `06_harvest_commons.py`
+  and `14_commons_provenance.py` match against.
+- `data/embeddings.npy`, `data/probe.pkl`, `data/probe_uncalibrated.pkl`,
+  `data/umap_model.pkl`: the model outputs the API and the reports use.
+- Optionally the BioCLIP 2 snapshot at the revision in `config.yaml`
+  (`open_clip_config.json` and `open_clip_model.safetensors`, about 1.7 GB),
+  in case the Hugging Face repository changes or disappears.
 
 ## Image sourcing (why three download scripts)
 

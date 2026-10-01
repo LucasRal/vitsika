@@ -5,6 +5,14 @@ Manual review of the 18 linear-probe misclassifications (`errors.csv`,
 sorted by probe confidence) and `confusions_pairs.jpg` (the Syllophopsis /
 Tetramorium and Royidris / Monomorium cases next to train examples).
 
+All probabilities quoted in these notes are **pre-calibration**: they come
+from the raw logistic-regression probe (`data/probe_uncalibrated.pkl`),
+before temperature scaling was added. The deployed probe (`data/probe.pkl`,
+T = 0.224) ranks the genera identically for every image, so the predictions
+and second guesses are unchanged, but it reports higher confidences.
+`errors.csv` holds the calibrated values: 0.997 / 0.986 instead of
+0.42 / 0.38 for the *C. imitator* pair below.
+
 Sanity checks passed first:
 
 - No specimen code appears in both splits
@@ -17,9 +25,9 @@ Sanity checks passed first:
 | category | n | specimens |
 |---|---|---|
 | genuinely hard (look-alike genera, photo fine) | 12 | casent0101118, casent0101119 (*C. imitator*), casent0048930, casent0443365, casent0010867, casent0101583, casent0101943, casent0101616, casent0102037, casent0467063, casent0101053, casent0173591 |
-| bad photo | 3 | casent0317759 (gbif_cache: extreme close crop, head cut off, no scale bar), casent0101146 (blurry, washed out, card fills the frame; probe 0.09 vs 0.09), casent0101139 (soft, low contrast, card background) |
+| bad photo | 3 | casent0317759 (gbif_cache: extreme close crop, head cut off, no scale bar), casent0101146 (blurry, washed out, card fills the frame; pre-calibration probe 0.09 vs 0.09), casent0101139 (soft, low contrast, card background) |
 | odd angle / mounting | 2 | casent0128362 (*Royidris*, gbif_cache: head tilted towards the camera, ¾ view), casent0102035 (*Tetraponera* lying flat on a card) |
-| suspicious | 1 | casent0102418 (*Camponotus reaumuri* → *Anochetus* at 0.16): an ordinary big-headed reddish *Camponotus*; nothing resembles *Anochetus*. Second guess is *Camponotus* (0.11), so this is low-confidence noise rather than a labelling problem, but worth a second look. |
+| suspicious | 1 | casent0102418 (*Camponotus reaumuri* → *Anochetus* at 0.16 pre-calibration): an ordinary big-headed reddish *Camponotus*; nothing resembles *Anochetus*. Second guess is *Camponotus* (0.11), so this is low-confidence noise rather than a labelling problem, but worth a second look. |
 
 Only ~3 of 18 errors are attributable to image quality, and 2 of those are
 `gbif_cache` images (116 of the 1,236 in the set; 137 of the 1,297 obtained); the Commons images are
@@ -29,7 +37,7 @@ uniformly good AntWeb profile shots.
 
 `casent0101118` and `casent0101119` (consecutive codes = same collecting
 series) are both *Camponotus imitator* paralectotypes from Taolagnaro,
-photographed by April Nobile, predicted *Aphaenogaster* at 0.42 / 0.38.
+photographed by April Nobile, predicted *Aphaenogaster* at 0.42 / 0.38 (pre-calibration).
 They are normal workers, not minims, and the photos are fine. Next to a
 train *Aphaenogaster swammerdami* the resemblance is striking: slender
 body, very long legs and antennae, small head, reddish body with a dark
@@ -57,7 +65,7 @@ with no train example at all:
   *Monomorium nigricans* in train. Its photo is also the ¾-angle
   gbif_cache one.
 
-Implication: per-genus recall for genera with ≤ 3 test images (11 of 27)
+Implication: per-genus recall for genera with ≤ 3 test images (10 of 27)
 partly measures cross-species generalisation from very few species, and
 should be read as such. A species-aware split, or simply more images per
 genus, would separate the two effects.
@@ -72,9 +80,9 @@ would expect:
   the 2010s revisions (Bolton & Fisher); the probe confuses them with
   *Tetramorium* / *Monomorium*: small compact myrmicines.
 - *Bothroponera* was a subgenus of *Pachycondyla* until 2014;
-  *Pachycondyla perroti* → *Bothroponera* (0.38) is that boundary.
-- *Technomyrmex* ↔ *Tapinoma* (both dolichoderines, 0.30 vs 0.28; a
-  near tie), *Aphaenogaster* ↔ *Pheidole*, *Nesomyrmex* ↔ *Crematogaster*
+  *Pachycondyla perroti* → *Bothroponera* (0.38 pre-calibration) is that boundary.
+- *Technomyrmex* ↔ *Tapinoma* (both dolichoderines, 0.30 vs 0.28
+  pre-calibration; a near tie), *Aphaenogaster* ↔ *Pheidole*, *Nesomyrmex* ↔ *Crematogaster*
   (heart-shaped gaster), *Tetraponera* ↔ *Lioponera* (both elongate,
   cylindrical).
 

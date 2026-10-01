@@ -190,7 +190,15 @@ def write_stats(
         lines.append("")
     lines.append(f"- Images (one per specimen): **{len(df)}**")
     lines.append(f"- Genera kept (>= {cfg['min_specimens_per_genus']} specimens): **{len(kept_counts)}**")
-    lines.append(f"- Genera dropped: **{len(dropped_counts)}**")
+    if provenance:
+        # dropped_counts only sees genera with at least one obtained image;
+        # the provenance table also lists those with none
+        none_obtained = [g for g, o, _ in provenance["dropped_table"] if o == 0]
+        lines.append(f"- Genera dropped: **{len(provenance['dropped_table'])}** "
+                     f"({len(dropped_counts)} below the threshold, {len(none_obtained)} with no image "
+                     f"obtained{': ' + ', '.join(none_obtained) if none_obtained else ''})")
+    else:
+        lines.append(f"- Genera dropped: **{len(dropped_counts)}**")
     lines.append(f"- Share of rows with coordinates: **{df['decimalLatitude'].notna().mean():.1%}**")
     lines.append("")
 

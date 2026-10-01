@@ -27,7 +27,7 @@
 
 - Images (one per specimen): **1236**
 - Genera kept (>= 10 specimens): **27**
-- Genera dropped: **11**
+- Genera dropped: **12** (11 below the threshold, 1 with no image obtained: Tanipone)
 - Share of rows with coordinates: **99.4%**
 
 ## Genus names merging several genusKeys
