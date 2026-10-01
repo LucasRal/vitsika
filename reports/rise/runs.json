@@ -1,9 +1,9 @@
 {
   "n_masks": 400,
-  "grid": 7,
   "p_keep": 0.5,
   "probs": "raw",
   "seed": 0,
+  "grid": 7,
   "runs": [
     {
       "specimen_code": "casent0104549",
@@ -15,7 +15,11 @@
       "p_masked_mean": 0.3303,
       "p_masked_max": 0.516,
       "creator": "April Nobile",
-      "figure": "casent0104549_Odontomachus.png"
+      "figure": "casent0104549_Odontomachus.png",
+      "baseline": 0.3383,
+      "sal_min": 0.3254,
+      "sal_max": 0.3663,
+      "dev_max": 0.028
     },
     {
       "specimen_code": "casent0104549",
@@ -27,7 +31,11 @@
       "p_masked_mean": 0.038,
       "p_masked_max": 0.0739,
       "creator": "April Nobile",
-      "figure": "casent0104549_Anochetus.png"
+      "figure": "casent0104549_Anochetus.png",
+      "baseline": 0.0377,
+      "sal_min": 0.036,
+      "sal_max": 0.0391,
+      "dev_max": 0.0018
     },
     {
       "specimen_code": "casent0102933",
@@ -39,7 +47,11 @@
       "p_masked_mean": 0.1702,
       "p_masked_max": 0.3313,
       "creator": "April Nobile",
-      "figure": "casent0102933_Anochetus.png"
+      "figure": "casent0102933_Anochetus.png",
+      "baseline": 0.1749,
+      "sal_min": 0.1668,
+      "sal_max": 0.1874,
+      "dev_max": 0.0125
     },
     {
       "specimen_code": "casent0102933",
@@ -51,7 +63,11 @@
       "p_masked_mean": 0.0739,
       "p_masked_max": 0.155,
       "creator": "April Nobile",
-      "figure": "casent0102933_Odontomachus.png"
+      "figure": "casent0102933_Odontomachus.png",
+      "baseline": 0.074,
+      "sal_min": 0.0699,
+      "sal_max": 0.0791,
+      "dev_max": 0.0051
     },
     {
       "specimen_code": "casent0101358",
@@ -63,7 +79,11 @@
       "p_masked_mean": 0.4267,
       "p_masked_max": 0.5912,
       "creator": "Nick Olgeirson",
-      "figure": "casent0101358_Camponotus.png"
+      "figure": "casent0101358_Camponotus.png",
+      "baseline": 0.4314,
+      "sal_min": 0.4216,
+      "sal_max": 0.4418,
+      "dev_max": 0.0105
     },
     {
       "specimen_code": "casent0499794",
@@ -75,7 +95,11 @@
       "p_masked_mean": 0.2445,
       "p_masked_max": 0.3409,
       "creator": "April Nobile",
-      "figure": "casent0499794_Technomyrmex.png"
+      "figure": "casent0499794_Technomyrmex.png",
+      "baseline": 0.2491,
+      "sal_min": 0.2414,
+      "sal_max": 0.261,
+      "dev_max": 0.0119
     },
     {
       "specimen_code": "casent0499794",
@@ -87,7 +111,11 @@
       "p_masked_mean": 0.1288,
       "p_masked_max": 0.2005,
       "creator": "April Nobile",
-      "figure": "casent0499794_Tapinoma.png"
+      "figure": "casent0499794_Tapinoma.png",
+      "baseline": 0.1296,
+      "sal_min": 0.1269,
+      "sal_max": 0.1366,
+      "dev_max": 0.007
     },
     {
       "specimen_code": "casent0453991",
@@ -99,7 +127,11 @@
       "p_masked_mean": 0.2675,
       "p_masked_max": 0.3813,
       "creator": "April Nobile",
-      "figure": "casent0453991_Tapinoma.png"
+      "figure": "casent0453991_Tapinoma.png",
+      "baseline": 0.2719,
+      "sal_min": 0.2638,
+      "sal_max": 0.2868,
+      "dev_max": 0.015
     },
     {
       "specimen_code": "casent0453991",
@@ -111,7 +143,11 @@
       "p_masked_mean": 0.1898,
       "p_masked_max": 0.2799,
       "creator": "April Nobile",
-      "figure": "casent0453991_Technomyrmex.png"
+      "figure": "casent0453991_Technomyrmex.png",
+      "baseline": 0.1933,
+      "sal_min": 0.1886,
+      "sal_max": 0.2015,
+      "dev_max": 0.0082
     },
     {
       "specimen_code": "casent0005580",
@@ -123,7 +159,12 @@
       "p_masked_mean": 0.2746,
       "p_masked_max": 0.485,
       "creator": "April Nobile",
-      "figure": "casent0005580_Strumigenys.png"
+      "figure": "casent0005580_Strumigenys.png",
+      "baseline": 0.2838,
+      "sal_min": 0.2692,
+      "sal_max": 0.3091,
+      "dev_max": 0.0253
     }
-  ]
+  ],
+  "shared_w": 0.028
 }

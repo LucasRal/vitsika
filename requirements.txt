@@ -18,3 +18,4 @@ umap-learn
 fastapi
 uvicorn
 python-multipart
+litellm                 # /saliency/chat (optional at runtime: needs LLM_VISION_MODEL + provider key)

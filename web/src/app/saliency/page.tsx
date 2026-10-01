@@ -1,23 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import rise from "@/data/rise.json";
-import { antwebUrl } from "@/lib/api";
-import { Genus } from "@/components/ui";
+import { SaliencyGallery, type RiseRun } from "@/components/SaliencyGallery";
 
 export const metadata: Metadata = { title: "Where the model looks" };
 
-type Run = {
-  code: string;
-  trueGenus: string;
-  species: string;
-  target: string;
-  pFull: number;
-  caption: string;
-  creator: string;
-};
-
 export default function SaliencyPage() {
-  const runs = rise.runs as Run[];
+  const runs = rise.runs as RiseRun[];
   return (
     <article className="max-w-4xl space-y-10">
       <header>
@@ -37,45 +25,7 @@ export default function SaliencyPage() {
         </p>
       </header>
 
-      <section className="space-y-6">
-        {runs.map((r) => (
-          <div
-            key={`${r.code}-${r.target}`}
-            className="hairline grid grid-cols-1 gap-4 rounded-md bg-surface-2 p-4 sm:grid-cols-[1fr_1fr_1.1fr] sm:items-center"
-          >
-            <figure>
-              <Image
-                src={`/rise/${r.code}_photo.png`}
-                alt={`${r.trueGenus} specimen ${r.code}, profile view`}
-                width={480}
-                height={480}
-                className="hairline w-full rounded-sm bg-white"
-              />
-              <figcaption className="mt-1 text-xs text-muted">
-                <Genus name={r.trueGenus} /> <span className="code">{r.code}</span> · ©{" "}
-                {r.creator} ·{" "}
-                <a className="link" href={antwebUrl(r.code)} target="_blank" rel="noreferrer">
-                  AntWeb
-                </a>{" "}
-                (CC BY-SA)
-              </figcaption>
-            </figure>
-            <figure>
-              <Image
-                src={`/rise/${r.code}_${r.target}_overlay.png`}
-                alt={`RISE saliency for ${r.target} on specimen ${r.code}`}
-                width={480}
-                height={480}
-                className="hairline w-full rounded-sm"
-              />
-              <figcaption className="mt-1 text-xs text-muted">
-                RISE for <Genus name={r.target} /> · full-image P = {r.pFull.toFixed(3)}
-              </figcaption>
-            </figure>
-            <p className="text-sm text-ink-2">{r.caption}</p>
-          </div>
-        ))}
-      </section>
+      <SaliencyGallery runs={runs} />
 
       <section className="space-y-2 text-xs text-muted">
         <p>
@@ -92,7 +42,9 @@ export default function SaliencyPage() {
             scripts/12_rise.py
           </a>
           . Saliency maps are qualitative; at {rise.n_masks} masks the blob scale is one grid cell, so read regions,
-          not pixels.
+          not pixels. The per-map colour bar gives each map’s real range of E[P | region visible]; the shared view
+          shows every map’s deviation from its own baseline (its mean) on one diverging scale, ±{rise.shared_w.toFixed(3)}{" "}
+          being the largest deviation on this page.
         </p>
       </section>
     </article>

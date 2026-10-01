@@ -190,9 +190,14 @@ Methods. Setup, env vars and the production/nginx sketch are in
 - `reports/rise/`: RISE saliency maps (Petsiuk et al. 2018, arXiv:1806.07421)
   for the deployed pipeline, built by `scripts/12_rise.py --gallery` (the
   weights use the probe's raw softmax; the temperature-calibrated
-  probabilities saturate at 1.0 under masking and carry no signal). Shown on
-  the site at `/saliency`; `reports/rise_onepager.pdf` (A4, the four best
-  maps) is built by `scripts/13_rise_onepager.py`.
+  probabilities saturate at 1.0 under masking and carry no signal). Every map
+  is drawn twice, each with a colour bar: per-map (its own range, shows
+  structure) and `*_shared.png` (deviation from the map's own mean on one
+  diverging scale shared by all maps, shows which maps carry signal); the
+  `/saliency` page toggles between the two. Saliency arrays are kept in
+  `reports/rise/arrays/`, so `--render-only` redraws without recomputing.
+  `reports/rise_onepager.pdf` (A4, the four best maps) is built by
+  `scripts/13_rise_onepager.py`.
 
 ## Attribution
 

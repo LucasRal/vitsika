@@ -103,3 +103,35 @@ so a stray `web/.env.local` with a dev API URL gets inlined into the
 production bundle (this bit us once: the site called `localhost:8001`). The
 dev value therefore lives in `.env.development`; never create `.env.local`
 on the server.
+
+## Saliency chat (optional LLM)
+
+"Discuss this map" on `/saliency` (`POST /api/saliency/chat`, `api/saliency_chat.py`)
+talks to any LiteLLM vision model. It is off unless the API process sees
+`LLM_VISION_MODEL` **and** that provider's key; the web button then hides
+itself (`GET /api/saliency/chat/status` reports `enabled`). To turn it on:
+
+```bash
+sudo install -d -m 700 /etc/vitsika
+sudo tee /etc/vitsika/api.env >/dev/null <<'EOF'
+# any LiteLLM "provider/model" name with vision, plus that provider's key
+# (OPENAI_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY, ...). No inline comments:
+# systemd would keep them as part of the value.
+LLM_VISION_MODEL=openai/gpt-5.6-terra
+OPENAI_API_KEY=sk-...
+EOF
+sudo chmod 600 /etc/vitsika/api.env
+sudo systemctl restart vitsika-api
+curl -s https://vitsika.lucas-ralambo.com/api/saliency/chat/status   # {"enabled":true,...}
+```
+
+The unit reads the file via `EnvironmentFile=-/etc/vitsika/api.env` (the
+`-` makes it optional). Replies are temperature 0.3, at most ~120 words,
+limited to 10 messages per minute per IP and 12 messages of history; every
+exchange is appended to `reports/saliency_chat_log.jsonl` for audit.
+
+Reasoning models (OpenAI gpt-5.x, Claude with extended thinking) are called
+with `reasoning_effort=none` so the short reply budget is not spent on
+thinking tokens and gpt-5.x accepts the 0.3 temperature. Set
+`LLM_REASONING_EFFORT=low|medium|high` in the same file to turn reasoning on;
+temperature is then left at the provider default, as gpt-5.x requires.

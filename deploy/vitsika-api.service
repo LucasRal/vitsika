@@ -21,6 +21,9 @@ Environment=PYTHONUNBUFFERED=1
 # huggingface_hub reads weights from the cache; never try the network at boot
 Environment=HF_HUB_OFFLINE=1
 Environment=HF_HOME=/home/ubuntu/.cache/huggingface
+# Optional: LLM_VISION_MODEL + provider key for /saliency/chat (root-owned,
+# mode 600). Absent file = chat disabled, everything else unaffected.
+EnvironmentFile=-/etc/vitsika/api.env
 Restart=on-failure
 RestartSec=5
 # model + UMAP JIT take ~30 s; give the unit time before systemd gives up

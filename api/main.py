@@ -11,6 +11,8 @@ Routes
   GET  /geo/{genus}            province counts, elevation, years, [lat, lon] points
   GET  /images/{specimen_code} the local profile-view jpg (thumbnails for the UI)
   GET  /health                 status, model_loaded, n_embeddings, versions
+  POST /saliency/chat          scoped LLM chat about one RISE map (api/saliency_chat.py;
+  GET  /saliency/chat/status   enabled only with LLM_VISION_MODEL + a provider key)
 
 All errors are JSON bodies with a `message` field: 400 wrong content type,
 413 upload too large, 422 unreadable image, 404 unknown genus / specimen.
@@ -37,6 +39,7 @@ from api.schemas import (AnalyzeResponse, AtlasPosition, AtlasResponse, Elevatio
                          ErrorResponse, ExampleSpecimen, ExamplesResponse, GeneraResponse,
                          GenusInfo, GenusPrediction, GeoResponse, HealthResponse,
                          SimilarSpecimen)
+from api.saliency_chat import router as saliency_chat_router
 from api.state import ROOT, AppState
 
 ANTWEB_SPECIMEN_URL = "https://www.antweb.org/specimen/{code}"
@@ -57,6 +60,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 app = FastAPI(title="mg-ants", version="0.1",
               description="Malagasy ant genus classifier (BioCLIP 2 + linear probe)",
               lifespan=lifespan)
+
+
+app.include_router(saliency_chat_router)
 
 
 def _ctx(request: Request) -> AppState:
