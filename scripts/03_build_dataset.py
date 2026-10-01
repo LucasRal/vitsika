@@ -111,9 +111,18 @@ def is_valid_image(path: Path) -> bool:
 
 
 def image_source(df: pd.DataFrame) -> pd.Series:
-    """gbif_cache / commons / '' per row. A path counts as gbif_cache only if
-    the cache run succeeded for the SAME url (stale-replaced files whose shot
-    selection changed were re-downloaded from Commons)."""
+    """gbif_cache / commons / antweb / '' per row.
+
+    The latest data/image_provenance.csv entry for a path wins when there is
+    one (the downloaders append to it since the reproducibility fixes).
+    Otherwise a path counts as gbif_cache only if the cache run succeeded for
+    the SAME url (stale-replaced files whose shot selection changed were
+    re-downloaded from Commons), and as commons if not."""
+    logged: dict[str, str] = {}
+    prov = DATA / "image_provenance.csv"
+    if prov.exists():
+        p_log = pd.read_csv(prov)
+        logged = dict(zip(p_log["image_path"], p_log["image_source"]))  # later rows win
     gbif_ok: dict[str, str] = {}
     p = DATA / "download_status.csv"
     if p.exists():
@@ -124,6 +133,8 @@ def image_source(df: pd.DataFrame) -> pd.Series:
     def source(row: pd.Series) -> str:
         if not (ROOT / str(row["image_path"])).exists():
             return ""
+        if row["image_path"] in logged:
+            return logged[row["image_path"]]
         if gbif_ok.get(row["image_path"]) == row["image_url"]:
             return "gbif_cache"
         return "commons"

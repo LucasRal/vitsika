@@ -15,8 +15,9 @@ Commons years ago with titles like
 4. Resolve URLs in batches of 50 via prop=imageinfo (1024px thumb) and
    download from upload.wikimedia.org (not Cloudflare-gated).
 
-Resumable: rows with a valid image on disk are skipped; outcomes go to
-data/download_status_commons.csv. Commons AntWeb files are CC BY-SA, same
+Resumable: rows with a valid image on disk are skipped. Each run's outcomes
+are appended to data/download_status_commons.csv, and every file written is
+recorded (Commons URL, title, sha256, size) in data/image_provenance.csv. Commons AntWeb files are CC BY-SA, same
 terms as AntWeb's own media.
 """
 from __future__ import annotations
@@ -36,7 +37,7 @@ from PIL import Image
 from tqdm import tqdm
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gbif_client import setup_logging  # noqa: E402
+from gbif_client import record_image_provenance, setup_logging  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -225,6 +226,10 @@ def main() -> None:
                 im.thumbnail((THUMB_PX, THUMB_PX))
                 im.save(dest, "JPEG", quality=90)
             tmp.unlink(missing_ok=True)
+            record_image_provenance(dest, script="06_harvest_commons.py",
+                                    specimen_code=row["specimen_code"], genus=row["genus"],
+                                    view=row["view"], image_path=row["image_path"],
+                                    image_source="commons", source_url=url, source_title=title)
             outcome["ok"] = True
             downloaded += 1
         except Exception as exc:
@@ -233,14 +238,17 @@ def main() -> None:
         outcomes.append(outcome)
         time.sleep(random.uniform(4.0, 6.0))
 
+    # appended, never rewritten: earlier runs' outcomes stay on record
     status_path = DATA / "download_status_commons.csv"
-    with status_path.open("w", newline="") as fh:
-        writer = csv.DictWriter(fh, fieldnames=list(outcomes[0].keys()) if outcomes
-                                else ["specimen_code", "genus", "commons_title",
-                                      "image_path", "ok", "error"])
-        writer.writeheader()
+    new = not status_path.exists()
+    with status_path.open("a", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=["specimen_code", "genus", "commons_title",
+                                                "image_path", "ok", "error"])
+        if new:
+            writer.writeheader()
         writer.writerows(outcomes)
-    log.info("done: %d downloaded, %d failed; status in %s", downloaded, failed, status_path)
+    log.info("done: %d downloaded, %d failed; status appended to %s, sources to %s",
+             downloaded, failed, status_path.name, "image_provenance.csv")
 
 
 if __name__ == "__main__":

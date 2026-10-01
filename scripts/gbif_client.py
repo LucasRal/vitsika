@@ -82,6 +82,41 @@ def load_config(path: Path) -> dict[str, Any]:
         return yaml.safe_load(fh)
 
 
+PROVENANCE_CSV = Path(__file__).resolve().parents[1] / "data" / "image_provenance.csv"
+PROVENANCE_FIELDS = ["recorded_at", "script", "specimen_code", "genus", "view", "image_path",
+                     "image_source", "source_url", "source_title", "sha256", "width", "height",
+                     "bytes"]
+
+
+def record_image_provenance(path: Path, *, script: str, specimen_code: str, genus: str,
+                            view: str, image_path: str, image_source: str, source_url: str,
+                            source_title: str = "") -> None:
+    """Append one row to data/image_provenance.csv for an image file just written.
+
+    Append-only and shared by every downloader (04, 05, 06), so the source of
+    each file on disk survives re-runs: the latest row per image_path is the
+    file's current origin, earlier rows are its history."""
+    import csv
+    from datetime import datetime, timezone
+
+    from PIL import Image
+
+    data = path.read_bytes()
+    with Image.open(path) as im:
+        width, height = im.size
+    row = {"recorded_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
+           "script": script, "specimen_code": specimen_code, "genus": genus, "view": view,
+           "image_path": image_path, "image_source": image_source, "source_url": source_url,
+           "source_title": source_title, "sha256": hashlib.sha256(data).hexdigest(),
+           "width": width, "height": height, "bytes": len(data)}
+    new = not PROVENANCE_CSV.exists()
+    with PROVENANCE_CSV.open("a", newline="", encoding="utf-8") as fh:
+        writer = csv.DictWriter(fh, fieldnames=PROVENANCE_FIELDS)
+        if new:
+            writer.writeheader()
+        writer.writerow(row)
+
+
 HF_HUB_PREFIX = "hf-hub:"
 MODEL_FILES = ["open_clip_config.json", "open_clip_model.safetensors"]
 

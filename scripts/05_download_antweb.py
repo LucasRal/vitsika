@@ -33,6 +33,9 @@ from curl_cffi import requests as cffi_requests
 from PIL import Image
 from tqdm import tqdm
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from gbif_client import record_image_provenance  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[1]
 DATASET = ROOT / "data" / "dataset.csv"
 ERRORS_CSV = ROOT / "data" / "download_errors_antweb.csv"
@@ -160,6 +163,11 @@ def main() -> None:
         if success:
             downloaded += 1
             consecutive_403 = 0
+            record_image_provenance(dest, script="05_download_antweb.py",
+                                    specimen_code=row.specimen_code, genus=row.genus,
+                                    view=row.view, image_path=row.image_path,
+                                    image_source="antweb", source_url=url,
+                                    source_title=row.image_url)
         else:
             failed += 1
             errors.append({"specimen_code": row.specimen_code,

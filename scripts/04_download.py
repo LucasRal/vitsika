@@ -9,7 +9,10 @@ the newest records whose images GBIF has not cached yet).
 
 Images are verified with Pillow and saved to
 data/images/<genus>/<specimen_code>_<view>.jpg. Resumable: existing valid
-files are skipped. Outputs: data/download_status.csv (per-row outcome),
+files are skipped and keep the outcome recorded for them by the previous
+run. Every file written is recorded (cache URL, sha256, size) in the
+append-only data/image_provenance.csv. Outputs: data/download_status.csv
+(per-row outcome),
 data/download_errors.csv (failures only) and reports/download_stats.md
 (failures broken down by eventDate year and by gbifID decile).
 """
@@ -25,7 +28,7 @@ from PIL import Image
 from tqdm import tqdm
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gbif_client import GbifClient, cache_url, load_config, setup_logging  # noqa: E402
+from gbif_client import GbifClient, cache_url, load_config, record_image_provenance, setup_logging  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
@@ -151,6 +154,14 @@ def main() -> None:
         sys.exit(1)
     df = pd.read_csv(src)
     log.info("dataset: %d images to ensure", len(df))
+    # outcome of earlier runs per image_path: a file already on disk keeps the
+    # status it had (it may come from Commons), instead of reading as a cache
+    # success, which 03_build_dataset.py would label gbif_cache
+    status_path = DATA / "download_status.csv"
+    previous: dict[str, dict] = {}
+    if status_path.exists():
+        prev = pd.read_csv(status_path, keep_default_na=False)
+        previous = {r["image_path"]: r for r in prev.to_dict("records")}
 
     size = f"{cfg['image_max_px']}x{cfg['image_max_px']}"
     downloaded = skipped = failed = 0
@@ -171,6 +182,13 @@ def main() -> None:
         }
         if dest.exists() and is_valid_image(dest):
             skipped += 1
+            before = previous.get(row.image_path)
+            if before is not None and before.get("image_url") == row.image_url:
+                outcome["download_failed"] = str(before["download_failed"]) == "True"
+                outcome["error"] = before.get("error", "")
+            else:
+                outcome["download_failed"] = True
+                outcome["error"] = "on disk, not from the GBIF cache"
             outcomes.append(outcome)
             continue
         dest.parent.mkdir(parents=True, exist_ok=True)
@@ -185,6 +203,11 @@ def main() -> None:
             last_error = fetch(client, url, dest)
             if last_error is None:
                 downloaded += 1
+                record_image_provenance(dest, script="04_download.py",
+                                        specimen_code=row.specimen_code, genus=row.genus,
+                                        view=row.view, image_path=row.image_path,
+                                        image_source="gbif_cache", source_url=url,
+                                        source_title=row.image_url)
                 break
             if i < len(attempts) - 1:
                 time.sleep(1.0)
