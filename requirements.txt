@@ -1,3 +1,9 @@
+# Human-readable list of direct dependencies.
+# The exact versions that produced the POC results (tag poc-baseline) are pinned
+# in requirements.lock; install that file to reproduce them:
+#   .venv/bin/pip install -r requirements.lock
+# See ENVIRONMENT.md for Python, OS and hardware.
+
 requests
 pandas
 pyarrow
@@ -18,4 +24,5 @@ umap-learn
 fastapi
 uvicorn
 python-multipart
+playwright              # scripts/11_deck.py, 13_rise_onepager.py (PDF rendering; needs a Chromium)
 litellm                 # /saliency/chat (optional at runtime: needs LLM_VISION_MODEL + provider key)
