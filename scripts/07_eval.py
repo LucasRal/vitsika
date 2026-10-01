@@ -23,10 +23,13 @@ reports/per_genus.csv (n_test, recall, F1 per genus and method),
 reports/confusion_matrix.png (probe; rows = true, cols = predicted, ordered
 by subfamily then genus), reports/errors.csv (probe misclassifications).
 Deterministic: no sampling anywhere; lbfgs is deterministic for a fixed
-input. Log: reports/07_eval.log.
+input. Log: reports/07_eval.log. --output-dir DIR writes every output,
+probe pickles included, to DIR instead (to check a re-run against the
+committed results).
 """
 from __future__ import annotations
 
+import argparse
 import json
 import logging
 import sys
@@ -304,7 +307,16 @@ def errors_table(index_test: pd.DataFrame, proba: np.ndarray, classes: np.ndarra
 
 # --------------------------------------------------------------------------- main
 def main() -> None:
-    setup_logging(REPORTS / "07_eval.log")
+    parser = argparse.ArgumentParser(description="Evaluate genus classification on the cached embeddings.")
+    parser.add_argument("--output-dir", type=Path, default=None,
+                        help="write metrics, tables, figure, log and both probe pickles here "
+                             "instead of reports/ and data/ (inputs are unchanged)")
+    args = parser.parse_args()
+    reports_dir = args.output_dir or REPORTS
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    probe_path = reports_dir / PROBE_PATH.name if args.output_dir else PROBE_PATH
+    probe_raw_path = reports_dir / PROBE_RAW_PATH.name if args.output_dir else PROBE_RAW_PATH
+    setup_logging(reports_dir / "07_eval.log")
     cfg = load_config(ROOT / "config.yaml")
     t_run = time.perf_counter()
 
@@ -340,7 +352,7 @@ def main() -> None:
     top3_raw = topk_from_scores(proba_raw, raw.classes_)
     metrics["linear_probe_uncalibrated"] = summarise(
         "linear_probe_uncal", y_test, top3_raw[:, 0], (top3_raw == y_test[:, None]).any(1), genera)
-    joblib.dump(raw, PROBE_RAW_PATH)
+    joblib.dump(raw, probe_raw_path)
     # ... and temperature-scaled (the deployed model: "linear_probe" everywhere below)
     clf = fit_temperature_scaled(raw, x_train, y_train, float(cfg["probe_C"]), int(cfg["probe_max_iter"]))
     assert list(clf.classes_) == list(raw.classes_)
@@ -350,9 +362,9 @@ def main() -> None:
     top1_preds["linear_probe"] = top3[:, 0]
     metrics["linear_probe"] = summarise("linear_probe", y_test, top3[:, 0],
                                         (top3 == y_test[:, None]).any(1), genera)
-    joblib.dump(clf, PROBE_PATH)
+    joblib.dump(clf, probe_path)
     log.info("calibrated probe saved to %s, raw probe to %s (%d classes)",
-             PROBE_PATH, PROBE_RAW_PATH, len(clf.classes_))
+             probe_path, probe_raw_path, len(clf.classes_))
     sig = fit_sigmoid_cv(x_train, y_train, float(cfg["probe_C"]), int(cfg["probe_max_iter"]))
     proba_sig = sig.predict_proba(x_test)
     top3_sig = topk_from_scores(proba_sig, sig.classes_)
@@ -403,21 +415,21 @@ def main() -> None:
         "nearest_neighbour_top3": "majority vote of 3 nearest train embeddings",
         "methods": {m: metrics[m] for m in [*METHODS, "linear_probe_uncalibrated"]},
     }
-    (REPORTS / "metrics.json").write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
-    log.info("metrics written to %s", REPORTS / "metrics.json")
+    (reports_dir / "metrics.json").write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
+    log.info("metrics written to %s", reports_dir / "metrics.json")
 
     per_genus = per_genus_table(index_test, top1_preds, genera, subfamily_of)
-    per_genus.to_csv(REPORTS / "per_genus.csv", index=False)
-    log.info("per-genus table written to %s", REPORTS / "per_genus.csv")
+    per_genus.to_csv(reports_dir / "per_genus.csv", index=False)
+    log.info("per-genus table written to %s", reports_dir / "per_genus.csv")
 
     order = sorted(genera, key=lambda g: (subfamily_of[g], g))
     plot_confusion(y_test, top1_preds["linear_probe"], order, subfamily_of,
-                   REPORTS / "confusion_matrix.png")
+                   reports_dir / "confusion_matrix.png")
 
     errors = errors_table(index_test, proba, clf.classes_)
-    errors.to_csv(REPORTS / "errors.csv", index=False)
+    errors.to_csv(reports_dir / "errors.csv", index=False)
     log.info("probe errors: %d / %d written to %s", len(errors), len(x_test),
-             REPORTS / "errors.csv")
+             reports_dir / "errors.csv")
     pairs = Counter(zip(errors["genus_true"], errors["genus_pred"]))
     for (t, p), c in pairs.most_common(5):
         log.info("  %-14s -> %-14s x%d", t, p, c)

@@ -5,3 +5,6 @@ data/*
 !data/*.csv
 notebooks/
 reports/api.log
+
+# re-run probes written by verification runs (see reports/repro_check/)
+reports/repro_check/**/*.pkl
