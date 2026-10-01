@@ -13,7 +13,12 @@ embeddings + linear-probe classifier (Phases B/C), a FastAPI service
 
 - `data/dataset_full.csv`, the **target manifest**: 4,354 specimens,
   39 genera, one image URL per specimen. What we would train on with full
-  image access.
+  image access. This copy was saved by hand from a run of
+  `03_build_dataset.py` without `--available-only` (commit d10a0b5) and is
+  what `09_geo.py` and the API read. `03_build_dataset.py` now writes the
+  same manifest to `data/dataset_full_generated.csv` on every run: same
+  rows, order, splits and values, plus an `image_source` column, with
+  `split` as the last column.
 - `data/dataset.csv`, the **POC dataset actually on disk**: 1,236 images,
   27 genera, 986 train / 250 test. Built with
   `03_build_dataset.py --available-only` (threshold and split re-applied to
@@ -40,11 +45,13 @@ python3 -m venv .venv
 .venv/bin/python scripts/01_explore.py          # verify dataset facts, build data/genera.csv
                                                 # report: reports/01_explore.txt
 .venv/bin/python scripts/02_harvest.py          # per-genus metadata harvest -> data/raw/records.parquet
-.venv/bin/python scripts/03_build_dataset.py    # filter + split -> data/dataset_full.csv (full manifest)
+.venv/bin/python scripts/03_build_dataset.py    # filter + split -> data/dataset.csv = full manifest for now
+                                                # (04/06 download from it), also data/dataset_full_generated.csv
 .venv/bin/python scripts/04_download.py         # attempt images via GBIF cache (see below)
 .venv/bin/python scripts/06_harvest_commons.py  # fallback: images from Wikimedia Commons
 .venv/bin/python scripts/03_build_dataset.py --available-only
-                                                # -> data/dataset.csv (POC set), reports/dataset_stats.md
+                                                # -> data/dataset.csv (POC set), reports/dataset_stats.md;
+                                                # --output-dir DIR writes everything to DIR instead
 .venv/bin/python scripts/06_embed.py            # Phase B: BioCLIP 2 embeddings -> data/embeddings.npy
                                                 # + data/embeddings_index.csv, log: reports/06_embed.log
 .venv/bin/python scripts/07_eval.py             # Phase C: zero-shot / linear probe / kNN evaluation

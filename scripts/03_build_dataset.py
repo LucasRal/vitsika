@@ -7,8 +7,15 @@ fallback), drop genera below min_specimens_per_genus, then do a stratified
 80/20 split by genus NAME (grouped by specimen_code) with a fixed seed.
 Genera whose name merges several GBIF genusKeys are logged.
 
-Writes data/dataset.csv and reports/dataset_stats.md. Deterministic and safe
-to re-run (outputs are rewritten).
+Writes data/dataset.csv, data/dataset_full_generated.csv (the full target
+manifest: every genus at threshold, split, image or not) and
+reports/dataset_stats.md. Deterministic and safe to re-run (outputs are
+rewritten). --output-dir sends all outputs, including the log, to another
+folder, e.g. to check that a re-run reproduces the committed files.
+
+data/dataset_full.csv is the copy of that manifest the POC used: it was
+saved by hand from an earlier run without --available-only (commit
+d10a0b5), and is kept as is.
 """
 from __future__ import annotations
 
@@ -159,6 +166,7 @@ def write_stats(
     merge_notes: list[str],
     cfg: dict,
     provenance: dict | None = None,
+    reports_dir: Path = REPORTS,
 ) -> None:
     lines = ["# Dataset stats", ""]
     if provenance:
@@ -257,7 +265,7 @@ def write_stats(
     lines += md_table(["stateProvince", "images"], [[p, n] for p, n in top.items()])
     lines.append("")
 
-    out = REPORTS / "dataset_stats.md"
+    out = reports_dir / "dataset_stats.md"
     out.write_text("\n".join(lines), encoding="utf-8")
     log.info("stats written to %s", out)
 
@@ -267,9 +275,15 @@ def main() -> None:
     parser.add_argument("--available-only", action="store_true",
                         help="restrict to specimens whose image file exists and "
                              "verifies before thresholding and splitting")
+    parser.add_argument("--output-dir", type=Path, default=None,
+                        help="write every output (CSVs, dataset_stats.md, log) here "
+                             "instead of data/ and reports/")
     args = parser.parse_args()
+    data_dir = args.output_dir or DATA
+    reports_dir = args.output_dir or REPORTS
+    data_dir.mkdir(parents=True, exist_ok=True)
 
-    setup_logging(REPORTS / "03_build_dataset.log")
+    setup_logging(reports_dir / "03_build_dataset.log")
     cfg = load_config(ROOT / "config.yaml")
 
     src = RAW / "records.parquet"
@@ -306,6 +320,15 @@ def main() -> None:
     full_counts = df.groupby("genus")["specimen_code"].nunique()
     full_kept = full_counts[full_counts >= cfg["min_specimens_per_genus"]]
 
+    # the full target manifest, thresholded and split on its own (what a run
+    # without --available-only writes as dataset.csv)
+    full = df[df["genus"].isin(full_kept.index)].copy()
+    full["split"] = split_by_specimen(full, cfg["test_fraction"], cfg["seed"])
+    full_out = data_dir / "dataset_full_generated.csv"
+    full.to_csv(full_out, index=False)
+    log.info("full manifest: %d rows, %d genera, split %s -> %s", len(full), len(full_kept),
+             full["split"].value_counts().to_dict(), full_out)
+
     provenance = None
     if args.available_only:
         on_disk = df["image_path"].map(lambda p: is_valid_image(ROOT / p))
@@ -338,12 +361,12 @@ def main() -> None:
     df["split"] = split_by_specimen(df, cfg["test_fraction"], cfg["seed"])
     log.info("split: %s", df["split"].value_counts().to_dict())
 
-    out = DATA / "dataset.csv"
+    out = data_dir / "dataset.csv"
     df.to_csv(out, index=False)
     log.info("dataset written to %s", out)
 
     write_stats(df, raw, kept_counts, dropped_counts, caste_table, merge_notes, cfg,
-                provenance)
+                provenance, reports_dir)
 
 
 if __name__ == "__main__":
