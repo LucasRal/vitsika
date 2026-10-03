@@ -1,0 +1,22 @@
+genera with >= 90 % from one photographer: 11 of 27 ({'April Nobile': 11})
+creator            V=0.217 (raw 0.259) null mean 0.023
+source3            V=0.174 (raw 0.227) null mean 0.026
+brightness_band    V=0.249 (raw 0.288) null mean 0.023
+warm_cool_band     V=0.311 (raw 0.343) null mean 0.024
+rights_years       V=0.237 (raw 0.277) null mean 0.029
+type_status        V=0.459 (raw 0.480) null mean 0.023
+is_type            V=0.414 (raw 0.439) null mean 0.029
+scalebar_style     V=0.548 (raw 0.567) null mean 0.026
+border_brightness  eta2=0.113 null mean 0.021 (n=1236)
+warm_cool          eta2=0.142 null mean 0.021 (n=1236)
+border_r           eta2=0.152 null mean 0.021 (n=1236)
+border_g           eta2=0.140 null mean 0.021 (n=1236)
+border_b           eta2=0.125 null mean 0.021 (n=1236)
+width              eta2=0.020 null mean 0.020 (n=1236)
+height             eta2=0.110 null mean 0.021 (n=1236)
+aspect             eta2=0.110 null mean 0.022 (n=1236)
+file_bytes         eta2=0.121 null mean 0.021 (n=1236)
+dark_frac          eta2=0.341 null mean 0.021 (n=1236)
+rights_year_end    eta2=0.125 null mean 0.021 (n=1236)
+scalebar_frac_width eta2=0.245 null mean 0.023 (n=1143)
+wrote /home/ubuntu/projects/lifeplan/mg-ants/reports/confounds/association_summary.md and 19 tables in /home/ubuntu/projects/lifeplan/mg-ants/reports/confounds/tables
