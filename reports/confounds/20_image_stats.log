@@ -1,0 +1,11 @@
+wrote /home/ubuntu/projects/lifeplan/mg-ants/reports/confounds/image_stats.csv: 1236 rows, 39 columns
+source3: {'commons_original': 1037, 'gbif_cache': 116, 'commons_thumbnail': 83}
+commons thumbnails at 1280 px: 83
+scale bar style x status:
+scalebar_status  found  not_found  truncated
+scalebar_style                              
+black_bar          948          0         53
+none                 0         36          0
+thin_line          195          0          4
+border brightness: median 167.3, IQR 150.3-190.3; warm_cool median 5.0, IQR 1.0-13.0
+rights years: start [np.float64(2000.0)], end [np.float64(2007.0), np.float64(2008.0), np.float64(2009.0), np.float64(2010.0), np.float64(2012.0), np.float64(2019.0), np.float64(2021.0), np.float64(2022.0), np.float64(2023.0), np.float64(2026.0)]
