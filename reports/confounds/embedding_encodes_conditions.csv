@@ -1,0 +1,9 @@
+target,measure,value,baseline,macro_recall
+border_r,CV R^2 (ridge),0.585528048314477,0.0,
+border_g,CV R^2 (ridge),0.6234368757882186,0.0,
+border_b,CV R^2 (ridge),0.6416354927884336,0.0,
+border_brightness,CV R^2 (ridge),0.6565255777110262,0.0,
+warm_cool,CV R^2 (ridge),0.5049811780520487,0.0,
+aspect,CV R^2 (ridge),0.5272325066747854,0.0,
+scalebar_style,CV accuracy (logreg),0.919093851132686,0.8098705501618123,0.599725232891062
+source3,CV accuracy (logreg),0.8559870550161812,0.8389967637540453,0.3936781609195403

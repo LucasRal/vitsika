@@ -1,0 +1,13 @@
+chance: {'majority': {'accuracy': 0.1925566343042071, 'macro_f1': 0.011960400020101512}, 'random_priors': {'accuracy': 0.09453058723725138, 'macro_f1': 0.037037037037037035, 'sim_accuracy_mean': np.float64(0.09450242718446603), 'sim_accuracy_p99': np.float64(0.12216828478964402), 'sim_macro_f1_mean': np.float64(0.03543779692747877), 'sim_macro_f1_p99': np.float64(0.04865606063591702)}}
+all_non_ant        logreg acc 0.211 macro-F1 0.120
+all_non_ant        forest acc 0.245 macro-F1 0.161
+no_photographer    logreg acc 0.190 macro-F1 0.088
+no_photographer    forest acc 0.239 macro-F1 0.144
+background_only    logreg acc 0.161 macro-F1 0.061
+background_only    forest acc 0.167 macro-F1 0.116
+photographer_only  logreg acc 0.107 macro-F1 0.044
+photographer_only  forest acc 0.045 macro-F1 0.039
+all_plus_scalebar  logreg acc 0.212 macro-F1 0.119
+all_plus_scalebar  forest acc 0.261 macro-F1 0.167
+bioclip embedding logreg acc 0.921 macro-F1 0.852
+wrote /home/ubuntu/projects/lifeplan/mg-ants/reports/confounds/metadata_only_classifier.md in 149s
