@@ -1,0 +1,40 @@
+torch 2.13.0+cpu, 6 threads, cpu only
+selected (seed 7):
+ k        genus specimen_code split                 why
+ 1   Camponotus casent0102441 train large ant, required
+ 2 Syllophopsis casent0044971 train small ant, required
+ 3 Odontomachus casent0005967  test        random genus
+ 4    Terataner casent0101703 train        random genus
+ 5     Pheidole casent0101624 train        random genus
+Loaded checkpoint sucessfully
+SAM 2 load (sam2.1_hiera_tiny.pt): 1.3 s
+rembg session (u2net): 0.9 s
+For numpy array image, we assume (HxWxC) format
+Computing image embeddings for the provided image...
+Image embeddings computed.
+1 Camponotus casent0102441: 1024x701, background (143, 142, 133), box A (0, 0, 953, 700), dark-only box (0, 0, 945, 700)
+For numpy array image, we assume (HxWxC) format
+Computing image embeddings for the provided image...
+Image embeddings computed.
+   embed 2.33 s; A 0.40 s score 0.89 44.5 %; B0 score 0.21 34.4 %; B 0.04 s score 0.78 37.3 %; rembg 0.55 s 47.0 %; C 0.09 s score 0.85 44.4 %, IoU with rembg 0.86
+2 Syllophopsis casent0044971: 1024x771, background (207, 209, 208), box A (0, 0, 987, 770), dark-only box (0, 0, 974, 770)
+For numpy array image, we assume (HxWxC) format
+Computing image embeddings for the provided image...
+Image embeddings computed.
+   embed 2.00 s; A 0.08 s score 0.89 52.7 %; B0 score 0.76 46.3 %; B 0.07 s score 0.64 7.1 %; rembg 0.54 s 26.2 %; C 0.06 s score 0.93 26.6 %, IoU with rembg 0.96
+3 Odontomachus casent0005967: 1024x773, background (175, 180, 182), box A (0, 0, 1023, 772), dark-only box (0, 0, 1023, 772)
+For numpy array image, we assume (HxWxC) format
+Computing image embeddings for the provided image...
+Image embeddings computed.
+   embed 1.67 s; A 0.05 s score 0.89 65.6 %; B0 score 0.95 66.3 %; B 0.05 s score 0.71 82.2 %; rembg 0.51 s 23.3 %; C 0.09 s score 0.87 23.8 %, IoU with rembg 0.91
+4 Terataner casent0101703: 1024x771, background (236, 232, 227), box A (0, 0, 1023, 732), dark-only box (0, 0, 1010, 730)
+For numpy array image, we assume (HxWxC) format
+Computing image embeddings for the provided image...
+Image embeddings computed.
+   embed 1.92 s; A 0.16 s score 0.87 36.6 %; B0 score 0.73 28.7 %; B 0.04 s score 0.71 29.1 %; rembg 0.55 s 35.9 %; C 0.07 s score 0.91 34.4 %, IoU with rembg 0.90
+5 Pheidole casent0101624: 1024x657, background (204, 207, 199), box A (2, 0, 1023, 656), dark-only box (88, 0, 1023, 647)
+For numpy array image, we assume (HxWxC) format
+Computing image embeddings for the provided image...
+Image embeddings computed.
+   embed 1.84 s; A 0.06 s score 0.96 60.3 %; B0 score 0.93 54.9 %; B 0.06 s score 0.88 51.9 %; rembg 1.59 s 33.5 %; C 0.06 s score 0.94 33.9 %, IoU with rembg 0.96
+mean per image: SAM 2 embedding 1.95 s + 0.15 s per prompt; rembg 0.75 s

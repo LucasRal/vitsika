@@ -1,0 +1,6 @@
+# Optional: segmentation trial (scripts/24_segmentation_trial.py). Not needed for the POC results.
+# Install with the venv's existing CPU torch (sam2's build imports torch, so skip build isolation):
+#   SAM2_BUILD_CUDA=0 .venv/bin/pip install --no-build-isolation -r requirements-segmentation.txt
+sam2==1.1.0
+rembg[cpu]==2.0.85
+onnxruntime==1.30.0

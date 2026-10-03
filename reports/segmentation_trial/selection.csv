@@ -1,0 +1,6 @@
+k,genus,subfamily,specimen_code,view,image_path,image_source,creator,split,why
+1,Camponotus,formicinae,casent0102441,p,data/images/Camponotus/casent0102441_p.jpg,commons,April Nobile,train,"large ant, required"
+2,Syllophopsis,myrmicinae,casent0044971,p,data/images/Syllophopsis/casent0044971_p.jpg,commons,April Nobile,train,"small ant, required"
+3,Odontomachus,ponerinae,casent0005967,p,data/images/Odontomachus/casent0005967_p.jpg,commons,April Nobile,test,random genus
+4,Terataner,myrmicinae,casent0101703,p,data/images/Terataner/casent0101703_p.jpg,commons,April Nobile,train,random genus
+5,Pheidole,myrmicinae,casent0101624,p,data/images/Pheidole/casent0101624_p.jpg,commons,April Nobile,train,random genus
