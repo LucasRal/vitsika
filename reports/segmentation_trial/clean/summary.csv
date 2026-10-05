@@ -1,0 +1,6 @@
+k,genus,specimen_code,mask_px,card_px,pin_px,dropped_px,dropped_pieces,glue_px,glue_blobs,clean_px,clean_components,removed_share,rules_s,sam2_iou,sam2_components,sam2_s,sam2_verdict,final
+1,Camponotus,casent0102441,337710,0,11473,101,4,6583,6,326136,1,0.0343,5.396,0.865,4,2.36,not kept,rules
+2,Syllophopsis,casent0044971,206889,0,0,0,0,30924,31,206889,1,0.0,9.484,0.962,1,2.18,not kept,rules
+3,Odontomachus,casent0005967,184757,1931,0,0,0,20974,22,182826,1,0.0105,8.048,0.93,3,3.67,not kept,rules
+4,Terataner,casent0101703,283174,0,0,0,0,18927,16,283174,1,0.0,7.548,0.906,12,1.95,not kept,rules
+5,Pheidole,casent0101624,225200,63135,0,2300,68,16310,27,159765,2,0.2906,8.994,0.695,4,1.8,not kept,rules
