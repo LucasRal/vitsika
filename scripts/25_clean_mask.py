@@ -2,18 +2,22 @@
 """Second segmentation step: remove the card point and the pin from a rembg mask.
 
 Follows the trial in reports/segmentation_trial/ (rembg is the primary
-segmenter). Reads each rembg alpha in reports/segmentation_trial/masks/ for
-the five trial images and writes to reports/segmentation_trial/clean/:
+segmenter). For every row of a selection CSV (default: the five trial
+images), reads <masks>/<specimen>_rembg_alpha.png and writes to <out>:
 
   <k>_<genus>_<specimen>.jpg   contact sheet: original | rembg mask | removed
                                regions (card yellow, pin red, dropped pieces
-                               magenta, kept glue outlined cyan) | final ant
-                               only on grey 128 | SAM 2 refinement and verdict
-  masks/<specimen>_*.png       card, pin, clean and SAM 2 masks
-  candidates.csv               every card and pin candidate with its features
-                               and the rule that accepted or rejected it
-  summary.csv                  pixels removed per image, refinement verdict
+                               magenta, kept pale blobs outlined green) |
+                               final ant only on grey 128
+  masks/<specimen>_*.png       card, pin and clean masks
+  candidates.csv               every card and pin candidate with its features,
+                               the tests it passed or failed, and an empty
+                               true_label column to fill by hand
+  margins.csv                  candidate tests within MARGIN of a threshold
+  summary.csv                  pixels removed per image, frame-edge contact
   25_clean_mask.log
+
+Usage: 25_clean_mask.py [--selection CSV] [--masks DIR] [--out DIR]
 
 Rules (all lengths in pixels at 1024 px width, scaled by width / 1024):
 
@@ -38,37 +42,41 @@ Rules (all lengths in pixels at 1024 px width, scaled by width / 1024):
            most outline pixels on one straight line (gaps allowed, so a card
            edge interrupted by a leg still counts). It is what keeps
            pale ant parts: a gaster or femur has a curved outline, a card
-           point has straight cut edges. Accepted components are grown by
-           CARD_GROW px into neighbouring pale mask pixels. Pale blobs that
-           fail the tests are "glue": kept and counted.
-  pin      body = mask opened with a disc of radius BODY_RADIUS (the thick
-           core: head, mesosoma, gaster). Thin parts = mask minus body,
-           opened by THIN_OPEN px to drop hairs. A thin connected component
-           is a pin when it is long (length >= PIN_MIN_LEN), not wider than
-           PIN_MAX_WIDTH (width = area / length), elongated (length / width
-           >= PIN_MIN_ELONG), straight (share of pixels within 0.75 width of
-           the fitted axis >= PIN_MIN_STRAIGHT), of even width (coefficient
-           of variation of the width along the axis <= PIN_MAX_WIDTH_CV),
-           touches the image border (every pin leaves the frame) and is
-           dark and grey (median luminance <= PIN_MAX_LUM, median chroma
-           <= PIN_MAX_CHROMA). Only thin-part pixels are removed: where the
-           pin passes behind or through the body, the body region is left
-           untouched by construction.
+           point has straight cut edges.
+           Shaded card: an accepted card is then grown into connected mask
+           pixels of similar hue (within GROW_HUE_TOL degrees of the card's
+           hue; any hue when the pixel or the card is nearly grey), with
+           chroma at most the card's median + GROW_CHROMA_TOL and luminance
+           >= GROW_MIN_LUM, never into the body core (see pin). This takes
+           the darker part of a card next to the ant, which the absolute
+           CARD_LUM test misses.
+           Pale blobs that fail the tests are "glue": kept and counted.
+  pin      body core = mask opened with a disc of radius BODY_RADIUS (the
+           thick parts: head, mesosoma, gaster). Thin parts = mask minus
+           core, opened by THIN_OPEN px to drop hairs. A thin connected
+           component is a pin when it is long (length >= PIN_MIN_LEN), not
+           wider than PIN_MAX_WIDTH (width = area / length), elongated
+           (length / width >= PIN_MIN_ELONG), straight (share of pixels
+           within 0.75 width of the fitted axis >= PIN_MIN_STRAIGHT), of
+           even width (coefficient of variation of the width along the axis
+           <= PIN_MAX_WIDTH_CV), touches the image border (every pin leaves
+           the frame) and is dark and grey (median luminance <= PIN_MAX_LUM,
+           median chroma <= PIN_MAX_CHROMA). Only thin-part pixels are
+           removed: where the pin passes behind or through the body, the
+           core is left untouched by construction.
   keep     after removal, the largest connected component plus every
            component reachable from it through gaps <= BRIDGE px (repeated
            dilation), so legs and antennae separated by a removed region
            stay. Everything else is dropped and counted.
-  SAM 2    optional refinement (trial row C): sam2.1 tiny, box = padded box
-           of the clean mask, up to 3 positive points at the thickest spots
-           of the clean mask, one negative point at the thickest spot of
-           every removed card or pin component. Kept only when IoU with the
-           clean mask > SAM_MIN_IOU and it has fewer connected components
-           (components >= 30 px). Set SAM2_SKIP=1 to skip it.
+
+Every candidate gets the same feature set (area, inscribed radius,
+solidity, straight edge, background share, chroma, luminance, elongation)
+whatever its kind, so the two rules can be compared on hand labels.
 """
 from __future__ import annotations
 
+import argparse
 import logging
-import os
 import sys
 import time
 from pathlib import Path
@@ -84,11 +92,6 @@ from gbif_client import setup_logging  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 TRIAL = ROOT / "reports" / "segmentation_trial"
-OUT = TRIAL / "clean"
-MASKS = OUT / "masks"
-CKPT = Path(os.environ.get("SAM2_CHECKPOINT",
-                           ROOT.parent / "mg-ants-cache" / "sam2" / "sam2.1_hiera_tiny.pt"))
-SAM2_CFG = "configs/sam2.1/sam2.1_hiera_t.yaml"
 
 ALPHA_FG = 0.5
 CARD_LUM = 150
@@ -100,6 +103,11 @@ CARD_MIN_BACKGROUND = 0.15
 EDGE_BIN = 3
 BG_TOL = 4
 CARD_GROW = 3
+GROW_MIN_LUM = 110
+GROW_HUE_TOL = 15           # degrees
+GROW_CHROMA_TOL = 20
+GROW_GREY = 15              # chroma below this: no usable hue
+GROW_MAX_ITER = 600
 GLUE_MIN_AREA = 150         # smaller pale blobs are not even listed
 BODY_RADIUS = 40
 THIN_OPEN = 3
@@ -113,21 +121,29 @@ PIN_MAX_LUM = 130
 PIN_MAX_CHROMA = 25
 BRIDGE = 6
 SPECK = 30
-SAM_MIN_IOU = 0.85
-SAM_POS_POINTS = 3
-SAM_POS_SEP = 150
-BOX_PAD = 0.02
+MARGIN = 0.10               # tests within this relative distance of a threshold are listed
 
 GREY = 128
-PANEL_W = 520
+PANEL_W = 640
 CAPTION_H = 24
 CARD_COLOR, PIN_COLOR, DROP_COLOR, GLUE_COLOR = (237, 161, 0), (227, 73, 72), (232, 123, 164), (27, 175, 122)
+FEATURES = ["area", "area_frac", "radius", "solidity", "edge", "background_share", "median_chroma",
+            "median_lum", "elongation", "length", "width", "straight", "width_cv", "touches_border"]
 
 log = logging.getLogger("clean_mask")
 
 
 def luminance(rgb: np.ndarray) -> np.ndarray:
     return 0.299 * rgb[..., 0] + 0.587 * rgb[..., 1] + 0.114 * rgb[..., 2]
+
+
+def hue_deg(rgb: np.ndarray) -> np.ndarray:
+    """HSV hue in degrees, 0 where the pixel is grey."""
+    r, g, b = (rgb[..., i].astype(float) for i in range(3))
+    mx, mn = rgb.max(-1).astype(float), rgb.min(-1).astype(float)
+    d = np.where(mx > mn, mx - mn, 1.0)
+    h = np.where(mx == r, (g - b) / d % 6, np.where(mx == g, (b - r) / d + 2, (r - g) / d + 4))
+    return np.where(mx > mn, h * 60.0, 0.0)
 
 
 def disc(r: int) -> np.ndarray:
@@ -166,49 +182,93 @@ def background_share(comp: np.ndarray, mask: np.ndarray) -> float:
     return float((outline & near_bg).sum() / max(outline.sum(), 1))
 
 
-def card_candidates(rgb: np.ndarray, mask: np.ndarray, s: float) -> list[dict]:
-    lum, chroma = luminance(rgb.astype(float)), rgb.max(-1).astype(int) - rgb.min(-1).astype(int)
+def shape_features(comp: np.ndarray, mask: np.ndarray, lum: np.ndarray, chroma: np.ndarray) -> dict:
+    props = measure.regionprops(comp.astype(np.uint8))[0]
+    h, w = mask.shape
+    area = int(comp.sum())
+    return {"area": area, "area_frac": area / (h * w),
+            "radius": float(ndimage.distance_transform_edt(comp).max()),
+            "solidity": float(props.solidity), "edge": longest_edge(comp),
+            "background_share": background_share(comp, mask),
+            "median_chroma": float(np.median(chroma[comp])), "median_lum": float(np.median(lum[comp])),
+            "elongation": float(props.axis_major_length / max(props.axis_minor_length, 1e-9))}
+
+
+def check(tests: dict[str, tuple[float, float, str]]) -> tuple[bool, str, list[dict]]:
+    """tests: name -> (value, threshold, '>=' or '<='). Returns accepted, failed names, margin rows."""
+    failed, rows = [], []
+    for name, (value, thr, op) in tests.items():
+        ok = value >= thr if op == ">=" else value <= thr
+        if not ok:
+            failed.append(name)
+        rel = abs(value - thr) / thr if thr else (0.0 if value == thr else np.inf)
+        rows.append({"test": name, "value": value, "threshold": thr, "op": op, "passed": ok, "rel_distance": rel})
+    return not failed, ",".join(failed), rows
+
+
+def grow_shaded(seed: np.ndarray, rgb: np.ndarray, mask: np.ndarray, core: np.ndarray,
+                lum: np.ndarray, chroma: np.ndarray, hue: np.ndarray) -> np.ndarray:
+    """Grow an accepted card into connected, similar-hue, darker card pixels (not into the core)."""
+    card_chroma = float(np.median(chroma[seed]))
+    if card_chroma < GROW_GREY:
+        hue_ok = np.ones_like(mask)
+    else:
+        vec = np.exp(1j * np.deg2rad(hue[seed]))
+        card_hue = np.rad2deg(np.angle(vec.mean())) % 360
+        diff = np.abs((hue - card_hue + 180) % 360 - 180)
+        hue_ok = (diff <= GROW_HUE_TOL) | (chroma < GROW_GREY)
+    allowed = mask & ~core & (lum >= GROW_MIN_LUM) & hue_ok & (chroma <= card_chroma + GROW_CHROMA_TOL)
+    grown = seed.copy()
+    for _ in range(GROW_MAX_ITER):
+        new = ndimage.binary_dilation(grown) & allowed | grown
+        if new.sum() == grown.sum():
+            break
+        grown = new
+    return grown
+
+
+def card_candidates(rgb: np.ndarray, mask: np.ndarray, core: np.ndarray, s: float) -> list[dict]:
+    lum = luminance(rgb.astype(float))
+    chroma = rgb.max(-1).astype(int) - rgb.min(-1).astype(int)
+    hue = hue_deg(rgb)
     pale = mask & (lum > CARD_LUM) & (chroma < CARD_MAX_CHROMA)
     pale = ndimage.binary_opening(pale, structure=disc(2))
     h, w = mask.shape
     out = []
     for comp in components(pale, int(GLUE_MIN_AREA * s * s)):
-        area = int(comp.sum())
-        props = measure.regionprops(comp.astype(np.uint8))[0]
-        radius = float(ndimage.distance_transform_edt(comp).max())
-        edge = longest_edge(comp)
-        bg_share = background_share(comp, mask)
-        med_chroma = float(np.median(chroma[comp]))
-        if med_chroma < CARD_WHITE_CHROMA:
-            tier, need_edge = "white", WHITE_MIN_EDGE * s
-            tests = {"area": area >= WHITE_MIN_AREA * h * w, "radius": radius >= WHITE_MIN_RADIUS * s,
-                     "solidity": props.solidity >= WHITE_MIN_SOLIDITY, "edge": edge >= need_edge,
-                     "background": bg_share >= CARD_MIN_BACKGROUND}
+        f = shape_features(comp, mask, lum, chroma)
+        if f["median_chroma"] < CARD_WHITE_CHROMA:
+            tier = "white"
+            tests = {"area": (f["area"], WHITE_MIN_AREA * h * w, ">="), "radius": (f["radius"], WHITE_MIN_RADIUS * s, ">="),
+                     "solidity": (f["solidity"], WHITE_MIN_SOLIDITY, ">="), "edge": (f["edge"], WHITE_MIN_EDGE * s, ">="),
+                     "background": (f["background_share"], CARD_MIN_BACKGROUND, ">=")}
         else:
-            tier, need_edge = "cream", max(CREAM_MIN_EDGE * s, CREAM_EDGE_FRAC * np.sqrt(area))
-            tests = {"area": area >= CREAM_MIN_AREA * h * w, "radius": radius >= CREAM_MIN_RADIUS * s,
-                     "solidity": props.solidity >= CREAM_MIN_SOLIDITY, "edge": edge >= need_edge,
-                     "background": bg_share >= CARD_MIN_BACKGROUND}
-        accepted = all(tests.values())
-        region = comp
-        if accepted and CARD_GROW:
-            grow = ndimage.binary_dilation(comp, structure=disc(int(round(CARD_GROW * s))))
-            region = comp | (grow & mask & (lum > CARD_LUM - 10) & (chroma < CARD_MAX_CHROMA + 15))
-        out.append({"kind": "card", "mask": region, "tier": tier, "area": area, "area_frac": area / (h * w),
-                    "radius": radius, "solidity": float(props.solidity), "edge": edge,
-                    "edge_needed": need_edge, "background_share": bg_share, "median_lum": float(np.median(lum[comp])),
-                    "median_chroma": med_chroma, "accepted": accepted,
-                    "failed": ",".join(k for k, v in tests.items() if not v)})
+            tier = "cream"
+            tests = {"area": (f["area"], CREAM_MIN_AREA * h * w, ">="), "radius": (f["radius"], CREAM_MIN_RADIUS * s, ">="),
+                     "solidity": (f["solidity"], CREAM_MIN_SOLIDITY, ">="),
+                     "edge": (f["edge"], max(CREAM_MIN_EDGE * s, CREAM_EDGE_FRAC * np.sqrt(f["area"])), ">="),
+                     "background": (f["background_share"], CARD_MIN_BACKGROUND, ">=")}
+        accepted, failed, rows = check(tests)
+        region, grown_px = comp, 0
+        if accepted:
+            if CARD_GROW:
+                near = ndimage.binary_dilation(comp, structure=disc(int(round(CARD_GROW * s))))
+                region = comp | (near & mask & (lum > CARD_LUM - 10) & (chroma < CARD_MAX_CHROMA + 15))
+            region = grow_shaded(region, rgb, mask, core, lum, chroma, hue)
+            grown_px = int(region.sum() - comp.sum())
+        out.append({"kind": "card", "tier": tier, "mask": region, **f, "edge_needed": tests["edge"][1],
+                    "grown_px": grown_px, "accepted": accepted, "failed": failed, "checks": rows})
     return out
 
 
-def pin_candidates(rgb: np.ndarray, mask: np.ndarray, s: float) -> tuple[list[dict], np.ndarray]:
-    lum, chroma = luminance(rgb.astype(float)), rgb.max(-1).astype(int) - rgb.min(-1).astype(int)
-    body = ndimage.binary_opening(mask, structure=disc(int(round(BODY_RADIUS * s))))
-    thin = ndimage.binary_opening(mask & ~body, structure=disc(int(round(THIN_OPEN * s))))
+def pin_candidates(rgb: np.ndarray, mask: np.ndarray, core: np.ndarray, s: float) -> list[dict]:
+    lum = luminance(rgb.astype(float))
+    chroma = rgb.max(-1).astype(int) - rgb.min(-1).astype(int)
+    thin = ndimage.binary_opening(mask & ~core, structure=disc(int(round(THIN_OPEN * s))))
     h, w = mask.shape
     out = []
     for comp in components(thin, int(THIN_MIN_AREA * s * s)):
+        f = shape_features(comp, mask, lum, chroma)
         ys, xs = np.nonzero(comp)
         pts = np.stack([xs, ys], 1).astype(float)
         pts -= pts.mean(0)
@@ -221,16 +281,15 @@ def pin_candidates(rgb: np.ndarray, mask: np.ndarray, s: float) -> tuple[list[di
         profile = np.bincount(bins, minlength=10) / (length / 10)   # width per tenth of the length
         width_cv = float(profile[1:-1].std() / max(profile[1:-1].mean(), 1e-9))  # ends excluded
         border = bool(xs.min() == 0 or ys.min() == 0 or xs.max() == w - 1 or ys.max() == h - 1)
-        tests = {"length": length >= PIN_MIN_LEN * s, "width": width <= PIN_MAX_WIDTH * s,
-                 "elongation": length / width >= PIN_MIN_ELONG, "straight": straight >= PIN_MIN_STRAIGHT,
-                 "even_width": width_cv <= PIN_MAX_WIDTH_CV, "border": border,
-                 "lum": np.median(lum[comp]) <= PIN_MAX_LUM, "chroma": np.median(chroma[comp]) <= PIN_MAX_CHROMA}
-        out.append({"kind": "pin", "mask": comp, "area": int(comp.sum()), "length": length, "width": width,
-                    "elongation": length / width, "straight": straight, "width_cv": width_cv,
-                    "touches_border": border,
-                    "median_lum": float(np.median(lum[comp])), "median_chroma": float(np.median(chroma[comp])),
-                    "accepted": all(tests.values()), "failed": ",".join(k for k, v in tests.items() if not v)})
-    return out, body
+        tests = {"length": (length, PIN_MIN_LEN * s, ">="), "width": (width, PIN_MAX_WIDTH * s, "<="),
+                 "elongation": (length / width, PIN_MIN_ELONG, ">="), "straight": (straight, PIN_MIN_STRAIGHT, ">="),
+                 "even_width": (width_cv, PIN_MAX_WIDTH_CV, "<="), "border": (float(border), 1.0, ">="),
+                 "lum": (f["median_lum"], PIN_MAX_LUM, "<="), "chroma": (f["median_chroma"], PIN_MAX_CHROMA, "<=")}
+        accepted, failed, rows = check(tests)
+        out.append({"kind": "pin", "tier": "", "mask": comp, **f, "length": length, "width": width,
+                    "straight": straight, "width_cv": width_cv, "touches_border": border,
+                    "accepted": accepted, "failed": failed, "checks": rows})
+    return out
 
 
 def keep_connected(mask: np.ndarray, s: float) -> tuple[np.ndarray, np.ndarray]:
@@ -256,17 +315,30 @@ def n_components(mask: np.ndarray) -> int:
     return len(components(mask, SPECK))
 
 
-def thickest_points(mask: np.ndarray, n: int, sep: float) -> list[tuple[int, int]]:
-    dist = ndimage.distance_transform_edt(mask)
-    pts: list[tuple[int, int]] = []
-    for _ in range(n):
-        if dist.max() <= 0:
-            break
-        y, x = np.unravel_index(int(dist.argmax()), dist.shape)
-        pts.append((int(x), int(y)))
-        yy, xx = np.ogrid[:dist.shape[0], :dist.shape[1]]
-        dist[(xx - x) ** 2 + (yy - y) ** 2 < sep * sep] = 0
-    return pts
+def edge_contact(mask: np.ndarray, s: float) -> str:
+    """Which frame edges the mask touches over at least 10 px: legs or antennae reaching the frame."""
+    n = int(10 * s)
+    sides = {"top": mask[0], "bottom": mask[-1], "left": mask[:, 0], "right": mask[:, -1]}
+    return ";".join(k for k, v in sides.items() if v.sum() >= n)
+
+
+def clean_image(rgb: np.ndarray, alpha: np.ndarray) -> dict:
+    h, w = rgb.shape[:2]
+    s = w / 1024
+    mask = alpha > ALPHA_FG
+    core = ndimage.binary_opening(mask, structure=disc(int(round(BODY_RADIUS * s))))
+    cards = card_candidates(rgb, mask, core, s)
+    card, glue = np.zeros_like(mask), np.zeros_like(mask)
+    for c in cards:
+        (card if c["accepted"] else glue)[c["mask"]] = True
+    pins = pin_candidates(rgb, mask & ~card, core, s)
+    pin = np.zeros_like(mask)
+    for p in pins:
+        if p["accepted"]:
+            pin[p["mask"]] = True
+    keep, dropped = keep_connected(mask & ~card & ~pin, s)
+    return {"mask": mask, "core": core, "cards": cards, "pins": pins, "card": card, "pin": pin,
+            "glue": glue, "keep": keep, "dropped": dropped, "scale": s}
 
 
 def font(size: int = 15):
@@ -276,10 +348,10 @@ def font(size: int = 15):
         return ImageFont.load_default(size=size)
 
 
-def panel(im: Image.Image, caption: str, f) -> Image.Image:
+def panel(im: Image.Image, caption: str, f, width: int = PANEL_W) -> Image.Image:
     im = im.convert("RGB")
-    im = im.resize((PANEL_W, int(round(im.height * PANEL_W / im.width))), Image.LANCZOS)
-    out = Image.new("RGB", (PANEL_W, im.height + CAPTION_H), "white")
+    im = im.resize((width, int(round(im.height * width / im.width))), Image.LANCZOS)
+    out = Image.new("RGB", (width, im.height + CAPTION_H), "white")
     ImageDraw.Draw(out).text((5, 4), caption, fill="black", font=f)
     out.paste(im, (0, CAPTION_H))
     return out
@@ -289,139 +361,117 @@ def on_grey(rgb: np.ndarray, mask: np.ndarray) -> Image.Image:
     return Image.fromarray(np.where(mask[..., None], rgb, GREY).astype(np.uint8))
 
 
-def removed_view(rgb, mask, card, pin, dropped, glue) -> Image.Image:
+def removed_view(rgb, res) -> Image.Image:
     out = rgb.astype(float) * 0.55 + 50
-    out[~mask] = out[~mask] * 0.5
-    for region, col in ((card, CARD_COLOR), (pin, PIN_COLOR), (dropped, DROP_COLOR)):
+    out[~res["mask"]] = out[~res["mask"]] * 0.5
+    for region, col in ((res["card"], CARD_COLOR), (res["pin"], PIN_COLOR), (res["dropped"], DROP_COLOR)):
         out[region] = 0.25 * out[region] + 0.75 * np.array(col)
-    edge = ndimage.binary_dilation(glue, iterations=2) & ~glue
+    edge = ndimage.binary_dilation(res["glue"], iterations=2) & ~res["glue"]
     out[edge] = GLUE_COLOR
     return Image.fromarray(out.round().astype(np.uint8))
 
 
-def sam_prompts_view(rgb, mask, box, pos, neg) -> Image.Image:
-    im = on_grey(rgb, mask)
-    d = ImageDraw.Draw(im)
-    d.rectangle(box, outline=(235, 104, 52), width=4)
-    for x, y in neg:
-        d.line([(x - 10, y - 10), (x + 10, y + 10)], fill=PIN_COLOR, width=5)
-        d.line([(x - 10, y + 10), (x + 10, y - 10)], fill=PIN_COLOR, width=5)
-    for x, y in pos:
-        d.ellipse([x - 9, y - 9, x + 9, y + 9], fill=GLUE_COLOR, outline="white", width=2)
-    return im
+def contact_sheet(rgb: np.ndarray, res: dict, title: str, f) -> Image.Image:
+    panels = [panel(Image.fromarray(rgb), "original", f),
+              panel(Image.fromarray(res["mask"]), f"rembg mask, alpha > {ALPHA_FG}", f),
+              panel(removed_view(rgb, res), "removed: card yellow, pin red, dropped pieces magenta; kept pale blobs outlined green", f),
+              panel(on_grey(rgb, res["keep"]), f"final ant only on grey {GREY}, {res['keep'].sum():,} px, "
+                                               f"{n_components(res['keep'])} component(s)", f)]
+    ph = max(p.height for p in panels)
+    sheet = Image.new("RGB", (len(panels) * PANEL_W + (len(panels) - 1) * 6, ph + 30), "white")
+    ImageDraw.Draw(sheet).text((5, 7), title, fill="black", font=f)
+    for i, p in enumerate(panels):
+        sheet.paste(p, (i * (PANEL_W + 6), 30))
+    return sheet
 
 
-def main() -> None:
-    OUT.mkdir(parents=True, exist_ok=True)
-    MASKS.mkdir(exist_ok=True)
-    setup_logging(OUT / "25_clean_mask.log")
-    sel = pd.read_csv(TRIAL / "selection.csv")
+def margins(cands: list[dict]) -> pd.DataFrame:
+    """Tests within MARGIN (relative) of their threshold. decisive = the outcome would flip:
+    an accepted candidate on any such test, a rejected one when that test is its only failure."""
+    rows = []
+    for c in cands:
+        failed = c["failed"].split(",") if c["failed"] else []
+        for r in c["checks"]:
+            if r["rel_distance"] <= MARGIN and r["test"] != "border":
+                decisive = c["accepted"] or failed == [r["test"]]
+                rows.append({"k": c["k"], "genus": c["genus"], "specimen_code": c["specimen_code"],
+                             "kind": c["kind"], "tier": c["tier"], "candidate": c["candidate"], "area": c["area"],
+                             "accepted": c["accepted"], **{k: r[k] for k in ("test", "value", "threshold", "op", "rel_distance")},
+                             "decisive": decisive})
+    cols = ["k", "genus", "specimen_code", "kind", "tier", "candidate", "area", "accepted", "test", "value",
+            "threshold", "op", "rel_distance", "decisive"]
+    return pd.DataFrame(rows, columns=cols).sort_values(["decisive", "rel_distance"], ascending=[False, True])
 
-    predictor = None
-    if not os.environ.get("SAM2_SKIP"):
-        from sam2.build_sam import build_sam2
-        from sam2.sam2_image_predictor import SAM2ImagePredictor
-        t0 = time.perf_counter()
-        predictor = SAM2ImagePredictor(build_sam2(SAM2_CFG, str(CKPT), device="cpu"))
-        log.info("SAM 2 load: %.1f s", time.perf_counter() - t0)
 
+def run(selection: Path, mask_dir: Path, out: Path) -> pd.DataFrame:
+    masks_out = out / "masks"
+    masks_out.mkdir(parents=True, exist_ok=True)
+    setup_logging(out / "25_clean_mask.log")
+    sel = pd.read_csv(selection)
     f = font()
     cands, summary = [], []
     for r in sel.itertuples():
         with Image.open(ROOT / r.image_path) as im:
             rgb = np.array(im.convert("RGB"))
-        h, w = rgb.shape[:2]
-        s = w / 1024
-        alpha = np.array(Image.open(TRIAL / "masks" / f"{r.specimen_code}_rembg_alpha.png")) / 255.0
-        mask = alpha > ALPHA_FG
+        alpha = np.array(Image.open(mask_dir / f"{r.specimen_code}_rembg_alpha.png")) / 255.0
         t0 = time.perf_counter()
-
-        cards = card_candidates(rgb, mask, s)
-        card = np.zeros_like(mask)
-        glue = np.zeros_like(mask)
-        for c in cards:
-            (card if c["accepted"] else glue)[c["mask"]] = True
-        pins, body = pin_candidates(rgb, mask & ~card, s)
-        pin = np.zeros_like(mask)
-        for p in pins:
-            if p["accepted"]:
-                pin[p["mask"]] = True
-        for c in cards + pins:
-            cands.append({"k": r.k, "genus": r.genus, "specimen_code": r.specimen_code,
-                          **{k: (round(v, 3) if isinstance(v, float) else v) for k, v in c.items() if k != "mask"}})
-        cleaned = mask & ~card & ~pin
-        keep, dropped = keep_connected(cleaned, s)
+        res = clean_image(rgb, alpha)
         t_rules = time.perf_counter() - t0
+        mask, card, pin, keep, dropped, glue = (res[k] for k in ("mask", "card", "pin", "keep", "dropped", "glue"))
+        contact = edge_contact(keep, res["scale"])
         log.info("%d %s %s: mask %d px; card candidates %d (accepted %d, %d px); pin candidates %d "
-                 "(accepted %d, %d px); dropped %d px in %d pieces; glue blobs kept %d (%d px); %.2f s",
-                 r.k, r.genus, r.specimen_code, mask.sum(), len(cards), sum(c["accepted"] for c in cards),
-                 card.sum(), len(pins), sum(p["accepted"] for p in pins), pin.sum(), dropped.sum(),
-                 len(components(dropped)), sum(not c["accepted"] for c in cards), glue.sum(), t_rules)
-        for c in cards + pins:
-            log.info("   %s %s: %s", c["kind"], "ACCEPT" if c["accepted"] else "reject",
-                     ", ".join(f"{k}={v:.2f}" if isinstance(v, float) else f"{k}={v}"
-                               for k, v in c.items() if k not in ("mask", "kind", "accepted")))
-
-        Image.fromarray(card).save(MASKS / f"{r.specimen_code}_card.png")
-        Image.fromarray(pin).save(MASKS / f"{r.specimen_code}_pin.png")
-        Image.fromarray(keep).save(MASKS / f"{r.specimen_code}_clean.png")
-
-        sam_mask, iou, verdict, t_sam, pos, neg, box = None, np.nan, "skipped", np.nan, [], [], None
-        if predictor is not None:
-            ys, xs = np.nonzero(keep)
-            px, py = int(w * BOX_PAD), int(h * BOX_PAD)
-            box = (max(0, xs.min() - px), max(0, ys.min() - py), min(w - 1, xs.max() + px), min(h - 1, ys.max() + py))
-            pos = thickest_points(keep, SAM_POS_POINTS, SAM_POS_SEP * s)
-            neg = [thickest_points(c["mask"], 1, 1)[0] for c in cards + pins if c["accepted"]]
-            t0 = time.perf_counter()
-            predictor.set_image(rgb)
-            pts = pos + neg
-            m, score, _ = predictor.predict(box=np.array(box), point_coords=np.array(pts, float),
-                                            point_labels=np.array([1] * len(pos) + [0] * len(neg)),
-                                            multimask_output=False)
-            t_sam = time.perf_counter() - t0
-            sam_mask = m[0].astype(bool)
-            iou = float((sam_mask & keep).sum() / (sam_mask | keep).sum())
-            fewer = n_components(sam_mask) < n_components(keep)
-            verdict = "kept" if (iou > SAM_MIN_IOU and fewer) else "not kept"
-            Image.fromarray(sam_mask).save(MASKS / f"{r.specimen_code}_sam2.png")
-            log.info("   SAM 2: score %.2f, IoU with clean %.3f, components %d vs %d, %.2f s -> %s",
-                     score[0], iou, n_components(sam_mask), n_components(keep), t_sam, verdict)
-
-        final = sam_mask if verdict == "kept" else keep
-        Image.fromarray(final).save(MASKS / f"{r.specimen_code}_final.png")
-        title = (f"{r.k}. {r.genus} {r.specimen_code}: rembg mask {mask.sum():,} px; removed card {card.sum():,}, "
-                 f"pin {pin.sum():,}, dropped pieces {dropped.sum():,} px; glue kept {glue.sum():,} px. "
-                 f"Rules {t_rules:.2f} s.")
-        panels = [panel(Image.fromarray(rgb), "original", f),
-                  panel(Image.fromarray(mask), f"rembg mask, alpha > {ALPHA_FG}", f),
-                  panel(removed_view(rgb, mask, card, pin, dropped, glue),
-                        "removed: card yellow, pin red, dropped pieces magenta; glue kept, outlined green", f),
-                  panel(on_grey(rgb, keep), f"clean ant only on grey {GREY}, {keep.sum():,} px, "
-                                            f"{n_components(keep)} component(s)", f)]
-        if sam_mask is not None:
-            panels.append(panel(sam_prompts_view(rgb, sam_mask, box, pos, neg),
-                                f"SAM 2 refinement: IoU {iou:.3f}, {n_components(sam_mask)} comp. -> {verdict}", f))
-        ph = max(p.height for p in panels)
-        sheet = Image.new("RGB", (len(panels) * PANEL_W + (len(panels) - 1) * 6, ph + 30), "white")
-        ImageDraw.Draw(sheet).text((5, 7), title, fill="black", font=f)
-        for i, p in enumerate(panels):
-            sheet.paste(p, (i * (PANEL_W + 6), 30))
-        sheet.save(OUT / f"{r.k}_{r.genus}_{r.specimen_code}.jpg", quality=90)
-
-        summary.append({"k": r.k, "genus": r.genus, "specimen_code": r.specimen_code, "mask_px": int(mask.sum()),
-                        "card_px": int(card.sum()), "pin_px": int(pin.sum()), "dropped_px": int(dropped.sum()),
-                        "dropped_pieces": len(components(dropped)), "glue_px": int(glue.sum()),
-                        "glue_blobs": sum(not c["accepted"] for c in cards),
+                 "(accepted %d, %d px); dropped %d px in %d pieces; pale blobs kept %d (%d px); "
+                 "final touches frame: %s; %.2f s",
+                 r.k, r.genus, r.specimen_code, mask.sum(), len(res["cards"]),
+                 sum(c["accepted"] for c in res["cards"]), card.sum(), len(res["pins"]),
+                 sum(p["accepted"] for p in res["pins"]), pin.sum(), dropped.sum(), len(components(dropped)),
+                 sum(not c["accepted"] for c in res["cards"]), glue.sum(), contact or "no", t_rules)
+        for i, c in enumerate(res["cards"] + res["pins"]):
+            c.update({"k": r.k, "genus": r.genus, "specimen_code": r.specimen_code, "candidate": i})
+            cands.append(c)
+            if c["accepted"] or c["area"] >= 1000:
+                log.info("   %s %s %s: %s", c["kind"], c["tier"], "ACCEPT" if c["accepted"] else "reject",
+                         ", ".join(f"{k}={c[k]:.2f}" if isinstance(c[k], float) else f"{k}={c[k]}"
+                                   for k in FEATURES + ["grown_px", "failed"] if k in c))
+        Image.fromarray(card).save(masks_out / f"{r.specimen_code}_card.png")
+        Image.fromarray(pin).save(masks_out / f"{r.specimen_code}_pin.png")
+        Image.fromarray(keep).save(masks_out / f"{r.specimen_code}_clean.png")
+        title = (f"{r.k}. {r.genus} {r.specimen_code} ({r.image_source}, {r.creator}): rembg mask {mask.sum():,} px; "
+                 f"removed card {card.sum():,}, pin {pin.sum():,}, dropped pieces {dropped.sum():,} px; "
+                 f"pale blobs kept {glue.sum():,} px. Rules {t_rules:.1f} s.")
+        contact_sheet(rgb, res, title, f).save(out / f"{r.k}_{r.genus}_{r.specimen_code}.jpg", quality=90)
+        summary.append({"k": r.k, "genus": r.genus, "specimen_code": r.specimen_code, "image_source": r.image_source,
+                        "creator": r.creator, "mask_px": int(mask.sum()), "card_px": int(card.sum()),
+                        "card_regions": sum(c["accepted"] for c in res["cards"]),
+                        "card_grown_px": sum(c["grown_px"] for c in res["cards"] if c["accepted"]),
+                        "pin_px": int(pin.sum()), "pin_regions": sum(p["accepted"] for p in res["pins"]),
+                        "dropped_px": int(dropped.sum()), "dropped_pieces": len(components(dropped)),
+                        "glue_px": int(glue.sum()), "glue_blobs": sum(not c["accepted"] for c in res["cards"]),
                         "clean_px": int(keep.sum()), "clean_components": n_components(keep),
-                        "removed_share": round(1 - keep.sum() / mask.sum(), 4), "rules_s": round(t_rules, 3),
-                        "sam2_iou": round(iou, 3) if sam_mask is not None else "",
-                        "sam2_components": n_components(sam_mask) if sam_mask is not None else "",
-                        "sam2_s": round(t_sam, 2) if sam_mask is not None else "", "sam2_verdict": verdict,
-                        "final": "sam2" if verdict == "kept" else "rules"})
-    pd.DataFrame(cands).to_csv(OUT / "candidates.csv", index=False)
-    pd.DataFrame(summary).to_csv(OUT / "summary.csv", index=False)
-    log.info("wrote %s", OUT)
+                        "removed_share": round(1 - keep.sum() / mask.sum(), 4),
+                        "final_touches_frame": contact, "rules_s": round(t_rules, 2)})
+    cols = ["k", "genus", "specimen_code", "candidate", "kind", "tier"] + FEATURES + ["edge_needed", "grown_px",
+                                                                                      "accepted", "failed"]
+    df = pd.DataFrame([{k: c.get(k, "") for k in cols} for c in cands])
+    for col in df.columns:
+        if df[col].dtype == float:
+            df[col] = df[col].round(3)
+    df["true_label"] = ""
+    df.to_csv(out / "candidates.csv", index=False)
+    margins(cands).to_csv(out / "margins.csv", index=False)
+    summ = pd.DataFrame(summary)
+    summ.to_csv(out / "summary.csv", index=False)
+    log.info("wrote %s: %d images, %d candidates", out, len(summ), len(df))
+    return summ
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    ap.add_argument("--selection", type=Path, default=TRIAL / "selection.csv")
+    ap.add_argument("--masks", type=Path, default=TRIAL / "masks")
+    ap.add_argument("--out", type=Path, default=TRIAL / "clean")
+    a = ap.parse_args()
+    run(a.selection, a.masks, a.out)
 
 
 if __name__ == "__main__":

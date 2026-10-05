@@ -1,0 +1,31 @@
+k,genus,subfamily,specimen_code,view,image_path,image_source,creator,split,why
+1,Anochetus,ponerinae,casent0102932,p,data/images/Anochetus/casent0102932_p.jpg,commons,April Nobile,train,one per genus
+2,Aphaenogaster,myrmicinae,casent0102039,p,data/images/Aphaenogaster/casent0102039_p.jpg,commons,April Nobile,test,one per genus
+3,Bothroponera,ponerinae,casent0027983,p,data/images/Bothroponera/casent0027983_p.jpg,commons,April Nobile,test,one per genus
+4,Camponotus,formicinae,casent0101390,p,data/images/Camponotus/casent0101390_p.jpg,commons,April Nobile,test,"extra, random"
+5,Camponotus,formicinae,casent0104638,p,data/images/Camponotus/casent0104638_p.jpg,gbif_cache,April Nobile,train,"gbif_cache crop, required"
+6,Cardiocondyla,myrmicinae,casent0101219,p,data/images/Cardiocondyla/casent0101219_p.jpg,commons,April Nobile,train,one per genus
+7,Cataulacus,myrmicinae,casent0101241,p,data/images/Cataulacus/casent0101241_p.jpg,commons,April Nobile,train,"extra, random"
+8,Cataulacus,myrmicinae,casent0101245,p,data/images/Cataulacus/casent0101245_p.jpg,commons,Nick Olgeirson,train,one per genus
+9,Crematogaster,myrmicinae,casent0193045,d,data/images/Crematogaster/casent0193045_d.jpg,gbif_cache,Bonnie Blaimer,train,"gbif_cache crop, required"
+10,Hypoponera,ponerinae,casent0101023,p,data/images/Hypoponera/casent0101023_p.jpg,commons,April Nobile,test,one per genus
+11,Leptogenys,ponerinae,casent0102413,p,data/images/Leptogenys/casent0102413_p.jpg,commons,April Nobile,test,one per genus
+12,Lioponera,dorylinae,casent0101980,p,data/images/Lioponera/casent0101980_p.jpg,commons,April Nobile,train,one per genus
+13,Meranoplus,myrmicinae,casent0101230,p,data/images/Meranoplus/casent0101230_p.jpg,commons,Nick Olgeirson,train,one per genus
+14,Monomorium,myrmicinae,casent0173547,p,data/images/Monomorium/casent0173547_p.jpg,commons,April Nobile,train,one per genus
+15,Mystrium,amblyoponinae,casent0003308,p,data/images/Mystrium/casent0003308_p.jpg,commons,April Nobile,train,one per genus
+16,Nesomyrmex,myrmicinae,casent0189276,p,data/images/Nesomyrmex/casent0189276_p.jpg,commons,Erin Prado,train,"other photographer, required"
+17,Nylanderia,formicinae,casent0101887,p,data/images/Nylanderia/casent0101887_p.jpg,commons,April Nobile,train,one per genus
+18,Odontomachus,ponerinae,casent0499525,p,data/images/Odontomachus/casent0499525_p.jpg,commons,April Nobile,train,one per genus
+19,Pachycondyla,ponerinae,casent0840847,p,data/images/Pachycondyla/casent0840847_p.jpg,gbif_cache,Wade Lee,train,one per genus
+20,Pheidole,myrmicinae,casent0101324,p,data/images/Pheidole/casent0101324_p.jpg,commons,Nick Olgeirson,train,"other photographer, required"
+21,Platythyrea,ponerinae,casent0102009,p,data/images/Platythyrea/casent0102009_p.jpg,commons,April Nobile,train,one per genus
+22,Royidris,myrmicinae,casent0077935,p,data/images/Royidris/casent0077935_p.jpg,commons,April Nobile,train,one per genus
+23,Strumigenys,myrmicinae,casent0005581,p,data/images/Strumigenys/casent0005581_p.jpg,gbif_cache,April Nobile,train,"gbif_cache crop, required"
+24,Syllophopsis,myrmicinae,casent0172919,p,data/images/Syllophopsis/casent0172919_p.jpg,commons,April Nobile,test,one per genus
+25,Tapinoma,dolichoderinae,casent0016783,p,data/images/Tapinoma/casent0016783_p.jpg,commons,April Nobile,train,one per genus
+26,Technomyrmex,dolichoderinae,casent0101932,p,data/images/Technomyrmex/casent0101932_p.jpg,commons,April Nobile,train,one per genus
+27,Technomyrmex,dolichoderinae,casent0104343,p,data/images/Technomyrmex/casent0104343_p.jpg,commons,April Nobile,train,"extra, random"
+28,Terataner,myrmicinae,casent0102049,p,data/images/Terataner/casent0102049_p.jpg,commons,April Nobile,train,one per genus
+29,Tetramorium,myrmicinae,casent0102347,p,data/images/Tetramorium/casent0102347_p.jpg,commons,April Nobile,train,one per genus
+30,Tetraponera,pseudomyrmecinae,casent0409559,p,data/images/Tetraponera/casent0409559_p.jpg,commons,Erin Prado,test,one per genus

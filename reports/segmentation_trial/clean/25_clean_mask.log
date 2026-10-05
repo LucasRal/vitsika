@@ -1,174 +1,58 @@
-Loaded checkpoint sucessfully
-SAM 2 load: 1.2 s
-1 Camponotus casent0102441: mask 337710 px; card candidates 6 (accepted 0, 0 px); pin candidates 6 (accepted 1, 11473 px); dropped 101 px in 4 pieces; glue blobs kept 6 (6583 px); 5.40 s
-   card reject: tier=cream, area=378, area_frac=0.00, radius=3.61, solidity=0.59, edge=35.00, edge_needed=70.00, background_share=0.00, median_lum=179.09, median_chroma=63.00, failed=area,radius,solidity,edge,background
-   card reject: tier=white, area=160, area_frac=0.00, radius=4.47, solidity=0.80, edge=20.00, edge_needed=50.00, background_share=0.00, median_lum=162.79, median_chroma=16.00, failed=area,radius,edge,background
-   card reject: tier=white, area=154, area_frac=0.00, radius=5.00, solidity=0.87, edge=18.00, edge_needed=50.00, background_share=0.00, median_lum=180.98, median_chroma=30.00, failed=area,radius,edge,background
-   card reject: tier=white, area=4551, area_frac=0.01, radius=12.81, solidity=0.69, edge=81.00, edge_needed=50.00, background_share=0.05, median_lum=180.10, median_chroma=37.00, failed=background
-   card reject: tier=white, area=625, area_frac=0.00, radius=6.08, solidity=0.81, edge=46.00, edge_needed=50.00, background_share=0.00, median_lum=167.04, median_chroma=11.00, failed=area,radius,edge,background
-   card reject: tier=white, area=715, area_frac=0.00, radius=7.00, solidity=0.57, edge=57.00, edge_needed=50.00, background_share=0.72, median_lum=190.23, median_chroma=49.00, failed=area,radius
-   pin ACCEPT: area=11473, length=201.15, width=57.04, elongation=3.53, straight=1.00, width_cv=0.02, touches_border=True, median_lum=82.85, median_chroma=15.00, failed=
-   pin reject: area=341, length=31.01, width=11.00, elongation=2.82, straight=0.97, width_cv=0.23, touches_border=False, median_lum=143.63, median_chroma=19.00, failed=length,elongation,border,lum
-   pin reject: area=9469, length=152.33, width=62.16, elongation=2.45, straight=0.90, width_cv=0.42, touches_border=False, median_lum=58.69, median_chroma=8.00, failed=elongation,even_width,border
-   pin reject: area=3010, length=169.95, width=17.71, elongation=9.60, straight=0.61, width_cv=0.19, touches_border=False, median_lum=79.23, median_chroma=8.00, failed=straight,border
-   pin reject: area=21809, length=425.18, width=51.29, elongation=8.29, straight=0.71, width_cv=0.43, touches_border=False, median_lum=85.03, median_chroma=11.00, failed=straight,even_width,border
-   pin reject: area=5954, length=125.84, width=47.31, elongation=2.66, straight=0.94, width_cv=0.26, touches_border=False, median_lum=74.85, median_chroma=5.00, failed=elongation,even_width,border
-For numpy array image, we assume (HxWxC) format
-Computing image embeddings for the provided image...
-Image embeddings computed.
-   SAM 2: score 0.83, IoU with clean 0.865, components 4 vs 1, 2.36 s -> not kept
-2 Syllophopsis casent0044971: mask 206889 px; card candidates 31 (accepted 0, 0 px); pin candidates 7 (accepted 0, 0 px); dropped 0 px in 0 pieces; glue blobs kept 31 (30924 px); 9.48 s
-   card reject: tier=cream, area=3843, area_frac=0.00, radius=18.38, solidity=0.73, edge=50.00, edge_needed=70.00, background_share=0.15, median_lum=180.11, median_chroma=85.00, failed=area,edge,background
-   card reject: tier=cream, area=517, area_frac=0.00, radius=9.49, solidity=0.87, edge=28.00, edge_needed=70.00, background_share=0.00, median_lum=183.86, median_chroma=88.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=180, area_frac=0.00, radius=4.24, solidity=0.73, edge=21.00, edge_needed=70.00, background_share=0.00, median_lum=170.31, median_chroma=90.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=726, area_frac=0.00, radius=12.65, solidity=0.87, edge=26.00, edge_needed=70.00, background_share=0.00, median_lum=203.03, median_chroma=73.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=1169, area_frac=0.00, radius=14.32, solidity=0.87, edge=46.00, edge_needed=70.00, background_share=0.00, median_lum=199.01, median_chroma=82.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=4553, area_frac=0.01, radius=25.71, solidity=0.90, edge=47.00, edge_needed=70.00, background_share=0.18, median_lum=188.21, median_chroma=78.00, failed=area,edge
-   card reject: tier=cream, area=579, area_frac=0.00, radius=6.08, solidity=0.79, edge=62.00, edge_needed=70.00, background_share=0.00, median_lum=212.86, median_chroma=87.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=334, area_frac=0.00, radius=5.83, solidity=0.76, edge=30.00, edge_needed=70.00, background_share=0.00, median_lum=173.22, median_chroma=87.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=2827, area_frac=0.00, radius=18.97, solidity=0.82, edge=47.00, edge_needed=70.00, background_share=0.11, median_lum=194.28, median_chroma=68.00, failed=area,edge,background
-   card reject: tier=cream, area=382, area_frac=0.00, radius=6.08, solidity=0.81, edge=28.00, edge_needed=70.00, background_share=0.26, median_lum=172.31, median_chroma=91.00, failed=area,radius,edge
-   card reject: tier=cream, area=2137, area_frac=0.00, radius=15.30, solidity=0.81, edge=42.00, edge_needed=70.00, background_share=0.00, median_lum=185.31, median_chroma=74.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=1150, area_frac=0.00, radius=11.31, solidity=0.82, edge=37.00, edge_needed=70.00, background_share=0.00, median_lum=202.86, median_chroma=86.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=217, area_frac=0.00, radius=5.39, solidity=0.82, edge=26.00, edge_needed=70.00, background_share=0.49, median_lum=169.81, median_chroma=73.00, failed=area,radius,edge
-   card reject: tier=cream, area=1905, area_frac=0.00, radius=8.49, solidity=0.76, edge=80.00, edge_needed=70.00, background_share=0.28, median_lum=183.13, median_chroma=82.00, failed=area,radius
-   card reject: tier=cream, area=412, area_frac=0.00, radius=7.07, solidity=0.77, edge=34.00, edge_needed=70.00, background_share=0.00, median_lum=192.50, median_chroma=85.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=274, area_frac=0.00, radius=5.39, solidity=0.80, edge=22.00, edge_needed=70.00, background_share=0.00, median_lum=169.52, median_chroma=85.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=208, area_frac=0.00, radius=7.00, solidity=0.88, edge=18.00, edge_needed=70.00, background_share=0.00, median_lum=172.84, median_chroma=85.00, failed=area,radius,edge,background
-   card reject: tier=white, area=1272, area_frac=0.00, radius=9.22, solidity=0.90, edge=59.00, edge_needed=50.00, background_share=0.06, median_lum=202.06, median_chroma=6.00, failed=background
-   card reject: tier=cream, area=294, area_frac=0.00, radius=5.10, solidity=0.75, edge=33.00, edge_needed=70.00, background_share=0.23, median_lum=163.02, median_chroma=85.00, failed=area,radius,edge
-   card reject: tier=cream, area=162, area_frac=0.00, radius=5.00, solidity=0.82, edge=16.00, edge_needed=70.00, background_share=0.04, median_lum=164.03, median_chroma=89.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=165, area_frac=0.00, radius=3.16, solidity=0.70, edge=25.00, edge_needed=70.00, background_share=0.29, median_lum=160.05, median_chroma=87.00, failed=area,radius,edge
-   card reject: tier=cream, area=4250, area_frac=0.01, radius=23.71, solidity=0.89, edge=56.00, edge_needed=70.00, background_share=0.55, median_lum=201.06, median_chroma=73.00, failed=area,edge
-   card reject: tier=cream, area=420, area_frac=0.00, radius=4.00, solidity=0.56, edge=53.00, edge_needed=70.00, background_share=0.04, median_lum=202.68, median_chroma=90.00, failed=area,radius,solidity,edge,background
-   card reject: tier=cream, area=472, area_frac=0.00, radius=7.21, solidity=0.86, edge=30.00, edge_needed=70.00, background_share=0.34, median_lum=191.92, median_chroma=89.00, failed=area,radius,edge
-   card reject: tier=cream, area=494, area_frac=0.00, radius=9.06, solidity=0.84, edge=25.00, edge_needed=70.00, background_share=0.73, median_lum=194.82, median_chroma=66.00, failed=area,radius,edge
-   card reject: tier=cream, area=172, area_frac=0.00, radius=3.61, solidity=0.74, edge=22.00, edge_needed=70.00, background_share=0.56, median_lum=174.98, median_chroma=79.00, failed=area,radius,edge
-   card reject: tier=cream, area=163, area_frac=0.00, radius=4.12, solidity=0.79, edge=23.00, edge_needed=70.00, background_share=0.54, median_lum=167.33, median_chroma=82.00, failed=area,radius,edge
-   card reject: tier=cream, area=377, area_frac=0.00, radius=5.00, solidity=0.63, edge=40.00, edge_needed=70.00, background_share=0.83, median_lum=189.91, median_chroma=74.00, failed=area,radius,edge
-   card reject: tier=cream, area=343, area_frac=0.00, radius=4.47, solidity=0.66, edge=31.00, edge_needed=70.00, background_share=0.49, median_lum=173.44, median_chroma=60.00, failed=area,radius,edge
-   card reject: tier=cream, area=685, area_frac=0.00, radius=6.00, solidity=0.59, edge=73.00, edge_needed=70.00, background_share=0.82, median_lum=190.72, median_chroma=74.00, failed=area,radius,solidity
-   card reject: tier=cream, area=242, area_frac=0.00, radius=5.00, solidity=0.83, edge=34.00, edge_needed=70.00, background_share=0.88, median_lum=184.08, median_chroma=77.00, failed=area,radius,edge
-   pin reject: area=25337, length=270.25, width=93.75, elongation=2.88, straight=0.78, width_cv=0.41, touches_border=False, median_lum=128.09, median_chroma=84.00, failed=width,elongation,straight,even_width,border,chroma
-   pin reject: area=1568, length=93.40, width=16.79, elongation=5.56, straight=1.00, width_cv=0.13, touches_border=True, median_lum=118.76, median_chroma=75.00, failed=length,chroma
-   pin reject: area=7576, length=457.01, width=16.58, elongation=27.57, straight=0.77, width_cv=0.43, touches_border=False, median_lum=174.82, median_chroma=90.00, failed=straight,even_width,border,lum,chroma
-   pin reject: area=6494, length=422.06, width=15.39, elongation=27.43, straight=0.79, width_cv=0.33, touches_border=False, median_lum=168.99, median_chroma=82.00, failed=straight,even_width,border,lum,chroma
-   pin reject: area=13909, length=351.06, width=39.62, elongation=8.86, straight=0.53, width_cv=0.64, touches_border=False, median_lum=174.77, median_chroma=81.00, failed=straight,even_width,border,lum,chroma
-   pin reject: area=6978, length=410.19, width=17.01, elongation=24.11, straight=0.96, width_cv=0.41, touches_border=False, median_lum=176.92, median_chroma=87.00, failed=even_width,border,lum,chroma
-   pin reject: area=5482, length=182.41, width=30.05, elongation=6.07, straight=0.93, width_cv=0.25, touches_border=False, median_lum=130.38, median_chroma=60.00, failed=border,lum,chroma
-For numpy array image, we assume (HxWxC) format
-Computing image embeddings for the provided image...
-Image embeddings computed.
-   SAM 2: score 0.93, IoU with clean 0.962, components 1 vs 1, 2.18 s -> not kept
-3 Odontomachus casent0005967: mask 184757 px; card candidates 23 (accepted 1, 1931 px); pin candidates 8 (accepted 0, 0 px); dropped 0 px in 0 pieces; glue blobs kept 22 (20974 px); 8.05 s
-   card reject: tier=cream, area=2908, area_frac=0.00, radius=7.00, solidity=0.55, edge=186.00, edge_needed=70.00, background_share=0.90, median_lum=204.17, median_chroma=63.00, failed=area,radius,solidity
-   card reject: tier=cream, area=219, area_frac=0.00, radius=4.24, solidity=0.82, edge=28.00, edge_needed=70.00, background_share=0.91, median_lum=182.27, median_chroma=63.00, failed=area,radius,edge
-   card reject: tier=cream, area=153, area_frac=0.00, radius=3.16, solidity=0.75, edge=30.00, edge_needed=70.00, background_share=0.20, median_lum=171.04, median_chroma=68.00, failed=area,radius,edge
-   card reject: tier=white, area=379, area_frac=0.00, radius=3.61, solidity=0.74, edge=56.00, edge_needed=50.00, background_share=0.55, median_lum=219.35, median_chroma=13.00, failed=area,radius
-   card ACCEPT: tier=white, area=1708, area_frac=0.00, radius=11.40, solidity=0.50, edge=70.00, edge_needed=50.00, background_share=0.49, median_lum=211.07, median_chroma=14.00, failed=
-   card reject: tier=white, area=635, area_frac=0.00, radius=6.71, solidity=0.81, edge=29.00, edge_needed=50.00, background_share=0.00, median_lum=178.36, median_chroma=14.00, failed=area,radius,edge,background
-   card reject: tier=white, area=977, area_frac=0.00, radius=4.47, solidity=0.47, edge=105.00, edge_needed=50.00, background_share=0.10, median_lum=188.92, median_chroma=39.00, failed=radius,background
-   card reject: tier=white, area=339, area_frac=0.00, radius=5.39, solidity=0.72, edge=32.00, edge_needed=50.00, background_share=0.47, median_lum=195.11, median_chroma=41.00, failed=area,radius,edge
-   card reject: tier=white, area=508, area_frac=0.00, radius=8.06, solidity=0.84, edge=29.00, edge_needed=50.00, background_share=0.20, median_lum=184.11, median_chroma=22.00, failed=area,edge
-   card reject: tier=cream, area=394, area_frac=0.00, radius=3.61, solidity=0.78, edge=64.00, edge_needed=70.00, background_share=0.39, median_lum=180.84, median_chroma=61.00, failed=area,radius,edge
-   card reject: tier=white, area=2880, area_frac=0.00, radius=10.82, solidity=0.64, edge=97.00, edge_needed=50.00, background_share=0.13, median_lum=194.19, median_chroma=25.00, failed=background
-   card reject: tier=white, area=353, area_frac=0.00, radius=4.47, solidity=0.74, edge=26.00, edge_needed=50.00, background_share=0.00, median_lum=178.79, median_chroma=32.00, failed=area,radius,edge,background
-   card reject: tier=white, area=637, area_frac=0.00, radius=4.47, solidity=0.42, edge=64.00, edge_needed=50.00, background_share=0.64, median_lum=185.19, median_chroma=49.00, failed=area,radius,solidity
-   card reject: tier=cream, area=407, area_frac=0.00, radius=3.61, solidity=0.63, edge=76.00, edge_needed=70.00, background_share=0.22, median_lum=176.73, median_chroma=52.00, failed=area,radius
-   card reject: tier=white, area=681, area_frac=0.00, radius=5.00, solidity=0.59, edge=52.00, edge_needed=50.00, background_share=0.26, median_lum=178.75, median_chroma=40.00, failed=area,radius
-   card reject: tier=white, area=3248, area_frac=0.00, radius=7.28, solidity=0.71, edge=134.00, edge_needed=50.00, background_share=0.35, median_lum=183.27, median_chroma=48.00, failed=radius
-   card reject: tier=white, area=175, area_frac=0.00, radius=4.00, solidity=0.76, edge=25.00, edge_needed=50.00, background_share=0.49, median_lum=164.97, median_chroma=29.00, failed=area,radius,edge
-   card reject: tier=cream, area=3903, area_frac=0.00, radius=10.00, solidity=0.55, edge=128.00, edge_needed=70.00, background_share=0.39, median_lum=179.95, median_chroma=55.00, failed=area,radius,solidity
-   card reject: tier=cream, area=163, area_frac=0.00, radius=4.12, solidity=0.63, edge=29.00, edge_needed=70.00, background_share=0.43, median_lum=181.96, median_chroma=59.00, failed=area,radius,edge
-   card reject: tier=cream, area=621, area_frac=0.00, radius=5.10, solidity=0.50, edge=84.00, edge_needed=70.00, background_share=0.58, median_lum=190.06, median_chroma=68.00, failed=area,radius,solidity
-   card reject: tier=cream, area=556, area_frac=0.00, radius=9.22, solidity=0.70, edge=34.00, edge_needed=70.00, background_share=0.56, median_lum=190.09, median_chroma=58.00, failed=area,radius,edge
-   card reject: tier=cream, area=320, area_frac=0.00, radius=4.00, solidity=0.78, edge=56.00, edge_needed=70.00, background_share=0.54, median_lum=196.97, median_chroma=73.00, failed=area,radius,edge
-   card reject: tier=cream, area=518, area_frac=0.00, radius=5.00, solidity=0.79, edge=47.00, edge_needed=70.00, background_share=0.61, median_lum=196.20, median_chroma=59.00, failed=area,radius,edge
-   pin reject: area=4561, length=420.73, width=10.84, elongation=38.81, straight=0.34, width_cv=0.10, touches_border=False, median_lum=192.19, median_chroma=59.00, failed=straight,border,lum,chroma
-   pin reject: area=67452, length=731.83, width=92.17, elongation=7.94, straight=0.39, width_cv=0.28, touches_border=True, median_lum=142.78, median_chroma=41.00, failed=width,straight,even_width,lum,chroma
-   pin reject: area=2944, length=86.22, width=34.14, elongation=2.53, straight=0.95, width_cv=0.33, touches_border=False, median_lum=97.68, median_chroma=17.00, failed=length,elongation,even_width,border
-   pin reject: area=9458, length=198.01, width=47.76, elongation=4.15, straight=0.88, width_cv=0.45, touches_border=False, median_lum=96.26, median_chroma=19.00, failed=straight,even_width,border
-   pin reject: area=1027, length=114.13, width=9.00, elongation=12.68, straight=1.00, width_cv=0.05, touches_border=True, median_lum=150.85, median_chroma=32.00, failed=lum,chroma
-   pin reject: area=459, length=37.63, width=12.20, elongation=3.08, straight=0.99, width_cv=0.13, touches_border=False, median_lum=149.70, median_chroma=15.00, failed=length,border,lum
-   pin reject: area=6789, length=186.36, width=36.43, elongation=5.12, straight=0.98, width_cv=0.05, touches_border=False, median_lum=123.94, median_chroma=37.00, failed=border,chroma
-   pin reject: area=540, length=71.30, width=7.57, elongation=9.41, straight=0.82, width_cv=0.08, touches_border=False, median_lum=162.97, median_chroma=77.00, failed=length,straight,border,lum,chroma
-For numpy array image, we assume (HxWxC) format
-Computing image embeddings for the provided image...
-Image embeddings computed.
-   SAM 2: score 0.85, IoU with clean 0.930, components 3 vs 1, 3.67 s -> not kept
-4 Terataner casent0101703: mask 283174 px; card candidates 16 (accepted 0, 0 px); pin candidates 5 (accepted 0, 0 px); dropped 0 px in 0 pieces; glue blobs kept 16 (18927 px); 7.55 s
-   card reject: tier=white, area=430, area_frac=0.00, radius=7.21, solidity=0.88, edge=25.00, edge_needed=50.00, background_share=0.00, median_lum=193.02, median_chroma=13.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=1535, area_frac=0.00, radius=7.00, solidity=0.49, edge=96.00, edge_needed=70.00, background_share=0.51, median_lum=189.32, median_chroma=76.00, failed=area,radius,solidity
-   card reject: tier=cream, area=298, area_frac=0.00, radius=5.83, solidity=0.82, edge=25.00, edge_needed=70.00, background_share=0.00, median_lum=167.76, median_chroma=69.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=573, area_frac=0.00, radius=9.00, solidity=0.89, edge=25.00, edge_needed=70.00, background_share=0.00, median_lum=165.35, median_chroma=77.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=718, area_frac=0.00, radius=7.07, solidity=0.74, edge=53.00, edge_needed=70.00, background_share=0.00, median_lum=166.74, median_chroma=68.00, failed=area,radius,edge,background
-   card reject: tier=white, area=561, area_frac=0.00, radius=7.28, solidity=0.86, edge=36.00, edge_needed=50.00, background_share=0.00, median_lum=163.88, median_chroma=29.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=1314, area_frac=0.00, radius=13.15, solidity=0.89, edge=39.00, edge_needed=70.00, background_share=0.00, median_lum=182.81, median_chroma=59.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=367, area_frac=0.00, radius=4.24, solidity=0.58, edge=36.00, edge_needed=70.00, background_share=0.00, median_lum=161.14, median_chroma=69.00, failed=area,radius,solidity,edge,background
-   card reject: tier=cream, area=11006, area_frac=0.01, radius=23.71, solidity=0.76, edge=68.00, edge_needed=70.00, background_share=0.42, median_lum=188.06, median_chroma=57.00, failed=edge
-   card reject: tier=white, area=151, area_frac=0.00, radius=5.00, solidity=0.79, edge=18.00, edge_needed=50.00, background_share=0.33, median_lum=187.94, median_chroma=29.00, failed=area,radius,edge
-   card reject: tier=cream, area=393, area_frac=0.00, radius=7.28, solidity=0.88, edge=23.00, edge_needed=70.00, background_share=0.00, median_lum=172.90, median_chroma=59.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=232, area_frac=0.00, radius=4.00, solidity=0.72, edge=28.00, edge_needed=70.00, background_share=0.52, median_lum=189.16, median_chroma=60.00, failed=area,radius,edge
-   card reject: tier=white, area=150, area_frac=0.00, radius=4.47, solidity=0.92, edge=18.00, edge_needed=50.00, background_share=0.00, median_lum=170.85, median_chroma=33.00, failed=area,radius,edge,background
-   card reject: tier=white, area=223, area_frac=0.00, radius=4.12, solidity=0.87, edge=20.00, edge_needed=50.00, background_share=0.00, median_lum=173.26, median_chroma=35.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=795, area_frac=0.00, radius=6.32, solidity=0.72, edge=52.00, edge_needed=70.00, background_share=0.38, median_lum=190.85, median_chroma=58.00, failed=area,radius,edge
-   card reject: tier=cream, area=181, area_frac=0.00, radius=4.00, solidity=0.90, edge=22.00, edge_needed=70.00, background_share=0.00, median_lum=175.92, median_chroma=61.00, failed=area,radius,edge,background
-   pin reject: area=9224, length=186.00, width=49.59, elongation=3.75, straight=0.94, width_cv=0.29, touches_border=False, median_lum=83.00, median_chroma=8.00, failed=even_width,border
-   pin reject: area=1110, length=59.45, width=18.67, elongation=3.18, straight=0.98, width_cv=0.28, touches_border=False, median_lum=113.96, median_chroma=34.00, failed=length,even_width,border,chroma
-   pin reject: area=944, length=48.77, width=19.36, elongation=2.52, straight=1.00, width_cv=0.11, touches_border=False, median_lum=115.97, median_chroma=59.00, failed=length,elongation,border,chroma
-   pin reject: area=1953, length=69.85, width=27.96, elongation=2.50, straight=0.98, width_cv=0.10, touches_border=False, median_lum=202.62, median_chroma=39.00, failed=length,elongation,border,lum,chroma
-   pin reject: area=7132, length=232.76, width=30.64, elongation=7.60, straight=0.84, width_cv=0.28, touches_border=False, median_lum=149.94, median_chroma=61.00, failed=straight,even_width,border,lum,chroma
-For numpy array image, we assume (HxWxC) format
-Computing image embeddings for the provided image...
-Image embeddings computed.
-   SAM 2: score 0.91, IoU with clean 0.906, components 12 vs 1, 1.95 s -> not kept
-5 Pheidole casent0101624: mask 225200 px; card candidates 28 (accepted 1, 63135 px); pin candidates 16 (accepted 0, 0 px); dropped 2300 px in 68 pieces; glue blobs kept 27 (16310 px); 8.99 s
-   card reject: tier=white, area=757, area_frac=0.00, radius=6.71, solidity=0.62, edge=51.00, edge_needed=50.00, background_share=0.83, median_lum=182.87, median_chroma=34.00, failed=radius
-   card reject: tier=white, area=417, area_frac=0.00, radius=6.08, solidity=0.73, edge=30.00, edge_needed=50.00, background_share=0.05, median_lum=185.20, median_chroma=40.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=221, area_frac=0.00, radius=4.47, solidity=0.75, edge=31.00, edge_needed=70.00, background_share=0.24, median_lum=169.72, median_chroma=70.00, failed=area,radius,edge
-   card reject: tier=cream, area=1906, area_frac=0.00, radius=10.77, solidity=0.60, edge=57.00, edge_needed=70.00, background_share=0.00, median_lum=185.04, median_chroma=75.00, failed=area,radius,solidity,edge,background
-   card reject: tier=cream, area=332, area_frac=0.00, radius=4.24, solidity=0.54, edge=29.00, edge_needed=70.00, background_share=0.40, median_lum=171.99, median_chroma=73.00, failed=area,radius,solidity,edge
-   card reject: tier=cream, area=427, area_frac=0.00, radius=6.40, solidity=0.61, edge=31.00, edge_needed=70.00, background_share=0.38, median_lum=167.37, median_chroma=73.00, failed=area,radius,edge
-   card reject: tier=cream, area=247, area_frac=0.00, radius=3.16, solidity=0.82, edge=30.00, edge_needed=70.00, background_share=0.16, median_lum=157.11, median_chroma=74.00, failed=area,radius,edge
-   card reject: tier=cream, area=1249, area_frac=0.00, radius=9.06, solidity=0.74, edge=42.00, edge_needed=70.00, background_share=0.00, median_lum=170.84, median_chroma=82.00, failed=area,radius,edge,background
-   card ACCEPT: tier=cream, area=56422, area_frac=0.08, radius=39.56, solidity=0.74, edge=276.00, edge_needed=142.52, background_share=0.17, median_lum=205.70, median_chroma=75.00, failed=
-   card reject: tier=cream, area=237, area_frac=0.00, radius=4.00, solidity=0.67, edge=22.00, edge_needed=70.00, background_share=0.66, median_lum=177.92, median_chroma=52.00, failed=area,radius,edge
-   card reject: tier=cream, area=836, area_frac=0.00, radius=10.00, solidity=0.75, edge=31.00, edge_needed=70.00, background_share=0.00, median_lum=191.07, median_chroma=80.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=1345, area_frac=0.00, radius=13.42, solidity=0.71, edge=39.00, edge_needed=70.00, background_share=0.00, median_lum=207.06, median_chroma=79.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=378, area_frac=0.00, radius=5.00, solidity=0.74, edge=44.00, edge_needed=70.00, background_share=0.00, median_lum=161.97, median_chroma=86.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=331, area_frac=0.00, radius=6.71, solidity=0.90, edge=26.00, edge_needed=70.00, background_share=0.00, median_lum=213.22, median_chroma=91.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=228, area_frac=0.00, radius=5.00, solidity=0.82, edge=28.00, edge_needed=70.00, background_share=0.00, median_lum=183.83, median_chroma=88.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=196, area_frac=0.00, radius=5.00, solidity=0.79, edge=22.00, edge_needed=70.00, background_share=0.00, median_lum=191.84, median_chroma=84.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=1903, area_frac=0.00, radius=9.85, solidity=0.70, edge=62.00, edge_needed=70.00, background_share=0.37, median_lum=180.27, median_chroma=82.00, failed=area,radius,edge
-   card reject: tier=cream, area=400, area_frac=0.00, radius=4.47, solidity=0.73, edge=44.00, edge_needed=70.00, background_share=0.43, median_lum=170.06, median_chroma=63.00, failed=area,radius,edge
-   card reject: tier=cream, area=759, area_frac=0.00, radius=10.77, solidity=0.88, edge=22.00, edge_needed=70.00, background_share=0.00, median_lum=206.80, median_chroma=79.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=351, area_frac=0.00, radius=5.66, solidity=0.85, edge=26.00, edge_needed=70.00, background_share=0.00, median_lum=175.13, median_chroma=74.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=274, area_frac=0.00, radius=4.47, solidity=0.88, edge=20.00, edge_needed=70.00, background_share=0.00, median_lum=183.57, median_chroma=89.00, failed=area,radius,edge,background
-   card reject: tier=white, area=294, area_frac=0.00, radius=5.10, solidity=0.80, edge=22.00, edge_needed=50.00, background_share=0.64, median_lum=177.18, median_chroma=35.00, failed=area,radius,edge
-   card reject: tier=cream, area=155, area_frac=0.00, radius=3.61, solidity=0.77, edge=25.00, edge_needed=70.00, background_share=0.36, median_lum=169.91, median_chroma=79.00, failed=area,radius,edge
-   card reject: tier=cream, area=505, area_frac=0.00, radius=6.40, solidity=0.70, edge=31.00, edge_needed=70.00, background_share=0.26, median_lum=179.56, median_chroma=63.00, failed=area,radius,edge
-   card reject: tier=cream, area=1792, area_frac=0.00, radius=9.06, solidity=0.64, edge=80.00, edge_needed=70.00, background_share=0.33, median_lum=172.91, median_chroma=71.00, failed=area,radius
-   card reject: tier=cream, area=178, area_frac=0.00, radius=5.00, solidity=0.78, edge=20.00, edge_needed=70.00, background_share=0.00, median_lum=173.31, median_chroma=85.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=218, area_frac=0.00, radius=3.61, solidity=0.72, edge=24.00, edge_needed=70.00, background_share=0.00, median_lum=164.90, median_chroma=85.00, failed=area,radius,edge,background
-   card reject: tier=cream, area=374, area_frac=0.00, radius=5.83, solidity=0.74, edge=30.00, edge_needed=70.00, background_share=0.30, median_lum=169.21, median_chroma=68.50, failed=area,radius,edge
-   pin reject: area=311, length=38.39, width=8.10, elongation=4.74, straight=0.99, width_cv=0.24, touches_border=False, median_lum=132.00, median_chroma=23.00, failed=length,border,lum
-   pin reject: area=488, length=35.76, width=13.65, elongation=2.62, straight=0.99, width_cv=0.24, touches_border=False, median_lum=133.97, median_chroma=15.00, failed=length,elongation,border,lum
-   pin reject: area=527, length=51.21, width=10.29, elongation=4.98, straight=0.91, width_cv=0.28, touches_border=False, median_lum=184.91, median_chroma=31.00, failed=length,even_width,border,lum,chroma
-   pin reject: area=2847, length=116.27, width=24.49, elongation=4.75, straight=1.00, width_cv=0.06, touches_border=False, median_lum=156.93, median_chroma=86.00, failed=border,lum,chroma
-   pin reject: area=342, length=38.01, width=9.00, elongation=4.23, straight=0.98, width_cv=0.21, touches_border=False, median_lum=144.97, median_chroma=71.00, failed=length,border,lum,chroma
-   pin reject: area=351, length=28.94, width=12.13, elongation=2.39, straight=1.00, width_cv=0.19, touches_border=True, median_lum=183.29, median_chroma=101.00, failed=length,elongation,lum,chroma
-   pin reject: area=555, length=38.18, width=14.54, elongation=2.63, straight=0.99, width_cv=0.17, touches_border=False, median_lum=167.69, median_chroma=103.00, failed=length,elongation,border,lum,chroma
-   pin reject: area=541, length=30.40, width=17.80, elongation=1.71, straight=1.00, width_cv=0.07, touches_border=False, median_lum=163.04, median_chroma=70.00, failed=length,elongation,border,lum,chroma
-   pin reject: area=4606, length=168.68, width=27.31, elongation=6.18, straight=1.00, width_cv=0.11, touches_border=False, median_lum=162.86, median_chroma=85.00, failed=border,lum,chroma
-   pin reject: area=1647, length=69.91, width=23.56, elongation=2.97, straight=0.95, width_cv=0.35, touches_border=False, median_lum=119.05, median_chroma=105.00, failed=length,elongation,even_width,border,chroma
-   pin reject: area=530, length=48.03, width=11.03, elongation=4.35, straight=1.00, width_cv=0.15, touches_border=False, median_lum=159.73, median_chroma=87.00, failed=length,border,lum,chroma
-   pin reject: area=5611, length=141.53, width=39.65, elongation=3.57, straight=0.84, width_cv=0.22, touches_border=False, median_lum=143.93, median_chroma=104.00, failed=straight,border,lum,chroma
-   pin reject: area=448, length=29.90, width=14.98, elongation=2.00, straight=0.99, width_cv=0.19, touches_border=False, median_lum=106.58, median_chroma=37.00, failed=length,elongation,border,chroma
-   pin reject: area=324, length=34.00, width=9.53, elongation=3.57, straight=1.00, width_cv=0.26, touches_border=False, median_lum=85.26, median_chroma=35.00, failed=length,even_width,border,chroma
-   pin reject: area=17140, length=254.91, width=67.24, elongation=3.79, straight=0.84, width_cv=0.34, touches_border=False, median_lum=152.94, median_chroma=94.00, failed=straight,even_width,border,lum,chroma
-   pin reject: area=869, length=40.89, width=21.25, elongation=1.92, straight=0.98, width_cv=0.20, touches_border=False, median_lum=111.11, median_chroma=48.00, failed=length,elongation,border,chroma
-For numpy array image, we assume (HxWxC) format
-Computing image embeddings for the provided image...
-Image embeddings computed.
-   SAM 2: score 0.71, IoU with clean 0.695, components 4 vs 2, 1.80 s -> not kept
-wrote /home/ubuntu/projects/lifeplan/mg-ants/reports/segmentation_trial/clean
+1 Camponotus casent0102441: mask 337710 px; card candidates 6 (accepted 0, 0 px); pin candidates 6 (accepted 1, 11473 px); dropped 101 px in 4 pieces; pale blobs kept 6 (6583 px); final touches frame: no; 7.28 s
+   card white reject: area=4551, area_frac=0.01, radius=12.81, solidity=0.69, edge=81.00, background_share=0.05, median_chroma=37.00, median_lum=180.10, elongation=1.71, grown_px=0, failed=background
+   pin  ACCEPT: area=11473, area_frac=0.02, radius=33.84, solidity=0.92, edge=165.00, background_share=0.74, median_chroma=15.00, median_lum=82.85, elongation=2.63, length=201.15, width=57.04, straight=1.00, width_cv=0.02, touches_border=True, failed=
+   pin  reject: area=9469, area_frac=0.01, radius=36.22, solidity=0.76, edge=53.00, background_share=0.67, median_chroma=8.00, median_lum=58.69, elongation=1.19, length=152.33, width=62.16, straight=0.90, width_cv=0.42, touches_border=False, failed=elongation,even_width,border
+   pin  reject: area=3010, area_frac=0.00, radius=13.42, solidity=0.44, edge=76.00, background_share=0.99, median_chroma=8.00, median_lum=79.23, elongation=3.33, length=169.95, width=17.71, straight=0.61, width_cv=0.19, touches_border=False, failed=straight,border
+   pin  reject: area=21809, area_frac=0.03, radius=32.20, solidity=0.51, edge=118.00, background_share=0.92, median_chroma=11.00, median_lum=85.03, elongation=2.95, length=425.18, width=51.29, straight=0.71, width_cv=0.43, touches_border=False, failed=straight,even_width,border
+   pin  reject: area=5954, area_frac=0.01, radius=25.06, solidity=0.75, edge=84.00, background_share=0.79, median_chroma=5.00, median_lum=74.85, elongation=1.36, length=125.84, width=47.31, straight=0.94, width_cv=0.26, touches_border=False, failed=elongation,even_width,border
+2 Syllophopsis casent0044971: mask 206889 px; card candidates 31 (accepted 0, 0 px); pin candidates 7 (accepted 0, 0 px); dropped 0 px in 0 pieces; pale blobs kept 31 (30924 px); final touches frame: left; 10.62 s
+   card cream reject: area=3843, area_frac=0.00, radius=18.38, solidity=0.73, edge=50.00, background_share=0.15, median_chroma=85.00, median_lum=180.11, elongation=1.24, grown_px=0, failed=area,edge,background
+   card cream reject: area=1169, area_frac=0.00, radius=14.32, solidity=0.87, edge=46.00, background_share=0.00, median_chroma=82.00, median_lum=199.01, elongation=1.62, grown_px=0, failed=area,radius,edge,background
+   card cream reject: area=4553, area_frac=0.01, radius=25.71, solidity=0.90, edge=47.00, background_share=0.18, median_chroma=78.00, median_lum=188.21, elongation=1.54, grown_px=0, failed=area,edge
+   card cream reject: area=2827, area_frac=0.00, radius=18.97, solidity=0.82, edge=47.00, background_share=0.11, median_chroma=68.00, median_lum=194.28, elongation=1.46, grown_px=0, failed=area,edge,background
+   card cream reject: area=2137, area_frac=0.00, radius=15.30, solidity=0.81, edge=42.00, background_share=0.00, median_chroma=74.00, median_lum=185.31, elongation=1.29, grown_px=0, failed=area,radius,edge,background
+   card cream reject: area=1150, area_frac=0.00, radius=11.31, solidity=0.82, edge=37.00, background_share=0.00, median_chroma=86.00, median_lum=202.86, elongation=2.62, grown_px=0, failed=area,radius,edge,background
+   card cream reject: area=1905, area_frac=0.00, radius=8.49, solidity=0.76, edge=80.00, background_share=0.28, median_chroma=82.00, median_lum=183.13, elongation=3.25, grown_px=0, failed=area,radius
+   card white reject: area=1272, area_frac=0.00, radius=9.22, solidity=0.90, edge=59.00, background_share=0.06, median_chroma=6.00, median_lum=202.06, elongation=4.89, grown_px=0, failed=background
+   card cream reject: area=4250, area_frac=0.01, radius=23.71, solidity=0.89, edge=56.00, background_share=0.55, median_chroma=73.00, median_lum=201.06, elongation=2.47, grown_px=0, failed=area,edge
+   pin  reject: area=25337, area_frac=0.03, radius=39.81, solidity=0.64, edge=100.00, background_share=0.84, median_chroma=84.00, median_lum=128.09, elongation=1.12, length=270.25, width=93.75, straight=0.78, width_cv=0.41, touches_border=False, failed=width,elongation,straight,even_width,border,chroma
+   pin  reject: area=1568, area_frac=0.00, radius=10.63, solidity=0.81, edge=70.00, background_share=0.83, median_chroma=75.00, median_lum=118.76, elongation=5.04, length=93.40, width=16.79, straight=1.00, width_cv=0.13, touches_border=True, failed=length,chroma
+   pin  reject: area=7576, area_frac=0.01, radius=16.64, solidity=0.48, edge=237.00, background_share=0.97, median_chroma=90.00, median_lum=174.82, elongation=12.75, length=457.01, width=16.58, straight=0.77, width_cv=0.43, touches_border=False, failed=straight,even_width,border,lum,chroma
+   pin  reject: area=6494, area_frac=0.01, radius=16.40, solidity=0.45, edge=200.00, background_share=0.96, median_chroma=82.00, median_lum=168.99, elongation=13.00, length=422.06, width=15.39, straight=0.79, width_cv=0.33, touches_border=False, failed=straight,even_width,border,lum,chroma
+   pin  reject: area=13909, area_frac=0.02, radius=25.00, solidity=0.35, edge=119.00, background_share=0.98, median_chroma=81.00, median_lum=174.77, elongation=2.64, length=351.06, width=39.62, straight=0.53, width_cv=0.64, touches_border=False, failed=straight,even_width,border,lum,chroma
+   pin  reject: area=6978, area_frac=0.01, radius=15.30, solidity=0.69, edge=248.00, background_share=0.99, median_chroma=87.00, median_lum=176.92, elongation=17.75, length=410.19, width=17.01, straight=0.96, width_cv=0.41, touches_border=False, failed=even_width,border,lum,chroma
+   pin  reject: area=5482, area_frac=0.01, radius=16.12, solidity=0.66, edge=108.00, background_share=0.87, median_chroma=60.00, median_lum=130.38, elongation=4.12, length=182.41, width=30.05, straight=0.93, width_cv=0.25, touches_border=False, failed=border,lum,chroma
+3 Odontomachus casent0005967: mask 184757 px; card candidates 23 (accepted 1, 2324 px); pin candidates 8 (accepted 0, 0 px); dropped 0 px in 0 pieces; pale blobs kept 22 (20974 px); final touches frame: bottom;left; 10.16 s
+   card cream reject: area=2908, area_frac=0.00, radius=7.00, solidity=0.55, edge=186.00, background_share=0.90, median_chroma=63.00, median_lum=204.17, elongation=18.27, grown_px=0, failed=area,radius,solidity
+   card white ACCEPT: area=1708, area_frac=0.00, radius=11.40, solidity=0.50, edge=70.00, background_share=0.49, median_chroma=14.00, median_lum=211.07, elongation=3.69, grown_px=616, failed=
+   card white reject: area=2880, area_frac=0.00, radius=10.82, solidity=0.64, edge=97.00, background_share=0.13, median_chroma=25.00, median_lum=194.19, elongation=7.18, grown_px=0, failed=background
+   card white reject: area=3248, area_frac=0.00, radius=7.28, solidity=0.71, edge=134.00, background_share=0.35, median_chroma=48.00, median_lum=183.27, elongation=8.09, grown_px=0, failed=radius
+   card cream reject: area=3903, area_frac=0.00, radius=10.00, solidity=0.55, edge=128.00, background_share=0.39, median_chroma=55.00, median_lum=179.95, elongation=6.37, grown_px=0, failed=area,radius,solidity
+   pin  reject: area=4561, area_frac=0.01, radius=7.07, solidity=0.28, edge=185.00, background_share=0.99, median_chroma=59.00, median_lum=192.19, elongation=8.90, length=420.73, width=10.84, straight=0.34, width_cv=0.10, touches_border=False, failed=straight,border,lum,chroma
+   pin  reject: area=67391, area_frac=0.09, radius=32.45, solidity=0.24, edge=261.00, background_share=0.95, median_chroma=41.00, median_lum=142.79, elongation=1.61, length=731.70, width=92.10, straight=0.39, width_cv=0.28, touches_border=True, failed=width,straight,even_width,lum,chroma
+   pin  reject: area=2944, area_frac=0.00, radius=21.95, solidity=0.75, edge=71.00, background_share=0.60, median_chroma=17.00, median_lum=97.68, elongation=1.39, length=86.22, width=34.14, straight=0.95, width_cv=0.33, touches_border=False, failed=length,elongation,even_width,border
+   pin  reject: area=9089, area_frac=0.01, radius=26.83, solidity=0.65, edge=85.00, background_share=0.82, median_chroma=19.00, median_lum=95.03, elongation=1.90, length=198.05, width=45.89, straight=0.86, width_cv=0.46, touches_border=False, failed=straight,even_width,border
+   pin  reject: area=1027, area_frac=0.00, radius=5.66, solidity=0.74, edge=89.00, background_share=0.92, median_chroma=32.00, median_lum=150.85, elongation=12.28, length=114.13, width=9.00, straight=1.00, width_cv=0.05, touches_border=True, failed=lum,chroma
+   pin  reject: area=6789, area_frac=0.01, radius=20.12, solidity=0.72, edge=100.00, background_share=0.93, median_chroma=37.00, median_lum=123.94, elongation=3.82, length=186.36, width=36.43, straight=0.98, width_cv=0.05, touches_border=False, failed=border,chroma
+4 Terataner casent0101703: mask 283174 px; card candidates 16 (accepted 0, 0 px); pin candidates 5 (accepted 0, 0 px); dropped 0 px in 0 pieces; pale blobs kept 16 (18927 px); final touches frame: no; 8.85 s
+   card cream reject: area=1535, area_frac=0.00, radius=7.00, solidity=0.49, edge=96.00, background_share=0.51, median_chroma=76.00, median_lum=189.32, elongation=7.83, grown_px=0, failed=area,radius,solidity
+   card cream reject: area=1314, area_frac=0.00, radius=13.15, solidity=0.89, edge=39.00, background_share=0.00, median_chroma=59.00, median_lum=182.81, elongation=2.35, grown_px=0, failed=area,radius,edge,background
+   card cream reject: area=11006, area_frac=0.01, radius=23.71, solidity=0.76, edge=68.00, background_share=0.42, median_chroma=57.00, median_lum=188.06, elongation=2.15, grown_px=0, failed=edge
+   pin  reject: area=9224, area_frac=0.01, radius=35.74, solidity=0.77, edge=75.00, background_share=0.83, median_chroma=8.00, median_lum=83.00, elongation=2.21, length=186.00, width=49.59, straight=0.94, width_cv=0.29, touches_border=False, failed=even_width,border
+   pin  reject: area=1110, area_frac=0.00, radius=12.00, solidity=0.77, edge=38.00, background_share=0.65, median_chroma=34.00, median_lum=113.96, elongation=2.38, length=59.45, width=18.67, straight=0.98, width_cv=0.28, touches_border=False, failed=length,even_width,border,chroma
+   pin  reject: area=1953, area_frac=0.00, radius=12.73, solidity=0.68, edge=42.00, background_share=0.66, median_chroma=39.00, median_lum=202.62, elongation=1.69, length=69.85, width=27.96, straight=0.98, width_cv=0.10, touches_border=False, failed=length,elongation,border,lum,chroma
+   pin  reject: area=7132, area_frac=0.01, radius=21.63, solidity=0.51, edge=87.00, background_share=0.93, median_chroma=61.00, median_lum=149.94, elongation=3.80, length=232.76, width=30.64, straight=0.84, width_cv=0.28, touches_border=False, failed=straight,even_width,border,lum,chroma
+5 Pheidole casent0101624: mask 225200 px; card candidates 28 (accepted 1, 66511 px); pin candidates 13 (accepted 0, 0 px); dropped 2286 px in 80 pieces; pale blobs kept 27 (16310 px); final touches frame: no; 11.67 s
+   card cream reject: area=1906, area_frac=0.00, radius=10.77, solidity=0.60, edge=57.00, background_share=0.00, median_chroma=75.00, median_lum=185.04, elongation=1.75, grown_px=0, failed=area,radius,solidity,edge,background
+   card cream reject: area=1249, area_frac=0.00, radius=9.06, solidity=0.74, edge=42.00, background_share=0.00, median_chroma=82.00, median_lum=170.84, elongation=1.83, grown_px=0, failed=area,radius,edge,background
+   card cream ACCEPT: area=56422, area_frac=0.08, radius=39.56, solidity=0.74, edge=276.00, background_share=0.17, median_chroma=75.00, median_lum=205.70, elongation=4.68, grown_px=10089, failed=
+   card cream reject: area=1345, area_frac=0.00, radius=13.42, solidity=0.71, edge=39.00, background_share=0.00, median_chroma=79.00, median_lum=207.06, elongation=1.84, grown_px=0, failed=area,radius,edge,background
+   card cream reject: area=1903, area_frac=0.00, radius=9.85, solidity=0.70, edge=62.00, background_share=0.37, median_chroma=82.00, median_lum=180.27, elongation=3.52, grown_px=0, failed=area,radius,edge
+   card cream reject: area=1792, area_frac=0.00, radius=9.06, solidity=0.64, edge=80.00, background_share=0.33, median_chroma=71.00, median_lum=172.91, elongation=6.75, grown_px=0, failed=area,radius
+   pin  reject: area=2847, area_frac=0.00, radius=14.32, solidity=0.91, edge=82.00, background_share=0.88, median_chroma=86.00, median_lum=156.93, elongation=3.89, length=116.27, width=24.49, straight=1.00, width_cv=0.06, touches_border=False, failed=border,lum,chroma
+   pin  reject: area=4606, area_frac=0.01, radius=17.89, solidity=0.82, edge=85.00, background_share=0.91, median_chroma=85.00, median_lum=162.86, elongation=4.63, length=168.68, width=27.31, straight=1.00, width_cv=0.11, touches_border=False, failed=border,lum,chroma
+   pin  reject: area=1647, area_frac=0.00, radius=16.97, solidity=0.88, edge=42.00, background_share=0.60, median_chroma=105.00, median_lum=119.05, elongation=1.62, length=69.91, width=23.56, straight=0.95, width_cv=0.35, touches_border=False, failed=length,elongation,even_width,border,chroma
+   pin  reject: area=1379, area_frac=0.00, radius=16.28, solidity=0.88, edge=48.00, background_share=0.62, median_chroma=108.00, median_lum=170.89, elongation=1.62, length=63.99, width=21.55, straight=0.94, width_cv=0.36, touches_border=False, failed=length,elongation,even_width,border,lum,chroma
+   pin  reject: area=1579, area_frac=0.00, radius=15.56, solidity=0.78, edge=44.00, background_share=0.63, median_chroma=119.00, median_lum=130.19, elongation=1.43, length=57.58, width=27.42, straight=0.98, width_cv=0.17, touches_border=False, failed=length,elongation,border,lum,chroma
+   pin  reject: area=8517, area_frac=0.01, radius=25.71, solidity=0.61, edge=72.00, background_share=0.82, median_chroma=105.00, median_lum=151.17, elongation=2.21, length=198.12, width=42.99, straight=0.88, width_cv=0.31, touches_border=False, failed=straight,even_width,border,lum,chroma
+wrote /home/ubuntu/projects/lifeplan/mg-ants/reports/segmentation_trial/clean: 5 images, 143 candidates

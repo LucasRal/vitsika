@@ -7,9 +7,13 @@ touched. Not run on the full dataset.
 
 Contact sheets `<k>_<genus>_<specimen>.jpg`: original | rembg mask | removed
 regions (card yellow, pin red, dropped pieces magenta; pale blobs that were
-kept outlined green) | final ant only on grey 128 | SAM 2 refinement and its
-verdict. Masks in `masks/`, per-candidate features in `candidates.csv`,
-per-image counts in `summary.csv`.
+kept outlined green) | final ant only on grey 128. Masks in `masks/`,
+per-candidate features in `candidates.csv`, tests within 10 % of a threshold
+in `margins.csv`, per-image counts in `summary.csv`.
+
+Second pass (after the first review): the SAM 2 refinement was dropped (it
+was never kept) and a shaded-card growth step was added after a card is
+accepted. The 30-image measurement run that followed is in `../run30/`.
 
 ## Rules and thresholds
 
@@ -33,8 +37,12 @@ pale yellow ant parts (chroma 65 to 90):
 The straight-edge test is what keeps pale ant parts: a gaster or femur has
 a curved outline, a card has cut edges. The background test keeps pale
 bands on a gaster, which are enclosed by ant pixels. Accepted components
-are grown by 3 px into neighbouring pale mask pixels. Pale blobs that fail
-are left in place and counted ("glue" in the summary; most of them are ant
+are grown by 3 px into neighbouring pale mask pixels, then into the shaded
+card: connected mask pixels whose hue is within 15 degrees of the card's
+mean hue (any hue when either is nearly grey, chroma < 15), whose chroma is
+at most the card's median + 20 and whose luminance is >= 110, never into the
+body core (the opening used by the pin rule). Pale blobs that fail are left
+in place and counted ("glue" in the summary; most of them are ant
 highlights, hairs and coxae, not glue).
 
 **Pin.** Body core = mask opened with a disc of radius 40 px (head,
@@ -53,59 +61,35 @@ is 40 and not smaller.
 component reachable from it through gaps <= 6 px (repeated dilation).
 Everything else is dropped and counted.
 
-**SAM 2 refinement.** sam2.1 tiny, box of the clean mask padded 2 %, up to
-3 positive points at the thickest spots of the clean mask (>= 150 px
-apart), one negative point at the thickest spot of each removed region.
-Kept only if IoU with the clean mask > 0.85 and it has fewer connected
-components (>= 30 px).
-
 ## Result per image
 
 | # | Genus | Card point | Pin | Ant pixels wrongly removed | Pixels removed |
 |---|---|---|---|---|---|
-| 1 | Camponotus | **not removed**: rembg had already cut most of it; the slivers left between the legs (4,551 px, white tier) fail the background test (0.05) because they are enclosed by legs and shaded card | **fully**: the 11,473 px band above the thorax to the top edge; the part behind the body is untouched by rule | none seen; antennae, legs, mandibles intact | 3.4 % of the mask |
+| 1 | Camponotus | **not removed**: rembg had already cut most of it; the slivers left between the legs (4,551 px, white tier) fail the background test (0.05) because they are enclosed by legs and shaded card. The growth step cannot reach them: it only grows from an accepted card, and there is none | **fully**: the 11,473 px band above the thorax to the top edge; the part behind the body is untouched by rule | none seen; antennae, legs, mandibles intact | 3.4 % of the mask |
 | 2 | Syllophopsis | nothing to remove (rembg mask was clean); nothing removed | already absent from the rembg mask | none; 31 pale blobs (coxae, femora, highlights) all correctly kept | 0 |
-| 3 | Odontomachus | **fully**: the white triangle at the petiole, 1,931 px | already absent | none; the pale bands on the gaster (2,880 px) were taken on an earlier pass and are now kept, by a thin margin (background share 0.13 against the 0.15 threshold) | 1.0 % |
+| 3 | Odontomachus | **fully**: the white triangle at the petiole, 2,324 px (1,708 pale, 616 added by growth) | already absent | none; the pale bands on the gaster (2,880 px) are kept, by a thin margin (background share 0.13 against the 0.15 threshold); growth did not enter the gaster (it is body core); all legs intact | 1.3 % |
 | 4 | Terataner | no card point; the glue under the ant (11,006 px) fails the straight-edge test by 2 px (68 against 70) and stays, which the brief allows | none in frame | none | 0 |
-| 5 | Pheidole | **mostly**: 63,135 px removed; a strip of shaded card next to the ant's underside stays because its luminance is below 150 | already absent | none seen; the hind leg lying on the card is intact; 2,300 px of card fragments dropped as disconnected pieces | 29 % |
+| 5 | Pheidole | **fully**: 66,511 px removed (56,422 pale, 10,089 added by growth); the shaded strip along the ant's underside is now gone | already absent | none seen; the hind leg lying on the card is intact to the tarsus (chroma 97 to 133, above the growth cap of 75 + 20); 2,286 px of card fragments dropped as disconnected pieces | 31 % |
 
-SAM 2 refinement: never kept. IoU with the clean mask 0.70 (Pheidole), 0.87, 0.91, 0.93, 0.96; it always
-had the same number of components or more. With the literal rule "fewer
-components" it can never be kept when the clean mask is one piece, which it
-is on 4 of 5 images. The rules alone took 5 to 9 s per image, mostly the
-Hough edge test on 20 to 30 candidates; SAM 2 added 2 to 4 s.
+So the shaded-card growth fixes the Pheidole strip, leaves the Odontomachus
+gaster bands and every leg intact, and does nothing for the Camponotus
+slivers, which have no accepted seed. Rules take 7 to 12 s per image, mostly
+the Hough edge test on 20 to 30 candidates.
 
-## Ready for a 30-image check?
+## Thin margins on these five
 
-Not yet. Two things to adjust first, then run seed 11 as a measurement run,
-not a validation:
-
-1. **Shaded card.** The pale test is absolute (luminance > 150), so the
-   darker part of a card next to the ant escapes it: the Pheidole strip and
-   the Camponotus slivers. Grow each accepted card into connected mask
-   pixels of similar hue down to luminance about 110, stopping at the body
-   core. This is the main cause of partial removal.
-2. **Thin margins.** The background-share threshold sits between the
-   Odontomachus gaster bands (0.13) and the Pheidole card (0.17); the cream
-   straight-edge threshold sits 2 px from the Terataner glue. Both were set
-   on these five images and will move on 30. Record the features for every
-   candidate (already in `candidates.csv`) and pick thresholds from the 30
-   before trusting them.
-
-What the 30-image run would test that these five cannot: the cream tier
-needs >= 1 % of the image, so small cream cards will be missed; the pin rule
-has met one pin, and its border and colour tests are untested on dark-legged
-ants whose legs reach the frame edge; GBIF-cache crops (square, ant filling
-the frame) were not in the five. The failure mode so far is "not removed"
-rather than "ant removed", which is the safer side.
-
-If the SAM 2 step is kept at all, change its rule to "no more components"
-and look at whether it ever beats the rules; on these five it did not.
+From `margins.csv` (tests within 10 % of their threshold; "decisive" means
+the outcome would flip): the Terataner glue, straight edge 68 against 70
+(3 %), and an Odontomachus white blob of 3,248 px that fails only the radius
+test, 7.3 against 8 (9 %). Nothing accepted is within 10 % of a threshold:
+the Odontomachus card's nearest test is the straight edge (70 against 50),
+the Pheidole card's is the background share (0.17 against 0.15, 13 %), the
+Camponotus pin's is the straightness (1.00 against 0.90).
 
 ## Reproduce
 
 ```bash
-.venv/bin/python scripts/25_clean_mask.py             # about 1 minute; SAM2_SKIP=1 to skip the refinement
+.venv/bin/python scripts/25_clean_mask.py             # about 1 minute, deterministic
 ```
 
-Needs the SAM 2 checkpoint and packages from `../README.md`. Deterministic.
+Needs rembg's packages from `../README.md` (SAM 2 is no longer used here).
