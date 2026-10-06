@@ -41,16 +41,40 @@ Flags: empty (mask < EMPTY_FRAC of the image), large (mask > LARGE_FRAC of
 the image), frame_filling (mask touches all four edges; with large, the
 sign of an inverted mask), no_scalebar.
 
-Usage: 27_segment_all.py [--resume] [--limit N]
+Usage: 27_segment_all.py [--resume] [--limit N] [--workers N] [--output-dir DIR]
+
+Parallelism: rembg runs in the main process, one image at a time, with
+onnxruntime's own threads (the same set-up as a sequential run, so the masks
+do not depend on --workers); the post-processing (mask, four derived images,
+residues, flags) runs in a pool of --workers processes, which is where the
+time went sequentially. --output-dir DIR writes the outputs to DIR/segmented/
+and the log and manifest copy to DIR instead (for tests).
 Network: none (the u2net model is cached in ~/.rembg/models/).
+
+Pause and resume: Ctrl-C (or SIGTERM) finishes the current image, writes
+the manifest and stops; `27_segment_all.py --resume` carries on from there.
+The log reports/segmentation/27_segment_all.log is started afresh by a full
+run and appended to by --resume, one header per session (time, machine,
+library versions, rows carried over), a progress line every 50 images with
+elapsed time, rate and ETA, and a closing summary. The run's wall time is
+measured from the outputs' modification times: from the first image's
+first output to the last image's last output, minus gaps over
+PAUSE_GAP_S between consecutive images (pauses), so it is one number for
+the whole run however many sessions it took.
 """
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import logging
+import os
+import platform
 import shutil
+import signal
 import sys
 import time
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
+from importlib import metadata
 from pathlib import Path
 
 import numpy as np
@@ -79,6 +103,9 @@ PIN_LUM, PIN_CHROMA, PIN_BODY_RADIUS, PIN_OPEN, PIN_MIN_ELONG, PIN_MIN_AREA = 10
 EMPTY_FRAC, LARGE_FRAC = 0.005, 0.80
 SPECK = 30
 EIGHT = np.ones((3, 3), bool)
+PAUSE_GAP_S = 60            # a gap longer than this between two images' outputs counts as a pause
+LOG_EVERY = 50
+DEFAULT_WORKERS_MAX = 8
 
 log = logging.getLogger("segment_all")
 
@@ -215,15 +242,93 @@ def process(rgb: np.ndarray, alpha: np.ndarray, stats: pd.Series, paths: dict[st
 
 
 KINDS = ("mask", "ant_grey", "ant_rgba", "ant_erased", "scalebar_erased")
+RESUME_CMD = ".venv/bin/python scripts/27_segment_all.py --resume"
+
+_stop = {"signal": None}
+
+
+def _request_stop(signum, _frame) -> None:
+    if _stop["signal"] is None:
+        _stop["signal"] = signal.Signals(signum).name
+        log.info("%s received: finishing the current image, then writing the manifest and stopping "
+                 "(press again to force; the image in progress is then redone on resume)", _stop["signal"])
+    else:
+        raise KeyboardInterrupt
+
+
+def fmt_s(seconds: float) -> str:
+    seconds = int(round(seconds))
+    return f"{seconds // 3600}h{seconds % 3600 // 60:02d}m{seconds % 60:02d}s" if seconds >= 3600 else f"{seconds // 60}m{seconds % 60:02d}s"
+
+
+def session_header(a: argparse.Namespace, n_images: int, n_carried: int) -> None:
+    versions = []
+    for pkg in ("rembg", "onnxruntime", "numpy", "scipy", "Pillow"):
+        try:
+            versions.append(f"{pkg} {metadata.version(pkg)}")
+        except metadata.PackageNotFoundError:
+            versions.append(f"{pkg} ?")
+    log.info("=" * 78)
+    log.info("session start %s, %s", dt.datetime.now().astimezone().isoformat(timespec="seconds"),
+             "resume" if a.resume else "full run (manifest and log started afresh)")
+    log.info("machine: %s, %s, %s CPUs; Python %s", platform.node(), platform.platform(), os.cpu_count(),
+             platform.python_version())
+    log.info("libraries: %s", ", ".join(versions))
+    log.info("images: %d in %s; %d carried over from the manifest, %d to process",
+             n_images, DATASET.relative_to(ROOT), n_carried, n_images - n_carried)
+    log.info("stop safely with Ctrl-C; resume with: %s", RESUME_CMD)
+
+
+def run_wall_time(m: pd.DataFrame) -> tuple[float, int, float]:
+    """(active seconds, sessions, paused seconds) from each image's output times."""
+    spans = []
+    for r in m.itertuples():
+        stem = Path(r.image_path).stem
+        t = [(OUT / r.genus / f"{stem}_{k}.png").stat().st_mtime for k in KINDS
+             if (OUT / r.genus / f"{stem}_{k}.png").exists()]
+        if t:
+            spans.append((min(t), max(t)))
+    if not spans:
+        return 0.0, 0, 0.0
+    spans.sort()                # by start; with parallel workers spans overlap, so track the latest end so far
+    gaps, end = [], spans[0][1]
+    for start, stop in spans[1:]:
+        gaps.append(start - end)
+        end = max(end, stop)
+    paused = sum(g for g in gaps if g > PAUSE_GAP_S)
+    total = end - spans[0][0]
+    return total - paused, 1 + sum(g > PAUSE_GAP_S for g in gaps), paused
+
+
+def _worker_init() -> None:
+    signal.signal(signal.SIGINT, signal.SIG_IGN)      # Ctrl-C is handled by the main process, which drains the pool
+
+
+def _post(job: tuple) -> tuple[int, dict, float]:
+    i, rgb, alpha, stats_row, paths = job
+    t = time.perf_counter()
+    info = process(rgb, alpha, stats_row, paths)
+    return i, info, time.perf_counter() - t
+
+
+def default_workers() -> int:
+    return max(1, min(DEFAULT_WORKERS_MAX, (os.cpu_count() or 2) - 2))
 
 
 def main() -> None:
+    global OUT, REPORT
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--resume", action="store_true", help="skip images whose five outputs and manifest row exist")
     ap.add_argument("--limit", type=int, default=0, help="process only the first N images (smoke test)")
+    ap.add_argument("--workers", type=int, default=default_workers(),
+                    help=f"post-processing processes (default: CPUs - 2, at most {DEFAULT_WORKERS_MAX}; 1 = in the main process)")
+    ap.add_argument("--output-dir", type=Path, help="write outputs to DIR/segmented and the log to DIR (tests)")
     a = ap.parse_args()
+    if a.output_dir:
+        OUT, REPORT = a.output_dir / "segmented", a.output_dir
+    OUT.mkdir(parents=True, exist_ok=True)
     REPORT.mkdir(parents=True, exist_ok=True)
-    setup_logging(REPORT / "27_segment_all.log")
+    setup_logging(REPORT / "27_segment_all.log", mode="a" if a.resume else "w")
     d = pd.read_csv(DATASET).sort_values("image_path").reset_index(drop=True)
     stats = pd.read_csv(STATS).set_index("image_path")
     if a.limit:
@@ -233,53 +338,110 @@ def main() -> None:
     if a.resume and manifest_path.exists():
         prev = pd.read_csv(manifest_path, keep_default_na=False)
         done = {r["image_path"]: r for r in prev.to_dict("records")}
-        log.info("resume: %d rows already in %s", len(done), manifest_path)
+    carried = sum(p in done and all((OUT / g / f"{Path(p).stem}_{k}.png").exists() for k in KINDS if k != "scalebar_erased")
+                  for p, g in zip(d.image_path, d.genus))
+    session_header(a, len(d), carried)
+    log.info("post-processing workers: %d", a.workers)
 
     from rembg import new_session, remove
     t0 = time.perf_counter()
     session = new_session(REMBG_MODEL)
-    log.info("rembg %s loaded in %.1f s; %d images", REMBG_MODEL, time.perf_counter() - t0, len(d))
+    providers = getattr(getattr(session, "inner_session", None), "get_providers", lambda: ["?"])()
+    log.info("rembg %s loaded in %.1f s; onnxruntime providers %s", REMBG_MODEL, time.perf_counter() - t0, providers)
 
-    rows, times = [], []
+    pool = ProcessPoolExecutor(max_workers=a.workers, initializer=_worker_init) if a.workers > 1 else None
+    signal.signal(signal.SIGINT, _request_stop)
+    signal.signal(signal.SIGTERM, _request_stop)
+    rows: dict[int, dict] = {}
+    rembg_t: dict[int, float] = {}
+    pending: set = set()
+    by_i = {i: r for i, r in enumerate(d.itertuples(), start=1)}
+    to_do = len(d) - carried
+    n_new = 0
     t_start = time.perf_counter()
-    for i, r in enumerate(d.itertuples(), start=1):
-        stem = Path(r.image_path).stem
-        gdir = OUT / r.genus
-        paths = {kind: gdir / f"{stem}_{kind}.png" for kind in KINDS}
-        if r.image_path in done and all(paths[k].exists() for k in KINDS if k != "scalebar_erased"):
-            rows.append(done[r.image_path])
-            continue
-        gdir.mkdir(parents=True, exist_ok=True)
-        with Image.open(ROOT / r.image_path) as im:
-            pil = im.convert("RGB")
-        rgb = np.array(pil)
-        t1 = time.perf_counter()
-        alpha = np.asarray(remove(pil, session=session))[..., 3]
-        t_rembg = time.perf_counter() - t1
-        t2 = time.perf_counter()
-        info = process(rgb, alpha, stats.loc[r.image_path], paths)
-        t_post = time.perf_counter() - t2
-        times.append(t_rembg)
-        row = {"specimen_code": r.specimen_code, "genus": r.genus, "split": r.split, "view": r.view,
-               "image_path": r.image_path, **info, "rembg_s": round(t_rembg, 3), "post_s": round(t_post, 3)}
-        rows.append(row)
-        if info["flags"] or i % 50 == 0:
+
+    def write_manifest() -> pd.DataFrame:
+        m = pd.DataFrame([rows[k] for k in sorted(rows)])
+        m.to_csv(manifest_path, index=False)
+        return m
+
+    def finish(i: int, info: dict, t_post: float) -> None:
+        nonlocal n_new
+        r = by_i[i]
+        rows[i] = {"specimen_code": r.specimen_code, "genus": r.genus, "split": r.split, "view": r.view,
+                   "image_path": r.image_path, **info, "rembg_s": round(rembg_t[i], 3), "post_s": round(t_post, 3)}
+        n_new += 1
+        if info["flags"] or i % LOG_EVERY == 0:
             log.info("%4d/%d %s %s: mask %.1f %%, %d comp, border %s, card %.3f, pin %.3f, flags [%s], rembg %.2f s, post %.2f s",
                      i, len(d), r.genus, r.specimen_code, 100 * info["mask_area_fraction"], info["n_components"],
                      info["border_edges"] or "no", info["card_residue_frac"], info["pin_residue_frac"],
-                     info["flags"], t_rembg, t_post)
-        if i % 100 == 0:
-            pd.DataFrame(rows).to_csv(manifest_path, index=False)
-    m = pd.DataFrame(rows)
-    m.to_csv(manifest_path, index=False)
-    shutil.copy(manifest_path, REPORT / "manifest.csv")
+                     info["flags"], rembg_t[i], t_post)
+        if n_new % LOG_EVERY == 0:
+            el = time.perf_counter() - t_start
+            left = (to_do - n_new) * el / n_new
+            log.info("     progress: %d/%d done this session, elapsed %s, %.2f s per image, ETA %s (about %s)",
+                     n_new, to_do, fmt_s(el), el / n_new, fmt_s(left),
+                     (dt.datetime.now() + dt.timedelta(seconds=left)).strftime("%H:%M"))
+        if n_new % 100 == 0:
+            write_manifest()
+
+    def harvest(block_until: int) -> None:
+        nonlocal pending
+        while len(pending) > block_until:
+            finished, pending = wait(pending, return_when=FIRST_COMPLETED)
+            for f in finished:
+                finish(*f.result())
+
+    try:
+        for i, r in by_i.items():
+            if _stop["signal"]:
+                break
+            stem = Path(r.image_path).stem
+            gdir = OUT / r.genus
+            paths = {kind: gdir / f"{stem}_{kind}.png" for kind in KINDS}
+            if r.image_path in done and all(paths[k].exists() for k in KINDS if k != "scalebar_erased"):
+                rows[i] = done[r.image_path]
+                continue
+            gdir.mkdir(parents=True, exist_ok=True)
+            with Image.open(ROOT / r.image_path) as im:
+                pil = im.convert("RGB")
+            rgb = np.array(pil)
+            t1 = time.perf_counter()
+            alpha = np.asarray(remove(pil, session=session))[..., 3]
+            rembg_t[i] = time.perf_counter() - t1
+            job = (i, rgb, alpha, stats.loc[r.image_path], paths)
+            if pool is None:
+                finish(*_post(job))
+            else:
+                pending.add(pool.submit(_post, job))
+                harvest(2 * a.workers)                 # keep at most 2 jobs per worker in flight
+        harvest(0)
+    finally:
+        if pool is not None:
+            pool.shutdown(wait=True, cancel_futures=True)
+    m = write_manifest()
     wall = time.perf_counter() - t_start
-    log.info("done: %d rows, wall %.0f s, rembg %.2f s per image (min %.2f, max %.2f) over %d new images",
-             len(m), wall, float(np.mean(times)) if times else 0, min(times, default=0), max(times, default=0), len(times))
+    times = list(rembg_t.values())
+    if _stop["signal"]:
+        log.info("stopped by %s after %d/%d images (%d new this session, %s); manifest written with %d rows",
+                 _stop["signal"], len(m), len(d), n_new, fmt_s(wall), len(m))
+        log.info("resume with: %s", RESUME_CMD)
+        return
+    shutil.copy(manifest_path, REPORT / "manifest.csv")
+    log.info("-" * 78)
+    log.info("done: %d rows; this session %s wall (%.0f s), %.2f s per new image, %d workers; "
+             "rembg %.2f s per image (min %.2f, max %.2f) over %d new images",
+             len(m), fmt_s(wall), wall, wall / max(n_new, 1), a.workers, float(np.mean(times)) if times else 0,
+             min(times, default=0), max(times, default=0), len(times))
+    active, n_sess, paused = run_wall_time(m)
+    log.info("whole run, from output times: %s wall (%.0f s) over %d session(s), %s of pauses left out; "
+             "sum of per-image rembg + post times %.0f s", fmt_s(active), active, n_sess, fmt_s(paused),
+             float((pd.to_numeric(m.rembg_s) + pd.to_numeric(m.post_s)).sum()))
     fl = m["flags"].fillna("").astype(str)
     for f in ("empty", "large", "frame_filling", "no_scalebar"):
         log.info("flag %-14s %d", f, fl.str.contains(f).sum())
     log.info("card residue > 5 %%: %d; pin residue > 5 %%: %d", (m.card_residue_frac > 0.05).sum(), (m.pin_residue_frac > 0.05).sum())
+    log.info("session end %s", dt.datetime.now().astimezone().isoformat(timespec="seconds"))
 
 
 if __name__ == "__main__":
