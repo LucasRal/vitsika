@@ -1,0 +1,17 @@
+1236 images compared (run 1: 500 VPS, 736 Mac)
+vps: 500 images, identical 339, IoU < 0.99: 0, < 0.95: 0, < 0.90: 0
+  IoU quantiles [0, 0.01, 0.05, 0.5, 0.95, 1]: 0.9997, 1.0000, 1.0000, 1.0000, 1.0000, 1.0000
+  changed-pixel share quantiles [0, 0.01, 0.05, 0.5, 0.95, 1]: 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00002
+  mean IoU 1.0000, mean changed share 0.00000
+  flags changed on 0 images
+mac: 736 images, identical 736, IoU < 0.99: 0, < 0.95: 0, < 0.90: 0
+  IoU quantiles [0, 0.01, 0.05, 0.5, 0.95, 1]: 1.0000, 1.0000, 1.0000, 1.0000, 1.0000, 1.0000
+  changed-pixel share quantiles [0, 0.01, 0.05, 0.5, 0.95, 1]: 0.00000, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000
+  mean IoU 1.0000, mean changed share 0.00000
+  flags changed on 0 images
+worst five by IoU:
+  Camponotus casent0192117 (vps): IoU 0.9997, changed 0.0000, mask 7625 -> 7625 px
+  Cataulacus casent0274827 (vps): IoU 0.9998, changed 0.0000, mask 12904 -> 12904 px
+  Cardiocondyla casent0101129 (vps): IoU 0.9999, changed 0.0000, mask 229854 -> 229858 px
+  Crematogaster casent0101410 (vps): IoU 1.0000, changed 0.0000, mask 154847 -> 154846 px
+  Leptogenys casent0102017 (vps): IoU 1.0000, changed 0.0000, mask 158304 -> 158303 px
