@@ -152,12 +152,13 @@ def pinned_model_name(cfg: dict[str, Any]) -> str:
     return f"local-dir:{path}"
 
 
-def setup_logging(report_path: Path | None = None, level: int = logging.INFO) -> None:
-    """Log to stdout, and also to a file when report_path is given."""
+def setup_logging(report_path: Path | None = None, level: int = logging.INFO, mode: str = "w") -> None:
+    """Log to stdout, and also to a file when report_path is given
+    (mode "w" starts the file afresh, "a" appends, e.g. on a resumed run)."""
     handlers: list[logging.Handler] = [logging.StreamHandler(sys.stdout)]
     if report_path is not None:
         report_path.parent.mkdir(parents=True, exist_ok=True)
-        handlers.append(logging.FileHandler(report_path, mode="w", encoding="utf-8"))
+        handlers.append(logging.FileHandler(report_path, mode=mode, encoding="utf-8"))
     logging.basicConfig(level=level, format="%(message)s", handlers=handlers)
 
 
