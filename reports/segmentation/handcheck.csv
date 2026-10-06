@@ -1,0 +1,61 @@
+k,specimen_code,genus,split,image_path,mask_area_fraction,n_components_30px,card_residue_frac,pin_residue_frac,flags,rating,note
+1,casent0489647,Aphaenogaster,train,data/images/Aphaenogaster/casent0489647_p.jpg,0.23787,1,0.03672,0.0,,good,whole ant incl. antennae and legs
+2,casent0102411,Bothroponera,train,data/images/Bothroponera/casent0102411_p.jpg,0.33526,1,0.04805,0.0,,good,whole ant; white glue blob kept
+3,casent0495513,Bothroponera,train,data/images/Bothroponera/casent0495513_p.jpg,0.48141,1,0.03386,0.0,,good,whole ant; source crops leg tips
+4,casent0101118,Camponotus,test,data/images/Camponotus/casent0101118_p.jpg,0.2045,3,0.03792,0.0,,partial,raised antenna lost; card strip and card corner kept
+5,casent0101122,Camponotus,train,data/images/Camponotus/casent0101122_p.jpg,0.34188,1,0.01129,0.0,,good,whole ant; card removed
+6,casent0101180,Camponotus,train,data/images/Camponotus/casent0101180_p.jpg,0.27375,2,0.01357,0.0,,partial,two legs reaching up-left lost; card kept
+7,casent0101369,Camponotus,train,data/images/Camponotus/casent0101369_p.jpg,0.41266,2,0.09741,0.0,,good,whole ant; pin and card kept
+8,casent0101441,Camponotus,train,data/images/Camponotus/casent0101441_p.jpg,0.2999,1,0.01336,0.0,,partial,raised antenna lost
+9,casent0101517,Camponotus,train,data/images/Camponotus/casent0101517_p.jpg,0.30006,2,0.0728,0.0,,partial,raised antenna lost; card kept
+10,casent0101540,Camponotus,train,data/images/Camponotus/casent0101540_p.jpg,0.46214,1,0.03537,0.0,,good,whole ant; card kept under legs
+11,casent0101867,Camponotus,train,data/images/Camponotus/casent0101867_p.jpg,0.35397,2,0.04523,0.0,,good,whole ant incl. raised antenna
+12,casent0101893,Camponotus,test,data/images/Camponotus/casent0101893_p.jpg,0.31966,1,0.01265,0.0,,partial,left antenna lost; card scraps kept
+13,casent0102434,Camponotus,train,data/images/Camponotus/casent0102434_p.jpg,0.3219,3,0.01054,0.0,,good,whole ant; antenna tip split off; card scraps kept
+14,casent0101240,Cataulacus,train,data/images/Cataulacus/casent0101240_p.jpg,0.27377,1,0.05424,0.0,,good,whole ant
+15,casent0104593,Crematogaster,train,data/images/Crematogaster/casent0104593_p.jpg,0.31718,1,0.12006,0.0,,good,whole ant; card kept
+16,casent0919664,Crematogaster,train,data/images/Crematogaster/casent0919664_p.jpg,0.30982,2,0.03507,0.0,no_scalebar,good,cropped close-up; pin kept
+17,casent0101016,Hypoponera,train,data/images/Hypoponera/casent0101016_p.jpg,0.48022,1,0.01953,0.0,,good,whole ant; large tan card block kept (card residue misses it: not pale enough)
+18,casent0101825,Leptogenys,test,data/images/Leptogenys/casent0101825_p.jpg,0.2863,1,0.00077,0.0,,good,whole ant; pin removed; card sliver kept
+19,casent0101916,Lioponera,train,data/images/Lioponera/casent0101916_p.jpg,0.45787,4,0.00633,0.0,,good,whole ant; card kept
+20,casent0104582,Lioponera,train,data/images/Lioponera/casent0104582_p.jpg,0.24162,1,0.08154,0.0,,good,whole ant
+21,casent0003327,Monomorium,train,data/images/Monomorium/casent0003327_p.jpg,0.31518,6,0.04542,0.0,,good,whole ant; card kept between legs
+22,casent0020200,Monomorium,train,data/images/Monomorium/casent0020200_p.jpg,0.35307,2,0.0805,0.0,,good,whole ant; dark glue blob kept
+23,casent0045443,Monomorium,train,data/images/Monomorium/casent0045443_p.jpg,0.33836,2,0.03324,0.0,,good,whole ant; dark glue blob kept
+24,casent0053986,Monomorium,train,data/images/Monomorium/casent0053986_p.jpg,0.37924,1,0.02949,0.0,,good,whole ant; dark glue blob kept
+25,casent0003280,Mystrium,train,data/images/Mystrium/casent0003280_p.jpg,0.31904,2,0.03835,0.0,,good,whole ant; pin removed
+26,casent0104555,Mystrium,train,data/images/Mystrium/casent0104555_p.jpg,0.25057,2,0.03098,0.0,,good,whole ant; pin kept
+27,casent0429953,Mystrium,train,data/images/Mystrium/casent0429953_p.jpg,0.37966,2,0.0081,0.0,,good,whole ant
+28,casent0393113,Nesomyrmex,train,data/images/Nesomyrmex/casent0393113_p.jpg,0.31457,1,0.07874,0.0,,good,cropped close-up; all visible parts kept
+29,casent0101015,Odontomachus,train,data/images/Odontomachus/casent0101015_p.jpg,0.14248,1,0.01557,0.0,,partial,all six legs and both antennae lost; head mesosoma gaster kept; card kept
+30,casent0101403,Pachycondyla,train,data/images/Pachycondyla/casent0101403_p.jpg,0.3471,1,0.03097,0.0,,good,whole ant; card kept
+31,casent0164205,Pachycondyla,train,data/images/Pachycondyla/casent0164205_p.jpg,0.45703,1,0.04395,0.0,,good,whole ant
+32,casent0102009,Platythyrea,train,data/images/Platythyrea/casent0102009_p.jpg,0.24134,1,0.00333,0.0,,good,whole ant; card edge kept
+33,casent0106094,Platythyrea,train,data/images/Platythyrea/casent0106094_p.jpg,0.29316,1,0.01958,0.0,,partial,left antenna funiculus lost
+34,casent0497789,Platythyrea,train,data/images/Platythyrea/casent0497789_p.jpg,0.36532,4,0.00432,0.0,,good,whole ant; dark glue kept
+35,casent0005484,Strumigenys,train,data/images/Strumigenys/casent0005484_p.jpg,0.24862,3,0.06482,0.0,,good,whole ant; glue point removed
+36,casent0005489,Strumigenys,train,data/images/Strumigenys/casent0005489_p.jpg,0.16256,1,0.06776,0.0,,good,whole ant; glue point removed
+37,casent0005506,Strumigenys,train,data/images/Strumigenys/casent0005506_p.jpg,0.29998,1,0.03868,0.0,,good,whole ant; glue point removed
+38,casent0005515,Strumigenys,train,data/images/Strumigenys/casent0005515_p.jpg,0.37268,1,0.11137,0.0,,good,whole ant; white glue kept between legs
+39,casent0005516,Strumigenys,train,data/images/Strumigenys/casent0005516_p.jpg,0.2861,1,0.04903,0.0,,good,whole ant
+40,casent0005540,Strumigenys,test,data/images/Strumigenys/casent0005540_p.jpg,0.30935,3,0.03202,0.0,,good,whole ant; glue point removed
+41,casent0005578,Strumigenys,test,data/images/Strumigenys/casent0005578_p.jpg,0.28932,2,0.0568,0.0,,good,whole ant
+42,casent0005584,Strumigenys,train,data/images/Strumigenys/casent0005584_p.jpg,0.34498,5,0.08292,0.0,,good,whole ant; white glue kept between legs
+43,casent0005591,Strumigenys,test,data/images/Strumigenys/casent0005591_p.jpg,0.41305,5,0.39198,0.0,,good,whole ant; large white glue point kept (card residue 39 % is real glue)
+44,casent0005596,Strumigenys,train,data/images/Strumigenys/casent0005596_p.jpg,0.25014,3,0.0723,0.0,,good,whole ant
+45,casent0005608,Strumigenys,test,data/images/Strumigenys/casent0005608_p.jpg,0.36463,4,0.13404,0.0,,good,whole ant; white glue and scale-bar bits kept
+46,casent0005612,Strumigenys,train,data/images/Strumigenys/casent0005612_p.jpg,0.28624,5,0.03164,0.0,,good,whole ant
+47,casent0005614,Strumigenys,train,data/images/Strumigenys/casent0005614_p.jpg,0.19949,1,0.02305,0.0,,good,whole ant
+48,casent0005631,Strumigenys,train,data/images/Strumigenys/casent0005631_p.jpg,0.3059,1,0.08023,0.0,,good,whole ant
+49,casent0005999,Strumigenys,train,data/images/Strumigenys/casent0005999_p.jpg,0.45821,1,0.05906,0.0,,good,whole ant; glue scraps kept
+50,casent0102263,Strumigenys,train,data/images/Strumigenys/casent0102263_p.jpg,0.2526,1,0.02229,0.0,,good,whole ant; glue kept behind body
+51,casent0102265,Strumigenys,train,data/images/Strumigenys/casent0102265_p.jpg,0.35609,2,0.1148,0.0,,good,whole ant; white glue kept
+52,casent0173588,Syllophopsis,train,data/images/Syllophopsis/casent0173588_p.jpg,0.28364,1,0.211,0.0,,good,whole ant; high card residue is the pale body
+53,casent0058901,Technomyrmex,train,data/images/Technomyrmex/casent0058901_p.jpg,0.29255,1,0.00382,0.0,,good,whole ant
+54,casent0101696,Terataner,train,data/images/Terataner/casent0101696_p.jpg,0.43864,3,0.02662,0.0,,good,whole ant; card edge kept
+55,casent0101141,Tetramorium,train,data/images/Tetramorium/casent0101141_p.jpg,0.33278,1,0.00044,0.0,,partial,antennal funiculi and parts of fore legs lost
+56,casent0101279,Tetramorium,train,data/images/Tetramorium/casent0101279_p.jpg,0.26669,2,0.09658,0.0,,partial,lower parts of two legs lost; card kept
+57,casent0102349,Tetramorium,train,data/images/Tetramorium/casent0102349_p.jpg,0.28433,2,0.03567,0.0,,good,whole ant
+58,casent0172830,Tetramorium,train,data/images/Tetramorium/casent0172830_p.jpg,0.424,1,0.19636,0.0,,good,whole ant; large white glue block kept (card residue 20 % is real glue)
+59,casent0101052,Tetraponera,train,data/images/Tetraponera/casent0101052_p.jpg,0.2955,1,0.07793,0.0,,good,whole ant; card kept
+60,casent0102035,Tetraponera,test,data/images/Tetraponera/casent0102035_p.jpg,0.30947,2,0.00431,0.0,,good,whole ant

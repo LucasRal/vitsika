@@ -1,0 +1,53 @@
+specimen_code,genus,split,image_path,mask_area_fraction,exclude,exclude_reason,partial,detail_image,rating,source,note
+casent0101069,Aphaenogaster,test,data/images/Aphaenogaster/casent0101069_p.jpg,0.1553,1,bad,0,,bad,sheet,mesosoma and legs lost; only head and gaster kept
+casent0101070,Aphaenogaster,train,data/images/Aphaenogaster/casent0101070_p.jpg,0.09302,1,bad,0,,bad,sheet,only gaster one antenna and one leg segment kept
+casent0101072,Aphaenogaster,train,data/images/Aphaenogaster/casent0101072_p.jpg,0.11504,1,bad,0,,bad,sheet,head antennae and most legs lost
+casent0101087,Aphaenogaster,train,data/images/Aphaenogaster/casent0101087_p.jpg,0.11378,1,bad,0,,bad,sheet,gaster lost (source also crops the head)
+casent0107566,Aphaenogaster,test,data/images/Aphaenogaster/casent0107566_p.jpg,0.08981,1,bad,0,,bad,sheet,head and front of mesosoma lost
+casent0101202,Camponotus,test,data/images/Camponotus/casent0101202_p.jpg,0.01482,1,bad,0,,bad,sheet,close-up of a large ant; mask is a small fragment of glue and coxa
+casent0145284,Camponotus,train,data/images/Camponotus/casent0145284_p.jpg,0.19106,1,bad,0,,bad,sheet,cropped close-up; head and legs lost; mesosoma and gaster kept
+casent0192117,Camponotus,train,data/images/Camponotus/casent0192117_p.jpg,0.00727,1,bad,0,head-mesosoma joint,bad,sheet,detail image (head-mesosoma joint); mask is three small fragments
+casent0274827,Cataulacus,train,data/images/Cataulacus/casent0274827_p.jpg,0.01231,1,bad,0,sculpture,bad,sheet,detail image (sculpture); mask is a fragment at the frame edge
+casent0423124,Crematogaster,train,data/images/Crematogaster/casent0423124_p.jpg,0.16623,1,bad,0,,bad,sheet,cropped close-up; petiole and gaster lost; only mesosoma and two legs kept
+casent0486683,Meranoplus,train,data/images/Meranoplus/casent0486683_p.jpg,0.03504,1,bad,0,sculpture,bad,sheet,detail image (sculpture); mask is two fragments
+casent0317582,Mystrium,test,data/images/Mystrium/casent0317582_p.jpg,0.03485,1,bad,0,seta tip,bad,sheet,detail image (seta tip); mask is a fragment
+casent0102019,Odontomachus,test,data/images/Odontomachus/casent0102019_p.jpg,0.08266,1,bad,0,,bad,sheet,gaster and most legs lost; mask broken into fragments on the card
+casent0102021,Odontomachus,train,data/images/Odontomachus/casent0102021_p.jpg,0.10693,1,bad,0,,bad,sheet,gaster antennae and most legs lost
+casent0389498,Pachycondyla,train,data/images/Pachycondyla/casent0389498_p.jpg,0.0258,1,bad,0,"SEM, spine and setae",bad,sheet,SEM detail image; mask is fragments of a spine and setae
+casent0235036,Pheidole,train,data/images/Pheidole/casent0235036_p.jpg,0.11844,1,bad,0,,bad,sheet,cropped close-up; head and mesosoma lost; only petiole gaster and legs kept
+casent0291293,Syllophopsis,train,data/images/Syllophopsis/casent0291293_p.jpg,0.00152,1,empty mask,0,two legs,bad,sheet,detail image (two legs); mask empty (0.15 %)
+casent0101074,Aphaenogaster,test,data/images/Aphaenogaster/casent0101074_p.jpg,0.2416,0,,1,,partial,sheet,propodeum and petiole lost; head mesosoma and gaster kept
+casent0101075,Aphaenogaster,train,data/images/Aphaenogaster/casent0101075_p.jpg,0.25327,0,,1,,partial,sheet,most legs lost; body kept; card kept
+casent0101100,Camponotus,train,data/images/Camponotus/casent0101100_p.jpg,0.29238,0,,1,,partial,sheet,antennae lost; card scraps kept
+casent0101118,Camponotus,test,data/images/Camponotus/casent0101118_p.jpg,0.2045,0,,1,,partial,handcheck,raised antenna lost; card strip and card corner kept
+casent0101180,Camponotus,train,data/images/Camponotus/casent0101180_p.jpg,0.27375,0,,1,,partial,handcheck,two legs reaching up-left lost; card kept
+casent0101441,Camponotus,train,data/images/Camponotus/casent0101441_p.jpg,0.2999,0,,1,,partial,handcheck,raised antenna lost
+casent0101517,Camponotus,train,data/images/Camponotus/casent0101517_p.jpg,0.30006,0,,1,,partial,handcheck,raised antenna lost; card kept
+casent0101527,Camponotus,train,data/images/Camponotus/casent0101527_p.jpg,0.19262,0,,1,,partial,sheet,fore and hind legs lost; body kept
+casent0101539,Camponotus,train,data/images/Camponotus/casent0101539_p.jpg,0.25527,0,,1,,partial,sheet,petiole and gaster base lost; gaster separate; antennae lost
+casent0101545,Camponotus,test,data/images/Camponotus/casent0101545_p.jpg,0.28295,0,,1,,partial,sheet,antennae and fore legs lost
+casent0101779,Camponotus,test,data/images/Camponotus/casent0101779_p.jpg,0.19655,0,,1,,partial,sheet,antennae and raised legs lost; card kept
+casent0101893,Camponotus,test,data/images/Camponotus/casent0101893_p.jpg,0.31966,0,,1,,partial,handcheck,left antenna lost; card scraps kept
+casent0102098,Camponotus,train,data/images/Camponotus/casent0102098_p.jpg,0.22771,0,,1,,partial,sheet,antennae and raised legs lost
+casent0102426,Camponotus,train,data/images/Camponotus/casent0102426_p.jpg,0.1833,0,,1,,partial,sheet,antennae and parts of fore and hind legs lost
+casent0104639,Camponotus,train,data/images/Camponotus/casent0104639_p.jpg,0.27867,0,,1,,partial,sheet,cropped close-up; legs lying on the card lost
+casent0195294,Camponotus,train,data/images/Camponotus/casent0195294_p.jpg,0.25308,0,,1,,partial,sheet,cropped close-up; front of mesosoma lost (head outside frame)
+focol2363,Camponotus,train,data/images/Camponotus/focol2363_p.jpg,0.27515,0,,1,,partial,sheet,cropped close-up; legs lost; body kept
+casent0101128,Cardiocondyla,train,data/images/Cardiocondyla/casent0101128_p.jpg,0.42834,0,,1,,partial,sheet,cleared flattened specimen in glue; mask is the glue blob around the ant; one leg lost
+casent0101626,Leptogenys,train,data/images/Leptogenys/casent0101626_p.jpg,0.21256,0,,1,,partial,sheet,antennae and two legs lost
+casent0101318,Nylanderia,train,data/images/Nylanderia/casent0101318_p.jpg,0.30196,0,,1,,partial,sheet,antenna split; legs on the card partly lost
+casent0047308,Odontomachus,train,data/images/Odontomachus/casent0047308_p.jpg,0.20272,0,,1,,partial,sheet,most legs and antennae lost; body kept
+casent0101015,Odontomachus,train,data/images/Odontomachus/casent0101015_p.jpg,0.14248,0,,1,,partial,handcheck,all six legs and both antennae lost; head mesosoma gaster kept; card kept
+casent0101745,Pheidole,test,data/images/Pheidole/casent0101745_p.jpg,0.22151,0,,1,,partial,sheet,all legs and antennae lost (pale); body kept
+casent0230800,Pheidole,train,data/images/Pheidole/casent0230800_p.jpg,0.16642,0,,1,,partial,sheet,cropped close-up; antennae and some legs lost; neck gap
+casent0106094,Platythyrea,train,data/images/Platythyrea/casent0106094_p.jpg,0.29316,0,,1,,partial,handcheck,left antenna funiculus lost
+casent0101141,Tetramorium,train,data/images/Tetramorium/casent0101141_p.jpg,0.33278,0,,1,,partial,handcheck,antennal funiculi and parts of fore legs lost
+casent0101279,Tetramorium,train,data/images/Tetramorium/casent0101279_p.jpg,0.26669,0,,1,,partial,handcheck,lower parts of two legs lost; card kept
+casent0101697,Tetramorium,train,data/images/Tetramorium/casent0101697_p.jpg,0.27389,0,,1,,partial,sheet,antennae and some legs lost; glue kept
+casent0822320,Aphaenogaster,train,data/images/Aphaenogaster/casent0822320_p.jpg,0.17527,0,,0,leg,good,sheet,detail image; mask covers the leg
+casent0121525,Camponotus,test,data/images/Camponotus/casent0121525_d.jpg,0.75126,0,,0,gaster,good,sheet,detail image; mask covers the gaster
+casent0054136,Crematogaster,train,data/images/Crematogaster/casent0054136_p.jpg,0.54845,0,,0,body segment,good,sheet,detail image; mask covers the segment
+casent0193045,Crematogaster,train,data/images/Crematogaster/casent0193045_d.jpg,0.59329,0,,0,petiole,good,sheet,detail image; mask covers the petiole
+casent0300904,Pachycondyla,test,data/images/Pachycondyla/casent0300904_p.jpg,0.49759,0,,0,gaster,good,sheet,detail image; mask covers the gaster
+casent0040756,Pheidole,test,data/images/Pheidole/casent0040756_d.jpg,0.36448,0,,0,head,good,sheet,detail image; mask covers the head
+casent0274442,Syllophopsis,train,data/images/Syllophopsis/casent0274442_d.jpg,0.57957,0,,0,gaster,good,sheet,detail image; mask covers the gaster
