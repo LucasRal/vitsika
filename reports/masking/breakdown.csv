@@ -1,0 +1,44 @@
+section,subject,version,A_n,A_value,B_n,B_value,top5,n_B,B_original,B_ant_grey,B_ant_erased,B_drop,n_A,A_original,A_ant_grey,A_drop,mask_area_median,n_components_30px_gt1,partial_n,handcheck_n,handcheck_partial_or_bad,metadata_only_recall_forest,ant_grey_B_recall_small_mask,ant_grey_B_recall_large_mask,ant_grey_B_recall_partial,ant_grey_B_errors_to,A_ant_erased
+1_genus_drop,Pheidole,,,,,,True,77.0,0.9481,0.7403,0.1948,0.2078,16.0,0.9375,0.625,0.3125,0.3345,0.6234,2.0,0.0,0.0,0.321,0.7105,0.7692,0.0,Crematogaster 5; Royidris 5; Strumigenys 3,0.0
+1_genus_drop,Nesomyrmex,,,,,,True,17.0,0.6471,0.4706,0.0,0.1765,3.0,0.6667,1.0,-0.3333,0.321,0.4706,0.0,1.0,0.0,0.118,0.375,0.5556,,Royidris 4; Crematogaster 2; Cardiocondyla 1,0.0
+1_genus_drop,Monomorium,,,,,,True,37.0,0.8649,0.7027,0.3243,0.1622,7.0,1.0,0.5714,0.4286,0.264,0.6216,0.0,4.0,0.0,0.162,0.6667,0.7368,,Syllophopsis 5; Royidris 4; Cardiocondyla 1,0.0
+1_genus_drop,Syllophopsis,,,,,,True,13.0,0.8462,0.6923,0.3077,0.1539,3.0,0.3333,0.3333,0.0,0.2988,0.4615,0.0,1.0,0.0,0.286,0.6667,0.7143,,Tetramorium 1; Terataner 1; Monomorium 1,0.0
+1_genus_drop,Tapinoma,,,,,,True,15.0,0.9333,0.8,0.0,0.1333,3.0,1.0,1.0,0.0,0.2994,0.3333,0.0,0.0,0.0,0.133,0.7143,0.875,,Technomyrmex 2; Crematogaster 1,0.3333
+1_genus_drop,Royidris,,,,,,False,10.0,0.8,0.7,0.1,0.1,2.0,0.5,0.5,0.0,0.2818,0.2,0.0,0.0,0.0,0.0,0.8,0.6,,Nesomyrmex 1; Monomorium 1; Crematogaster 1,0.0
+1_genus_drop,Tetraponera,,,,,,False,43.0,0.9535,0.8605,0.0,0.093,9.0,0.7778,0.8889,-0.1111,0.2744,0.3953,0.0,2.0,0.0,0.116,0.9048,0.8182,,Anochetus 3; Lioponera 2; Nesomyrmex 1,0.0
+1_genus_drop,Aphaenogaster,,,,,,False,22.0,0.9091,0.8182,0.1818,0.0909,3.0,0.6667,0.6667,0.0,0.2617,0.6364,2.0,1.0,0.0,0.222,0.8182,0.8182,1.0,Pheidole 1; Tetramorium 1; Odontomachus 1,0.0
+1_genus_drop,Technomyrmex,,,,,,False,35.0,0.7714,0.6857,0.0571,0.0857,7.0,0.8571,0.7143,0.1428,0.293,0.3429,0.0,1.0,0.0,0.057,0.7647,0.6111,,Tapinoma 8; Nylanderia 3,0.1429
+1_genus_drop,Pachycondyla,,,,,,False,12.0,0.1667,0.0833,0.1667,0.0834,3.0,0.6667,0.0,0.6667,0.3503,0.4167,0.0,2.0,0.0,0.154,0.0,0.1667,,Bothroponera 7; Lioponera 2; Platythyrea 1,0.0
+1_genus_drop,Cardiocondyla,,,,,,False,13.0,0.9231,0.8462,0.0769,0.0769,3.0,1.0,0.6667,0.3333,0.3534,0.4615,1.0,0.0,0.0,0.0,0.8333,0.8571,0.0,Meranoplus 1; Tetramorium 1,0.0
+1_genus_drop,Meranoplus,,,,,,False,13.0,1.0,0.9231,0.0769,0.0769,3.0,1.0,1.0,0.0,0.3996,0.7692,0.0,0.0,0.0,0.214,0.8333,1.0,,Crematogaster 1,0.0
+1_genus_drop,Crematogaster,,,,,,False,81.0,0.8642,0.7901,0.0123,0.0741,16.0,0.9375,0.9375,0.0,0.3173,0.3333,0.0,2.0,0.0,0.073,0.85,0.7317,,Meranoplus 4; Nylanderia 3; Monomorium 3,0.3125
+1_genus_drop,Bothroponera,,,,,,False,27.0,0.8519,0.7778,0.5185,0.0741,5.0,1.0,0.2,0.8,0.3595,0.2593,0.0,2.0,0.0,0.481,0.6923,0.8571,,Leptogenys 4; Mystrium 1; Pachycondyla 1,0.0
+1_genus_drop,Lioponera,,,,,,False,14.0,1.0,0.9286,0.3571,0.0714,3.0,1.0,0.3333,0.6667,0.3675,0.6429,0.0,2.0,0.0,0.357,0.8571,1.0,,Pachycondyla 1,0.0
+1_genus_drop,Anochetus,,,,,,False,29.0,0.9655,0.8966,0.0,0.0689,6.0,1.0,1.0,0.0,0.2765,0.1379,0.0,0.0,0.0,0.345,0.8571,0.9333,,Nylanderia 1; Aphaenogaster 1; Odontomachus 1,0.0
+1_genus_drop,Platythyrea,,,,,,False,18.0,1.0,0.9444,0.0556,0.0556,4.0,1.0,1.0,0.0,0.3233,0.2778,1.0,3.0,1.0,0.222,1.0,0.8889,1.0,Anochetus 1,0.0
+1_genus_drop,Leptogenys,,,,,,False,38.0,0.9211,0.8684,0.0263,0.0527,8.0,1.0,0.75,0.25,0.2698,0.3684,1.0,1.0,0.0,0.158,0.8947,0.8421,1.0,Platythyrea 3; Lioponera 1; Bothroponera 1,0.0
+1_genus_drop,Camponotus,,,,,,False,235.0,0.9617,0.9106,0.1532,0.0511,47.0,0.9362,0.8511,0.0851,0.3271,0.617,15.0,10.0,5.0,0.029,0.8803,0.9407,0.8,Anochetus 7; Aphaenogaster 6; Odontomachus 3,0.2128
+1_genus_drop,Nylanderia,,,,,,False,20.0,1.0,0.95,0.35,0.05,4.0,1.0,0.5,0.5,0.3344,0.7,1.0,0.0,0.0,0.2,1.0,0.9,1.0,Camponotus 1,0.0
+1_genus_drop,Tetramorium,,,,,,False,105.0,0.8762,0.8381,0.0095,0.0381,21.0,0.8571,0.7143,0.1428,0.3466,0.5619,3.0,4.0,2.0,0.124,0.8462,0.8302,1.0,Strumigenys 4; Nesomyrmex 4; Crematogaster 3,0.0
+1_genus_drop,Strumigenys,,,,,,False,223.0,0.9865,0.9552,0.8206,0.0313,45.0,1.0,0.9778,0.0222,0.2963,0.6816,0.0,17.0,0.0,0.695,0.9279,0.9821,,Odontomachus 3; Mystrium 3; Royidris 1,0.0
+1_genus_drop,Terataner,,,,,,False,16.0,1.0,1.0,0.1875,0.0,3.0,1.0,1.0,0.0,0.3246,0.5,0.0,1.0,0.0,0.25,1.0,1.0,,,0.0
+1_genus_drop,Hypoponera,,,,,,False,23.0,1.0,1.0,0.4783,0.0,5.0,1.0,1.0,0.0,0.3991,0.1304,0.0,1.0,0.0,0.261,1.0,1.0,,,0.0
+1_genus_drop,Odontomachus,,,,,,False,12.0,1.0,1.0,0.1667,0.0,2.0,1.0,1.0,0.0,0.2171,0.5833,2.0,1.0,1.0,0.143,1.0,1.0,1.0,,0.0
+1_genus_drop,Mystrium,,,,,,False,43.0,1.0,1.0,0.0,0.0,8.0,1.0,1.0,0.0,0.308,0.3023,0.0,3.0,0.0,0.114,1.0,1.0,,,0.0
+1_genus_drop,Cataulacus,,,,,,False,28.0,0.9643,0.9643,0.0357,0.0,6.0,0.8333,0.8333,0.0,0.332,0.2857,0.0,1.0,0.0,0.207,0.9286,1.0,,Mystrium 1,0.0
+2_strumigenys,Strumigenys,original,45.0,1.0,223.0,0.9865,,,,,,,,,,,,,,,,,,,,,
+2_strumigenys,Strumigenys,ant_grey,45.0,0.9778,223.0,0.9552,,,,,,,,,,,,,,,,,,,,,
+2_strumigenys,Strumigenys,ant_erased,45.0,0.0,223.0,0.8206,,,,,,,,,,,,,,,,,,,,,
+2_strumigenys,Strumigenys,scalebar_erased,45.0,1.0,223.0,0.9776,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,Commons,original,223.0,0.9283,1114.0,0.9381,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,Commons,ant_grey,223.0,0.8251,1114.0,0.8743,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,Commons,ant_erased,223.0,0.0628,1114.0,0.2522,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,GBIF-cache crops,original,22.0,0.9091,105.0,0.819,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,GBIF-cache crops,ant_grey,22.0,0.6818,105.0,0.7333,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,GBIF-cache crops,ant_erased,22.0,0.1364,105.0,0.2571,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,Background typical for the genus,original,128.0,0.9531,616.0,0.9481,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,Background typical for the genus,ant_grey,128.0,0.8516,616.0,0.8766,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,Background typical for the genus,ant_erased,128.0,0.0703,616.0,0.2646,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,Background atypical for the genus,original,117.0,0.8974,603.0,0.9071,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,Background atypical for the genus,ant_grey,117.0,0.7692,603.0,0.8474,,,,,,,,,,,,,,,,,,,,,
+3_group_accuracy,Background atypical for the genus,ant_erased,117.0,0.0684,603.0,0.2405,,,,,,,,,,,,,,,,,,,,,

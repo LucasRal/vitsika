@@ -1,0 +1,23 @@
+note while loading the probe: Trying to unpickle estimator LogisticRegression from version 1
+deployed probe: TemperatureScaledProbe(T=0.224, base=LogisticRegression), 27 genera
+rows: 1219 all, 1184 clean (without 28 partial and 7 detail images)
+[all] A: 245 test images; B: 1219 images, 27 genera, smallest genus 10
+[all] A original         acc 0.927 [0.890, 0.955]  macro-F1 0.877 [0.786, 0.926]
+[all] B original         acc 0.928  macro-F1 0.863
+[all] A ant_grey         acc 0.812 [0.759, 0.865]  macro-F1 0.694 [0.600, 0.752]
+[all] B ant_grey         acc 0.862  macro-F1 0.773
+[all] A ant_erased       acc 0.069 [0.037, 0.106]  macro-F1 0.029 [0.015, 0.045]
+[all] B ant_erased       acc 0.253  macro-F1 0.122
+[all] A scalebar_erased  acc 0.914 [0.873, 0.947]  macro-F1 0.848 [0.756, 0.898]
+[all] B scalebar_erased  acc 0.921  macro-F1 0.858
+[clean] A: 236 test images; B: 1184 images, 27 genera, smallest genus 10
+[clean] A original         acc 0.928 [0.894, 0.958]  macro-F1 0.869 [0.768, 0.918]
+[clean] B original         acc 0.920  macro-F1 0.860
+[clean] A ant_grey         acc 0.826 [0.780, 0.877]  macro-F1 0.704 [0.608, 0.761]
+[clean] B ant_grey         acc 0.867  macro-F1 0.788
+[clean] A ant_erased       acc 0.064 [0.034, 0.097]  macro-F1 0.028 [0.013, 0.044]
+[clean] B ant_erased       acc 0.241  macro-F1 0.112
+[clean] A scalebar_erased  acc 0.915 [0.877, 0.949]  macro-F1 0.831 [0.738, 0.885]
+[clean] B scalebar_erased  acc 0.924  macro-F1 0.867
+check: A original (245 test images) acc 0.927 macro-F1 0.877; POC test (250 images) top-1 0.928 macro-F1 0.885
+wrote reports/masking/scores.csv (18 rows) and per_genus.csv (432 rows)

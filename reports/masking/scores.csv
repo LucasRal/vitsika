@@ -1,0 +1,19 @@
+scheme,subset,version,n,accuracy,accuracy_lo,accuracy_hi,macro_f1,macro_f1_lo,macro_f1_hi
+A_deployed_probe,all,original,245,0.9265,0.8898,0.9551,0.8766,0.7862,0.9257
+B_retrained_cv,all,original,1219,0.9278,,,0.8627,,
+A_deployed_probe,all,ant_grey,245,0.8122,0.7592,0.8653,0.6939,0.6002,0.7523
+B_retrained_cv,all,ant_grey,1219,0.8622,,,0.7727,,
+A_deployed_probe,all,ant_erased,245,0.0694,0.0367,0.1061,0.0293,0.0146,0.0446
+B_retrained_cv,all,ant_erased,1219,0.2527,,,0.1221,,
+A_deployed_probe,all,scalebar_erased,245,0.9143,0.8735,0.9469,0.8484,0.7556,0.898
+B_retrained_cv,all,scalebar_erased,1219,0.9212,,,0.858,,
+A_deployed_probe,clean,original,236,0.928,0.8941,0.9576,0.8691,0.7678,0.9177
+B_retrained_cv,clean,original,1184,0.9198,,,0.8598,,
+A_deployed_probe,clean,ant_grey,236,0.8263,0.7797,0.8771,0.7045,0.6083,0.7607
+B_retrained_cv,clean,ant_grey,1184,0.8666,,,0.7883,,
+A_deployed_probe,clean,ant_erased,236,0.0636,0.0339,0.0975,0.0283,0.0127,0.0444
+B_retrained_cv,clean,ant_erased,1184,0.2407,,,0.1119,,
+A_deployed_probe,clean,scalebar_erased,236,0.9153,0.8771,0.9492,0.831,0.7378,0.8845
+B_retrained_cv,clean,scalebar_erased,1184,0.924,,,0.8669,,
+chance (reports/confounds/README.md),,chance: always the majority genus,1236,0.193,,,0.012,,
+chance (reports/confounds/README.md),,"chance: random with class priors, 99th percentile",1236,0.122,,,0.049,,

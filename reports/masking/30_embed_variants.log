@@ -1,0 +1,42 @@
+torch 2.14.1, device mps, 13 DataLoader workers
+dataset: 1236 images; left out (exclude=1): 17
+  excluded casent0101069  Aphaenogaster
+  excluded casent0101070  Aphaenogaster
+  excluded casent0101072  Aphaenogaster
+  excluded casent0101087  Aphaenogaster
+  excluded casent0101202  Camponotus
+  excluded casent0102019  Odontomachus
+  excluded casent0102021  Odontomachus
+  excluded casent0107566  Aphaenogaster
+  excluded casent0145284  Camponotus
+  excluded casent0192117  Camponotus
+  excluded casent0235036  Pheidole
+  excluded casent0274827  Cataulacus
+  excluded casent0291293  Syllophopsis
+  excluded casent0317582  Mystrium
+  excluded casent0389498  Pachycondyla
+  excluded casent0423124  Crematogaster
+  excluded casent0486683  Meranoplus
+kept 1219 images: partial=28, detail_image=7, no_scalebar=30 (scalebar_erased uses the original for these)
+model local-dir:/Users/ainalucas/.cache/huggingface/hub/models--imageomics--bioclip-2/snapshots/2957b322090f9cb17ae72c71981c7218a28d81e0 loaded on mps in 3.3s
+batch size 32: 4.9 img/s on 256 images
+batch size 64: 8.2 img/s on 256 images
+batch size chosen: 64
+original: 1219 images in 106.1s, 11.5 img/s -> data/masking/embeddings_original.npy
+sanity check, re-embedded original vs data/embeddings.npy (1219 images): cosine median 1.000000, minimum 1.000000, 1st percentile 1.000000
+  lowest  casent0195294  Camponotus  1.000000
+  lowest  casent0101517  Camponotus  1.000000
+  lowest  casent0435387  Technomyrmex  1.000000
+  lowest  casent0101767  Pheidole  1.000000
+  lowest  casent0005568  Strumigenys  1.000000
+ant_grey: 1219 images in 107.3s, 11.4 img/s -> data/masking/embeddings_ant_grey.npy
+ant_erased: 1219 images in 106.4s, 11.5 img/s -> data/masking/embeddings_ant_erased.npy
+scalebar_erased: 1219 images in 107.9s, 11.3 img/s -> data/masking/embeddings_scalebar_erased.npy
+wrote data/masking/embeddings_index.csv (1219 rows)
+summary (batch size 64, device mps):
+  version          images  seconds    img/s
+  original           1219    106.1     11.5
+  ant_grey           1219    107.3     11.4
+  ant_erased         1219    106.4     11.5
+  scalebar_erased    1219    107.9     11.3
+done in 526s

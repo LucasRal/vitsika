@@ -1,0 +1,63 @@
+per-image predictions reproduce reports/masking/scores.csv (accuracy, all rows)
+1. B recall drop original -> ant_grey, all genera:
+               n_B  B_original  B_ant_grey  B_drop  B_ant_erased  A_drop  mask_area_median  partial_n
+genus                                                                                                
+Pheidole        77       0.948       0.740   0.208         0.195   0.312             0.334          2
+Nesomyrmex      17       0.647       0.471   0.176         0.000  -0.333             0.321          0
+Monomorium      37       0.865       0.703   0.162         0.324   0.429             0.264          0
+Syllophopsis    13       0.846       0.692   0.154         0.308   0.000             0.299          0
+Tapinoma        15       0.933       0.800   0.133         0.000   0.000             0.299          0
+Royidris        10       0.800       0.700   0.100         0.100   0.000             0.282          0
+Tetraponera     43       0.954       0.860   0.093         0.000  -0.111             0.274          0
+Aphaenogaster   22       0.909       0.818   0.091         0.182   0.000             0.262          2
+Technomyrmex    35       0.771       0.686   0.086         0.057   0.143             0.293          0
+Pachycondyla    12       0.167       0.083   0.083         0.167   0.667             0.350          0
+Cardiocondyla   13       0.923       0.846   0.077         0.077   0.333             0.353          1
+Meranoplus      13       1.000       0.923   0.077         0.077   0.000             0.400          0
+Crematogaster   81       0.864       0.790   0.074         0.012   0.000             0.317          0
+Bothroponera    27       0.852       0.778   0.074         0.518   0.800             0.359          0
+Lioponera       14       1.000       0.929   0.071         0.357   0.667             0.367          0
+Anochetus       29       0.966       0.897   0.069         0.000   0.000             0.277          0
+Platythyrea     18       1.000       0.944   0.056         0.056   0.000             0.323          1
+Leptogenys      38       0.921       0.868   0.053         0.026   0.250             0.270          1
+Camponotus     235       0.962       0.911   0.051         0.153   0.085             0.327         15
+Nylanderia      20       1.000       0.950   0.050         0.350   0.500             0.334          1
+Tetramorium    105       0.876       0.838   0.038         0.010   0.143             0.347          3
+Strumigenys    223       0.986       0.955   0.031         0.821   0.022             0.296          0
+Terataner       16       1.000       1.000   0.000         0.188   0.000             0.325          0
+Hypoponera      23       1.000       1.000   0.000         0.478   0.000             0.399          0
+Odontomachus    12       1.000       1.000   0.000         0.167   0.000             0.217          2
+Mystrium        43       1.000       1.000   0.000         0.000   0.000             0.308          0
+Cataulacus      28       0.964       0.964   0.000         0.036   0.000             0.332          0
+1. top 5:
+              n_B  B_original  B_ant_grey  B_ant_erased  B_drop  A_original  A_ant_grey  A_drop  mask_area_median  n_components_30px_gt1  partial_n  handcheck_n  handcheck_partial_or_bad  metadata_only_recall_forest  ant_grey_B_recall_small_mask  ant_grey_B_recall_large_mask  ant_grey_B_recall_partial                          ant_grey_B_errors_to  A_ant_erased
+genus                                                                                                                                                                                                                                                                                                                                                                     
+Pheidole       77       0.948       0.740         0.195   0.208       0.938       0.625   0.312             0.334                  0.623          2          0.0                       0.0                        0.321                         0.711                         0.769                        0.0    Crematogaster 5; Royidris 5; Strumigenys 3         0.000
+Nesomyrmex     17       0.647       0.471         0.000   0.176       0.667       1.000  -0.333             0.321                  0.471          0          1.0                       0.0                        0.118                         0.375                         0.556                        NaN  Royidris 4; Crematogaster 2; Cardiocondyla 1         0.000
+Monomorium     37       0.865       0.703         0.324   0.162       1.000       0.571   0.429             0.264                  0.622          0          4.0                       0.0                        0.162                         0.667                         0.737                        NaN   Syllophopsis 5; Royidris 4; Cardiocondyla 1         0.000
+Syllophopsis   13       0.846       0.692         0.308   0.154       0.333       0.333   0.000             0.299                  0.462          0          1.0                       0.0                        0.286                         0.667                         0.714                        NaN      Tetramorium 1; Terataner 1; Monomorium 1         0.000
+Tapinoma       15       0.933       0.800         0.000   0.133       1.000       1.000   0.000             0.299                  0.333          0          0.0                       0.0                        0.133                         0.714                         0.875                        NaN               Technomyrmex 2; Crematogaster 1         0.333
+all genera: median mask area 0.321; partial images 28 of 1219
+2. Strumigenys recall:
+scheme           A_deployed_probe  B_retrained_cv
+version                                          
+ant_erased                  0.000           0.821
+ant_grey                    0.978           0.955
+original                    1.000           0.986
+scalebar_erased             1.000           0.978
+2. ant_erased, B: 63 non-Strumigenys images predicted as Strumigenys
+3. accuracy by group:
+         section                           subject    version  A_n  A_value  B_n  B_value
+3_group_accuracy                           Commons   original  223    0.928 1114    0.938
+3_group_accuracy                           Commons   ant_grey  223    0.825 1114    0.874
+3_group_accuracy                           Commons ant_erased  223    0.063 1114    0.252
+3_group_accuracy                  GBIF-cache crops   original   22    0.909  105    0.819
+3_group_accuracy                  GBIF-cache crops   ant_grey   22    0.682  105    0.733
+3_group_accuracy                  GBIF-cache crops ant_erased   22    0.136  105    0.257
+3_group_accuracy  Background typical for the genus   original  128    0.953  616    0.948
+3_group_accuracy  Background typical for the genus   ant_grey  128    0.852  616    0.877
+3_group_accuracy  Background typical for the genus ant_erased  128    0.070  616    0.265
+3_group_accuracy Background atypical for the genus   original  117    0.897  603    0.907
+3_group_accuracy Background atypical for the genus   ant_grey  117    0.769  603    0.847
+3_group_accuracy Background atypical for the genus ant_erased  117    0.068  603    0.240
+wrote reports/masking/breakdown.csv (43 rows) and figures/per_genus_recall.png
